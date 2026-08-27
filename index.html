@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SS Spark Collections | Women's Accessories</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="top-bar">
+        <p>✨ Free Shipping Across India &nbsp; | &nbsp; 💝 Carefully Packed With Love</p>
+    </div>
+
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="brand-logo">
+
+        <div class="brand-monogram">
+        <span>SS</span>
+        <i>✦</i>
+    </div>
+
+    <div class="brand-name">
+        <span>Spark</span>
+        <small>COLLECTIONS</small>
+    </div>
+
+</div>
+
+        <nav class="navbar">
+            <a href="#">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">Categories</a>
+            <a href="#">New Arrivals</a>
+            <a href="#">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+
+            <button class="icon-button">⌕</button>
+
+            <button class="icon-button">
+                ♡
+            </button>
+
+            <button class="icon-button cart-button">
+                🛍
+                <span id="cart-count">0</span>
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- HERO SLIDER -->
+<section class="hero-slider">
+
+    <div class="slides">
+
+        <div class="slide active">
+            <img
+                src="images/hero-1.jpg"
+                alt="SS Spark Collections"
+            >
+        </div>
+
+        <div class="slide">
+            <img
+                src="images/hero-2.jpg"
+                alt="New Jewellery Collection"
+            >
+        </div>
+
+        <div class="slide">
+            <img
+                src="images/hero-3.jpg"
+                alt="Fashion Jewellery Collection"
+            >
+        </div>
+
+    </div>
+
+
+    <!-- Previous Button -->
+    <button class="slider-arrow previous" onclick="previousSlide()">
+        ‹
+    </button>
+
+
+    <!-- Next Button -->
+    <button class="slider-arrow next" onclick="nextSlide()">
+        ›
+    </button>
+
+
+    <!-- Slider Dots -->
+    <div class="slider-dots">
+
+        <button
+            class="dot active"
+            onclick="goToSlide(0)">
+        </button>
+
+        <button
+            class="dot"
+            onclick="goToSlide(1)">
+        </button>
+
+        <button
+            class="dot"
+            onclick="goToSlide(2)">
+        </button>
+
+    </div>
+
+</section>
+
+
+    <!-- CATEGORIES -->
+    <section class="categories">
+
+        <div class="section-heading">
+            <p>EXPLORE OUR COLLECTION</p>
+            <h2>Shop By Category</h2>
+            <span>Find something beautiful for every occasion</span>
+        </div>
+
+
+        <div class="category-container">
+
+            <div class="category-card">
+                <div class="category-circle">💎</div>
+                <h3>Earrings</h3>
+                <p>Explore Collection</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-circle">✨</div>
+                <h3>Bangles</h3>
+                <p>Explore Collection</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-circle">💖</div>
+                <h3>Bracelets</h3>
+                <p>Explore Collection</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-circle">🌸</div>
+                <h3>Hair Accessories</h3>
+                <p>Explore Collection</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-circle">💍</div>
+                <h3>Rings</h3>
+                <p>Explore Collection</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-circle">📿</div>
+                <h3>Necklaces</h3>
+                <p>Explore Collection</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- NEW ARRIVALS -->
+    <section class="new-arrivals">
+
+        <div class="section-heading">
+
+            <p>JUST DROPPED</p>
+
+            <h2>New Arrivals ✨</h2>
+
+            <span>
+                Discover our latest styles, specially picked for you
+            </span>
+
+        </div>
+
+
+        <div class="product-container">
+
+            <div class="product-card">
+
+                <div class="product-image">
+                    <span class="badge">NEW</span>
+                    <div class="product-placeholder">💎</div>
+                    <button class="wishlist">♡</button>
+                </div>
+
+                <div class="product-info">
+                    <h3>Elegant Pearl Earrings</h3>
+
+                    <div class="rating">
+                        ★★★★★
+                    </div>
+
+                    <p class="price">
+                        ₹299
+                        <span>₹499</span>
+                    </p>
+
+                    <button class="add-cart">
+                        Add to Cart
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="product-card">
+
+                <div class="product-image">
+                    <span class="badge">NEW</span>
+                    <div class="product-placeholder">✨</div>
+                    <button class="wishlist">♡</button>
+                </div>
+
+                <div class="product-info">
+                    <h3>Rose Gold Bangles</h3>
+
+                    <div class="rating">
+                        ★★★★★
+                    </div>
+
+                    <p class="price">
+                        ₹399
+                        <span>₹699</span>
+                    </p>
+
+                    <button class="add-cart">
+                        Add to Cart
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="product-card">
+
+                <div class="product-image">
+                    <span class="badge">NEW</span>
+                    <div class="product-placeholder">🌸</div>
+                    <button class="wishlist">♡</button>
+                </div>
+
+                <div class="product-info">
+                    <h3>Floral Hair Clip</h3>
+
+                    <div class="rating">
+                        ★★★★★
+                    </div>
+
+                    <p class="price">
+                        ₹199
+                        <span>₹349</span>
+                    </p>
+
+                    <button class="add-cart">
+                        Add to Cart
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="product-card">
+
+                <div class="product-image">
+                    <span class="badge">NEW</span>
+                    <div class="product-placeholder">💖</div>
+                    <button class="wishlist">♡</button>
+                </div>
+
+                <div class="product-info">
+                    <h3>Charm Bracelet</h3>
+
+                    <div class="rating">
+                        ★★★★★
+                    </div>
+
+                    <p class="price">
+                        ₹349
+                        <span>₹599</span>
+                    </p>
+
+                    <button class="add-cart">
+                        Add to Cart
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button class="view-all">
+            View All Products →
+        </button>
+
+    </section>
+
+
+    <!-- WHY SHOP WITH US -->
+    <section class="why-us">
+
+        <div class="section-heading">
+
+            <p>WHY SS SPARK?</p>
+
+            <h2>Made With Love For You ❤️</h2>
+
+        </div>
+
+
+        <div class="benefits">
+
+            <div class="benefit">
+                <div>💎</div>
+                <h3>Premium Quality</h3>
+                <p>Beautiful accessories selected with care.</p>
+            </div>
+
+            <div class="benefit">
+                <div>🎁</div>
+                <h3>Perfect For Every Occasion</h3>
+                <p>Styles for everyday wear and special moments.</p>
+            </div>
+
+            <div class="benefit">
+                <div>🚚</div>
+                <h3>Pan India Shipping</h3>
+                <p>Safe and secure delivery across India.</p>
+            </div>
+
+            <div class="benefit">
+                <div>💗</div>
+                <h3>Small Business</h3>
+                <p>Every order supports our small business.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- INSTAGRAM STYLE SECTION -->
+    <section class="follow-us">
+
+        <p>FOLLOW OUR JOURNEY</p>
+
+        <h2>@sssparkcollections</h2>
+
+        <p>
+            Discover more styles, new arrivals and offers on Instagram.
+        </p>
+
+        <button>
+            Follow Us
+        </button>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <div class="footer-content">
+
+            <div>
+                <h2>SS Spark Collections</h2>
+                <p>
+                    Sparkle in style. Shine every day. ✨
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="#">Home</a>
+                <a href="#">Shop</a>
+                <a href="#">Categories</a>
+                <a href="#">Contact</a>
+            </div>
+
+            <div>
+                <h3>Customer Care</h3>
+                <p>WhatsApp Us</p>
+                <p>6383270648</p>
+                <p>Pan India Shipping</p>
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+            <p>© 2026 SS Spark Collections. All Rights Reserved.</p>
+        </div>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
