@@ -2239,3 +2239,113 @@ footer {
     background: #fff0f3;
     color: #c52d61;
 }
+
+/* ===============================
+   FINAL MOBILE HEADER
+   =============================== */
+
+@media (max-width: 600px) {
+
+    .main-header {
+        min-height: 70px;
+        height: auto;
+        padding: 6px 10px;
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    /* Logo */
+    .brand-logo img {
+        width: 72px;
+        height: 58px;
+        object-fit: contain;
+    }
+
+    /* Icons + profile */
+    .header-actions {
+        margin-left: auto;
+        gap: 3px;
+    }
+
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .cart-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    #cartCount {
+        min-width: 14px;
+        height: 14px;
+        font-size: 8px;
+        top: -1px;
+        right: -1px;
+    }
+
+    /* Profile button */
+    .profile-trigger {
+        padding: 5px 8px 5px 5px;
+        gap: 5px;
+        font-size: 11px;
+    }
+
+    .profile-avatar {
+        width: 25px;
+        height: 25px;
+        font-size: 11px;
+    }
+
+    .profile-arrow {
+        width: 6px;
+        height: 6px;
+    }
+
+    /* Navigation */
+    .main-nav {
+        order: 3;
+        width: 100%;
+        margin-left: 0;
+        padding: 7px 2px 3px;
+
+        display: flex;
+        justify-content: flex-start;
+
+        gap: 24px;
+
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .main-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .main-nav a {
+        flex-shrink: 0;
+        font-size: 12px;
+        padding: 5px 0;
+    }
+
+    /* Top shipping bar */
+    .top-bar {
+        padding: 7px 5px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .top-bar span {
+        margin: 0 5px;
+    }
+
+    /* Profile dropdown */
+    .profile-menu {
+        width: 220px;
+        right: 0;
+        top: calc(100% + 8px);
+    }
+}
