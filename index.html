@@ -8,58 +8,76 @@
     <title>SS Spark Collections | Women's Accessories</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <!-- TOP ANNOUNCEMENT BAR -->
-    <div class="top-bar">
-        <p>✨ Free Shipping Across India &nbsp; | &nbsp; 💝 Carefully Packed With Love</p>
-    </div>
+<!-- ================= HEADER ================= -->
 
-
-    <!-- HEADER -->
-    <header class="header">
-
-        <div class="brand-logo">
-
-        <div class="brand-monogram">
-        <span>SS</span>
-        <i>✦</i>
-    </div>
-
-    <div class="brand-name">
-        <span>Spark</span>
-        <small>COLLECTIONS</small>
-    </div>
-
+<div class="top-bar">
+    ✨ Free Shipping Across India
+    <span>|</span>
+    💝 Carefully Packed With Love
 </div>
 
-        <nav class="navbar">
-            <a href="#">Home</a>
-            <a href="#">Shop</a>
-            <a href="#">Categories</a>
-            <a href="#">New Arrivals</a>
-            <a href="#">Contact</a>
-        </nav>
+<header class="main-header">
 
-        <div class="header-actions">
+    <!-- LOGO -->
+    <a href="index.html" class="brand-logo">
+        <img src="assets/logo.png" alt="SS Spark Collections">
+    </a>
 
-            <button class="icon-button">⌕</button>
 
-            <button class="icon-button">
-                ♡
-            </button>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
 
-            <button class="icon-button cart-button">
-                🛍
-                <span id="cart-count">0</span>
-            </button>
+        <a href="index.html" class="active">Home</a>
+
+        <a href="shop.html">Shop</a>
+
+        <a href="categories.html">Categories</a>
+
+        <a href="new-arrivals.html">New Arrivals</a>
+
+        <a href="contact.html">Contact</a>
+
+    </nav>
+
+
+    <!-- HEADER ACTIONS -->
+    <div class="header-actions">
+
+        <button class="icon-btn" title="Search">
+            🔍
+        </button>
+
+        <button class="icon-btn" title="Wishlist">
+            ♡
+        </button>
+
+        <a href="cart.html" class="cart-btn" title="Shopping Cart">
+            🛒
+            <span id="cartCount">0</span>
+        </a>
+
+
+        <!-- LOGIN / USER AREA -->
+        <div id="authArea" class="auth-area">
+
+            <a href="login.html" class="login-btn">
+                Login
+            </a>
+
+            <a href="signup.html" class="signup-btn">
+                Sign Up
+            </a>
 
         </div>
 
-    </header>
+    </div>
 
+</header>
 
     <!-- HERO SLIDER -->
 <section class="hero-slider">
@@ -415,7 +433,7 @@
     </footer>
 
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 
 </body>
 

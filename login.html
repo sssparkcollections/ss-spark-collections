@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | SS Spark Collections</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-wrapper">
+
+        <!-- LEFT BRAND SECTION -->
+        <section class="auth-brand">
+
+            <a href="index.html">
+                <img
+                    src="assets/logo.png"
+                    alt="SS Spark Collections"
+                    class="auth-logo"
+                >
+            </a>
+
+            <h1>Welcome Back ✨</h1>
+
+            <p>
+                Discover beautiful accessories,
+                handpicked just for you.
+            </p>
+
+            <div class="auth-decoration">
+                ✦ &nbsp; Sparkle &nbsp; ✦ &nbsp; Shine &nbsp; ✦
+            </div>
+
+        </section>
+
+
+        <!-- LOGIN CARD -->
+        <section class="auth-form-section">
+
+            <div class="auth-card">
+
+                <div class="auth-card-logo">
+                    <img
+                        src="assets/logo.png"
+                        alt="SS Spark Collections"
+                    >
+                </div>
+
+                <h2>Welcome Back</h2>
+
+                <p class="auth-subtitle">
+                    Login to continue your sparkle journey
+                </p>
+
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+
+                        <label for="loginEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="auth-options">
+
+                        <label class="remember-me">
+                            <input type="checkbox">
+                            Remember me
+                        </label>
+
+                        <a href="#">
+                            Forgot Password?
+                        </a>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="auth-submit-btn"
+                    >
+                        Login
+                        <span>→</span>
+                    </button>
+
+                </form>
+
+
+                <p
+                    id="loginMessage"
+                    class="auth-message"
+                ></p>
+
+
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+
+
+                <p class="auth-switch">
+
+                    Don't have an account?
+
+                    <a href="signup.html">
+                        Create Account
+                    </a>
+
+                </p>
+
+
+                <a
+                    href="index.html"
+                    class="back-home"
+                >
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script
+        type="module"
+        src="auth.js"
+    ></script>
+
+</body>
+
+</html>

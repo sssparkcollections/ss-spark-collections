@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supabase Test</title>
+</head>
+
+<body>
+
+    <h1>Supabase Connection Test</h1>
+
+    <button id="testBtn">Test Connection</button>
+
+    <p id="result"></p>
+
+    <script type="module">
+        import { supabase } from "./supabase-client.js";
+
+        document
+            .getElementById("testBtn")
+            .addEventListener("click", async () => {
+
+                const { data, error } = await supabase
+                    .from("categories")
+                    .select("id, name")
+                    .limit(5);
+
+                if (error) {
+                    console.error(error);
+                    document.getElementById("result").textContent =
+                        "Error: " + error.message;
+                    return;
+                }
+
+                console.log(data);
+
+                document.getElementById("result").textContent =
+                    "Supabase connected successfully!";
+
+            });
+    </script>
+
+</body>
+</html>

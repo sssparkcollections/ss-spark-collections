@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | SS Spark Collections</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-wrapper">
+
+        <!-- LEFT BRAND SECTION -->
+        <section class="auth-brand">
+
+            <a href="index.html">
+                <img
+                    src="assets/logo.png"
+                    alt="SS Spark Collections"
+                    class="auth-logo"
+                >
+            </a>
+
+            <h1>Begin Your Sparkle ✨</h1>
+
+            <p>
+                Create your account and discover
+                beautiful accessories made just for you.
+            </p>
+
+            <div class="auth-decoration">
+                ✦ &nbsp; Sparkle &nbsp; ✦ &nbsp; Shine &nbsp; ✦
+            </div>
+
+        </section>
+
+
+        <!-- SIGNUP FORM -->
+        <section class="auth-form-section">
+
+            <div class="auth-card">
+
+                <div class="auth-card-logo">
+                    <img
+                        src="assets/logo.png"
+                        alt="SS Spark Collections"
+                    >
+                </div>
+
+                <h2>Create Account</h2>
+
+                <p class="auth-subtitle">
+                    Join SS Spark Collections today
+                </p>
+
+
+                <form id="signupForm">
+
+                    <!-- FULL NAME -->
+                    <div class="form-group">
+
+                        <label for="fullName">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Create a password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TERMS -->
+                    <label class="terms-check">
+
+                        <input
+                            type="checkbox"
+                            required
+                        >
+
+                        <span>
+                            I agree to the Terms & Privacy Policy
+                        </span>
+
+                    </label>
+
+
+                    <!-- CREATE ACCOUNT -->
+                    <button
+                        type="submit"
+                        class="auth-submit-btn"
+                    >
+                        Create Account
+                        <span>→</span>
+                    </button>
+
+                </form>
+
+
+                <!-- MESSAGE -->
+                <p
+                    id="signupMessage"
+                    class="auth-message"
+                ></p>
+
+
+                <!-- DIVIDER -->
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+
+
+                <!-- LOGIN -->
+                <p class="auth-switch">
+
+                    Already have an account?
+
+                    <a href="login.html">
+                        Login
+                    </a>
+
+                </p>
+
+
+                <!-- HOME -->
+                <a
+                    href="index.html"
+                    class="back-home"
+                >
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script
+        type="module"
+        src="auth.js"
+    ></script>
+
+</body>
+
+</html>
