@@ -1,0 +1,1062 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | SS Spark Collections</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --orders-pink: #d6336c;
+            --orders-pink-dark: #c52d61;
+            --orders-rose: #8f294f;
+            --orders-ink: #542238;
+            --orders-muted: #987080;
+            --orders-border: #f0dce4;
+            --orders-soft: #fff7fa;
+            --orders-shadow: 0 16px 42px rgba(83,35,52,.08);
+        }
+
+        .orders-page {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 8% 8%, rgba(214,51,108,.05), transparent 26%),
+                radial-gradient(circle at 92% 12%, rgba(231,84,128,.05), transparent 25%),
+                linear-gradient(180deg,#fff9fb 0%,#fff 32%,#fff 100%);
+        }
+
+        .orders-hero {
+            padding: 54px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--orders-border);
+        }
+
+        .orders-hero-inner {
+            width: min(1120px,92%);
+            margin: 0 auto;
+        }
+
+        .orders-eyebrow {
+            margin: 0 0 10px;
+            color: var(--orders-pink);
+            font: 700 9px/1.2 Arial,sans-serif;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .orders-hero h1 {
+            margin: 0;
+            color: var(--orders-ink);
+            font: 500 clamp(38px,5vw,54px)/1.08 Georgia,"Times New Roman",serif;
+        }
+
+        .orders-divider {
+            display: block;
+            margin: 12px 0 9px;
+            color: #d78ba8;
+            font-size: 13px;
+        }
+
+        .orders-hero p {
+            max-width: 570px;
+            margin: 0 auto;
+            color: var(--orders-muted);
+            font: 12px/1.7 Arial,sans-serif;
+        }
+
+        .orders-content {
+            width: min(1120px,92%);
+            margin: 0 auto;
+            padding: 36px 0 85px;
+        }
+
+        .orders-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .orders-toolbar-copy h2 {
+            margin: 0;
+            color: var(--orders-ink);
+            font: 500 27px/1.15 Georgia,"Times New Roman",serif;
+        }
+
+        .orders-toolbar-copy span {
+            display: block;
+            margin-top: 6px;
+            color: var(--orders-muted);
+            font: 10px/1.4 Arial,sans-serif;
+        }
+
+        .orders-filter {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px;
+            border: 1px solid var(--orders-border);
+            border-radius: 999px;
+            background: rgba(255,255,255,.92);
+            box-shadow: 0 8px 24px rgba(83,35,52,.05);
+        }
+
+        .orders-tab {
+            min-width: 88px;
+            height: 34px;
+            padding: 0 13px;
+            border: 0;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--orders-muted);
+            font: 700 9px/1 Arial,sans-serif;
+            cursor: pointer;
+            transition: background .18s ease,color .18s ease,box-shadow .18s ease;
+        }
+
+        .orders-tab:hover {
+            color: var(--orders-pink);
+            background: #fff5f8;
+        }
+
+        .orders-tab.active {
+            color: #fff;
+            background: linear-gradient(135deg,var(--orders-pink),#e75480);
+            box-shadow: 0 6px 16px rgba(214,51,108,.18);
+        }
+
+        .orders-tab-count {
+            opacity: .78;
+            margin-left: 3px;
+        }
+
+        .orders-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .order-card {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(210px,1.05fr) minmax(240px,1.35fr) auto;
+            align-items: center;
+            gap: 22px;
+            padding: 20px 22px;
+            border: 1px solid var(--orders-border);
+            border-radius: 20px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 10px 30px rgba(83,35,52,.055);
+            transition: border-color .18s ease,box-shadow .18s ease;
+        }
+
+        .order-card:hover {
+            border-color: #e6c4d2;
+            box-shadow: 0 14px 34px rgba(83,35,52,.08);
+        }
+
+        .order-main {
+            min-width: 0;
+        }
+
+        .order-kicker {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 8px;
+            color: var(--orders-muted);
+            font: 700 8px/1 Arial,sans-serif;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        .order-kicker::before {
+            content: "";
+            width: 22px;
+            height: 1px;
+            background: #dca2b8;
+        }
+
+        .order-number {
+            margin: 0;
+            color: var(--orders-ink);
+            font: 600 19px/1.2 Georgia,"Times New Roman",serif;
+        }
+
+        .order-date {
+            margin-top: 7px;
+            color: var(--orders-muted);
+            font: 10px/1.4 Arial,sans-serif;
+        }
+
+        .order-middle {
+            min-width: 0;
+            padding-left: 22px;
+            border-left: 1px solid #f1e1e7;
+        }
+
+        .order-items {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px 8px;
+            margin-bottom: 10px;
+        }
+
+        .item-pill {
+            max-width: 190px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 7px 10px;
+            border: 1px solid #f0dfe5;
+            border-radius: 999px;
+            background: #fffafd;
+            color: #6f4d5d;
+            font: 600 9px/1 Arial,sans-serif;
+        }
+
+        .item-more {
+            color: var(--orders-muted);
+            font: 700 9px/1 Arial,sans-serif;
+        }
+
+        .order-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .order-meta-item {
+            color: var(--orders-muted);
+            font: 9px/1.4 Arial,sans-serif;
+        }
+
+        .order-meta-item strong {
+            color: var(--orders-ink);
+            font-weight: 700;
+        }
+
+        .order-side {
+            min-width: 145px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .order-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            font: 700 9px/1 Arial,sans-serif;
+            white-space: nowrap;
+        }
+
+        .order-status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-pending {
+            background: #fff6dc;
+            color: #9a7100;
+        }
+
+        .status-completed {
+            background: #eaf8ef;
+            color: #2c8a4b;
+        }
+
+        .status-canceled {
+            background: #ffecec;
+            color: #c14b4b;
+        }
+
+        .order-total-label {
+            color: var(--orders-muted);
+            font: 8px/1 Arial,sans-serif;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        .order-total {
+            margin-top: -5px;
+            color: var(--orders-pink);
+            font: 700 18px/1.1 Arial,sans-serif;
+        }
+
+        .payment-state {
+            color: var(--orders-muted);
+            font: 8px/1 Arial,sans-serif;
+        }
+
+        .view-order {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 112px;
+            height: 36px;
+            padding: 0 13px;
+            border: 1px solid #e4c2d1;
+            border-radius: 999px;
+            background: #fff8fb;
+            color: var(--orders-rose);
+            text-decoration: none;
+            font: 700 9px/1 Arial,sans-serif;
+            transition: border-color .18s ease,background .18s ease,color .18s ease;
+        }
+
+        .view-order:hover {
+            border-color: var(--orders-pink);
+            background: #fff2f7;
+            color: var(--orders-pink);
+        }
+
+        .orders-message {
+            padding: 70px 20px;
+            text-align: center;
+            border: 1px solid var(--orders-border);
+            border-radius: 22px;
+            background: #fff;
+            box-shadow: var(--orders-shadow);
+        }
+
+        .orders-message-icon {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 15px;
+            display: grid;
+            place-items: center;
+            border: 1px solid #efd7e1;
+            border-radius: 50%;
+            background: #fff7fa;
+            color: var(--orders-pink);
+            font: 500 21px Georgia,serif;
+        }
+
+        .orders-message strong {
+            display: block;
+            color: var(--orders-ink);
+            font: 500 22px Georgia,"Times New Roman",serif;
+        }
+
+        .orders-message p {
+            margin: 7px auto 0;
+            max-width: 430px;
+            color: var(--orders-muted);
+            font: 10px/1.6 Arial,sans-serif;
+        }
+
+        .shop-link {
+            display: inline-flex;
+            margin-top: 18px;
+            align-items: center;
+            justify-content: center;
+            height: 38px;
+            padding: 0 16px;
+            border-radius: 999px;
+            background: linear-gradient(135deg,var(--orders-pink),#e75480);
+            color: #fff;
+            text-decoration: none;
+            font: 700 9px/1 Arial,sans-serif;
+            box-shadow: 0 8px 20px rgba(214,51,108,.16);
+        }
+
+        @media(max-width:900px) {
+            .order-card {
+                grid-template-columns: 1fr auto;
+            }
+
+            .order-middle {
+                grid-column: 1 / -1;
+                padding-left: 0;
+                padding-top: 15px;
+                border-left: 0;
+                border-top: 1px solid #f1e1e7;
+            }
+        }
+
+        @media(max-width:700px) {
+            .orders-hero {
+                padding: 38px 16px 30px;
+            }
+
+            .orders-content {
+                width: calc(100% - 24px);
+                padding: 26px 0 60px;
+            }
+
+            .orders-toolbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .orders-toolbar-copy h2 {
+                font-size: 25px;
+            }
+
+            .orders-filter {
+                width: 100%;
+                overflow-x: auto;
+                justify-content: flex-start;
+                scrollbar-width: none;
+            }
+
+            .orders-filter::-webkit-scrollbar {
+                display: none;
+            }
+
+            .orders-tab {
+                flex: 1 0 auto;
+            }
+
+            .order-card {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 18px;
+                border-radius: 18px;
+            }
+
+            .order-middle {
+                grid-column: auto;
+            }
+
+            .order-side {
+                min-width: 0;
+                align-items: center;
+                display: grid;
+                grid-template-columns: 1fr auto;
+                gap: 8px 12px;
+            }
+
+            .order-status {
+                justify-self: start;
+                grid-column: 1;
+                grid-row: 1 / span 3;
+            }
+
+            .order-total-label,
+            .order-total,
+            .payment-state {
+                grid-column: 2;
+                justify-self: end;
+                text-align: right;
+            }
+
+            .order-total-label {
+                grid-row: 1;
+            }
+
+            .order-total {
+                grid-row: 2;
+                margin-top: -2px;
+            }
+
+            .payment-state {
+                grid-row: 3;
+            }
+
+            .view-order {
+                width: 100%;
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* Pagination - added only; existing functionality unchanged */
+        .orders-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .orders-page-btn {
+            min-width: 34px;
+            height: 34px;
+            padding: 0 10px;
+            border: 1px solid var(--orders-border);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--orders-rose);
+            font: 700 9px/1 Arial,sans-serif;
+            cursor: pointer;
+            transition: border-color .18s ease,background .18s ease,color .18s ease;
+        }
+
+        .orders-page-btn:hover:not(:disabled) {
+            border-color: var(--orders-pink);
+            background: #fff2f7;
+            color: var(--orders-pink);
+        }
+
+        .orders-page-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg,var(--orders-pink),#e75480);
+            border-color: var(--orders-pink);
+            box-shadow: 0 6px 16px rgba(214,51,108,.15);
+        }
+
+        .orders-page-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+        .orders-page-info {
+            color: var(--orders-muted);
+            font: 9px/1.4 Arial,sans-serif;
+            margin: 0 5px;
+        }
+
+        @media(max-width:700px) {
+            .orders-pagination {
+                gap: 5px;
+                margin-top: 20px;
+            }
+
+            .orders-page-btn {
+                min-width: 32px;
+                height: 32px;
+                padding: 0 9px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">✨ Free Shipping Across India <span>|</span> 💝 Carefully Packed With Love</div>
+
+    <header class="main-header">
+        <a href="index.html" class="brand-logo">
+            <img src="assets/logo.png" alt="SS Spark Collections">
+        </a>
+
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="product-list.html">Products</a>
+            <a href="new-arrivals.html">New Arrivals</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+            <button class="icon-btn" id="headerSearchBtn" type="button" title="Search" aria-label="Search">
+                🔍
+            </button>
+
+            <a href="cart.html" class="cart-btn" title="Shopping Cart" aria-label="Shopping Cart">
+                🛒
+                <span id="cartCount">0</span>
+            </a>
+
+            <div id="authArea" class="auth-area">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="create-account.html" class="signup-btn">Create Account</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="orders-page">
+        <section class="orders-hero">
+            <div class="orders-hero-inner">
+                <p class="orders-eyebrow">SS SPARK COLLECTIONS</p>
+                <h1>My Orders</h1>
+                <span class="orders-divider">✦</span>
+                <p>Every order, beautifully kept in one place. Track your purchases, check their status, and revisit the details whenever you need.</p>
+            </div>
+        </section>
+
+        <section class="orders-content">
+            <div class="orders-toolbar">
+                <div class="orders-toolbar-copy">
+                    <h2>Your Orders</h2>
+                    <span id="ordersSubtitle">Loading your order history...</span>
+                </div>
+
+                <div class="orders-filter" role="tablist" aria-label="Order status filters">
+                    <button class="orders-tab active" type="button" data-filter="all" role="tab">All <span class="orders-tab-count" id="countAll">0</span></button>
+                    <button class="orders-tab" type="button" data-filter="pending" role="tab">Pending <span class="orders-tab-count" id="countPending">0</span></button>
+                    <button class="orders-tab" type="button" data-filter="canceled" role="tab">Canceled <span class="orders-tab-count" id="countCanceled">0</span></button>
+                    <button class="orders-tab" type="button" data-filter="completed" role="tab">Completed <span class="orders-tab-count" id="countCompleted">0</span></button>
+                </div>
+            </div>
+
+            <div id="ordersList" class="orders-list">
+                <div class="orders-message">
+                    <div class="orders-message-icon">✦</div>
+                    <strong>Loading your orders</strong>
+                    <p>We are gathering your latest order history.</p>
+                </div>
+            </div>
+
+            <div id="ordersPagination" class="orders-pagination" aria-label="Orders pagination"></div>
+        </section>
+    </main>
+
+    <div id="ordersToast" aria-live="polite"></div>
+
+    <script type="module">
+        import { supabase } from "./supabase-client.js";
+
+        const els = {
+            authArea: document.getElementById("authArea"),
+            cartCount: document.getElementById("cartCount"),
+            search: document.getElementById("headerSearchBtn"),
+            ordersList: document.getElementById("ordersList"),
+            ordersSubtitle: document.getElementById("ordersSubtitle"),
+            tabs: [...document.querySelectorAll(".orders-tab")],
+            countAll: document.getElementById("countAll"),
+            countPending: document.getElementById("countPending"),
+            countCanceled: document.getElementById("countCanceled"),
+            countCompleted: document.getElementById("countCompleted"),
+            pagination: document.getElementById("ordersPagination")
+        };
+
+        let currentFilter = "all";
+        let currentPage = 1;
+        const ORDERS_PER_PAGE = 5;
+        let allOrders = [];
+        let orderItemsByOrder = new Map();
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function formatMoney(value) {
+            return Number(value || 0).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatDate(value) {
+            if (!value) return "-";
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return "-";
+            return date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            });
+        }
+
+        function formatStatus(value) {
+            const status = String(value || "").toLowerCase();
+
+            if (status === "delivered") return "Completed";
+            if (status === "cancelled" || status === "canceled") return "Canceled";
+            return "Pending";
+        }
+
+        function statusBucket(value) {
+            const status = String(value || "").toLowerCase();
+
+            if (status === "delivered") return "completed";
+            if (status === "cancelled" || status === "canceled") return "canceled";
+
+            // Pending covers the active fulfilment lifecycle:
+            // pending, confirmed, processing, shipped, etc.
+            return "pending";
+        }
+
+        function paymentLabel(value) {
+            const status = String(value || "").toLowerCase();
+            const labels = {
+                pending: "Payment pending",
+                paid: "Payment paid",
+                failed: "Payment failed",
+                refunded: "Payment refunded",
+                partially_refunded: "Partially refunded"
+            };
+            return labels[status] || (value ? String(value).replace(/_/g, " ") : "Payment");
+        }
+
+        function getItems(orderId) {
+            return orderItemsByOrder.get(orderId) || [];
+        }
+
+        function renderCounts() {
+            const counts = {
+                all: allOrders.length,
+                pending: allOrders.filter(o => statusBucket(o.status) === "pending").length,
+                canceled: allOrders.filter(o => statusBucket(o.status) === "canceled").length,
+                completed: allOrders.filter(o => statusBucket(o.status) === "completed").length
+            };
+
+            els.countAll.textContent = counts.all;
+            els.countPending.textContent = counts.pending;
+            els.countCanceled.textContent = counts.canceled;
+            els.countCompleted.textContent = counts.completed;
+
+            const visibleCount = currentFilter === "all"
+                ? counts.all
+                : counts[currentFilter];
+
+            els.ordersSubtitle.textContent = visibleCount === 1
+                ? "1 order in this view"
+                : `${visibleCount} orders in this view`;
+        }
+
+
+        function renderPagination(totalItems) {
+            if (!els.pagination) return;
+
+            const totalPages = Math.ceil(totalItems / ORDERS_PER_PAGE);
+
+            if (totalPages <= 1) {
+                els.pagination.innerHTML = "";
+                return;
+            }
+
+            let buttons = `
+                <button class="orders-page-btn" type="button"
+                    data-page="${currentPage - 1}"
+                    ${currentPage === 1 ? "disabled" : ""}>
+                    ←
+                </button>
+            `;
+
+            for (let page = 1; page <= totalPages; page++) {
+                buttons += `
+                    <button class="orders-page-btn ${page === currentPage ? "active" : ""}"
+                        type="button" data-page="${page}"
+                        aria-current="${page === currentPage ? "page" : "false"}">
+                        ${page}
+                    </button>
+                `;
+            }
+
+            buttons += `
+                <button class="orders-page-btn" type="button"
+                    data-page="${currentPage + 1}"
+                    ${currentPage === totalPages ? "disabled" : ""}>
+                    →
+                </button>
+                <span class="orders-page-info">Page ${currentPage} of ${totalPages}</span>
+            `;
+
+            els.pagination.innerHTML = buttons;
+
+            els.pagination.querySelectorAll("[data-page]").forEach(button => {
+                button.addEventListener("click", () => {
+                    const page = Number(button.dataset.page);
+                    if (!Number.isInteger(page) || page < 1 || page > totalPages || page === currentPage) {
+                        return;
+                    }
+
+                    currentPage = page;
+                    renderOrders();
+                    document.querySelector(".orders-content")?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                });
+            });
+        }
+
+        function renderOrders() {
+            const visibleOrders = currentFilter === "all"
+                ? allOrders
+                : allOrders.filter(order => statusBucket(order.status) === currentFilter);
+
+            renderCounts();
+
+            if (!visibleOrders.length) {
+                if (els.pagination) els.pagination.innerHTML = "";
+                els.ordersList.innerHTML = `
+                    <div class="orders-message">
+                        <div class="orders-message-icon">♡</div>
+                        <strong>No orders here yet</strong>
+                        <p>There are no orders in this status. Your order history will appear here once you place an order.</p>
+                        <a class="shop-link" href="shop.html">Continue Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const totalPages = Math.ceil(visibleOrders.length / ORDERS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+
+            const startIndex = (currentPage - 1) * ORDERS_PER_PAGE;
+            const paginatedOrders = visibleOrders.slice(startIndex, startIndex + ORDERS_PER_PAGE);
+
+            renderPagination(visibleOrders.length);
+
+            els.ordersList.innerHTML = paginatedOrders.map(order => {
+                const bucket = statusBucket(order.status);
+                const items = getItems(order.id);
+                const itemCount = items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+
+                const itemPreview = items.slice(0, 2).map(item => `
+                    <span class="item-pill">${escapeHtml(item.product_name || "Product")}</span>
+                `).join("");
+
+                const moreCount = Math.max(0, items.length - 2);
+
+                return `
+                    <article class="order-card">
+                        <div class="order-main">
+                            <div class="order-kicker">Order placed</div>
+                            <h3 class="order-number">#${escapeHtml(order.order_number || order.id)}</h3>
+                            <div class="order-date">${formatDate(order.created_at)}</div>
+                        </div>
+
+                        <div class="order-middle">
+                            <div class="order-items">
+                                ${itemPreview || '<span class="item-pill">Order items</span>'}
+                                ${moreCount ? `<span class="item-more">+${moreCount} more</span>` : ""}
+                            </div>
+
+                            <div class="order-meta">
+                                <span class="order-meta-item"><strong>${itemCount}</strong> item${itemCount === 1 ? "" : "s"}</span>
+                                <span class="order-meta-item">Subtotal <strong>₹${formatMoney(order.subtotal)}</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="order-side">
+                            <span class="order-status status-${bucket}">${formatStatus(order.status)}</span>
+                            <span class="order-total-label">Order total</span>
+                            <span class="order-total">₹${formatMoney(order.total_amount)}</span>
+                            <span class="payment-state">${escapeHtml(paymentLabel(order.payment_status))}</span>
+                            <a class="view-order" href="order-view.html?id=${encodeURIComponent(order.id)}">View Order →</a>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        async function updateCartCount(userId) {
+            if (!els.cartCount) return;
+
+            const { data: cart } = await supabase
+                .from("carts")
+                .select("id")
+                .eq("user_id", userId)
+                .maybeSingle();
+
+            if (!cart) {
+                els.cartCount.textContent = "0";
+                return;
+            }
+
+            const { data: items } = await supabase
+                .from("cart_items")
+                .select("quantity")
+                .eq("cart_id", cart.id);
+
+            const count = (items || []).reduce(
+                (sum, item) => sum + Number(item.quantity || 0),
+                0
+            );
+
+            els.cartCount.textContent = String(count);
+        }
+
+        async function updateAuthUI() {
+            if (!els.authArea) return null;
+
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                window.location.href = "login.html";
+                return null;
+            }
+
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("full_name, role")
+                .eq("id", user.id)
+                .maybeSingle();
+
+            const displayName =
+                profile?.full_name ||
+                user.user_metadata?.full_name ||
+                user.email ||
+                "";
+
+            els.authArea.innerHTML = `
+                <div class="profile-dropdown">
+                    <button class="profile-trigger" id="profileTrigger" type="button">
+                        <span class="profile-avatar">✦</span>
+                        <span>Hi, ${escapeHtml(displayName)}</span>
+                        <span class="profile-arrow">⌄</span>
+                    </button>
+
+                    <div class="profile-menu" id="profileMenu">
+                        <div class="profile-menu-header">
+                            <div class="profile-menu-avatar">✦</div>
+                            <div>
+                                <strong>${escapeHtml(displayName)}</strong>
+                                <small>${escapeHtml(user.email || "")}</small>
+                            </div>
+                        </div>
+
+                        <div class="profile-menu-divider"></div>
+
+                        <a href="wishlist.html" class="profile-menu-item">
+                            <span>♡</span><span>Wishlist</span>
+                        </a>
+
+                        <a href="order-lists.html" class="profile-menu-item">
+                            <span>♧</span><span>My Orders</span>
+                        </a>
+
+                        ${profile?.role === "admin" ? `
+<a href="admin.html" class="profile-menu-item">
+    <span>⚙</span>
+    <span>Admin Panel</span>
+</a>
+` : ""}
+
+
+                        <div class="profile-menu-divider"></div>
+
+                        <button id="logoutBtn" class="profile-menu-logout" type="button">
+                            <span>↪</span><span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const trigger = document.getElementById("profileTrigger");
+            const menu = document.getElementById("profileMenu");
+
+            trigger?.addEventListener("click", event => {
+                event.stopPropagation();
+                menu?.classList.toggle("show");
+            });
+
+            document.addEventListener("click", event => {
+                if (
+                    menu &&
+                    trigger &&
+                    !menu.contains(event.target) &&
+                    !trigger.contains(event.target)
+                ) {
+                    menu.classList.remove("show");
+                }
+            }, { once: true });
+
+            document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+                await supabase.auth.signOut();
+                window.location.href = "login.html";
+            });
+
+            await updateCartCount(user.id);
+            return user;
+        }
+
+        async function loadOrders(userId) {
+            els.ordersList.innerHTML = `
+                <div class="orders-message">
+                    <div class="orders-message-icon">✦</div>
+                    <strong>Loading your orders</strong>
+                    <p>We are gathering your latest order history.</p>
+                </div>
+            `;
+
+            const { data: orders, error } = await supabase
+                .from("orders")
+                .select(`
+                    id,
+                    order_number,
+                    status,
+                    payment_status,
+                    subtotal,
+                    discount_amount,
+                    shipping_amount,
+                    total_amount,
+                    shipping_address,
+                    created_at,
+                    updated_at
+                `)
+                .eq("user_id", userId)
+                .order("created_at", { ascending: false });
+
+            if (error) throw error;
+
+            allOrders = orders || [];
+            orderItemsByOrder = new Map();
+
+            if (allOrders.length) {
+                const orderIds = allOrders.map(order => order.id);
+
+                const { data: items, error: itemsError } = await supabase
+                    .from("order_items")
+                    .select("id,order_id,product_name,product_price,quantity,subtotal,created_at")
+                    .in("order_id", orderIds)
+                    .order("created_at", { ascending: true });
+
+                if (itemsError) throw itemsError;
+
+                (items || []).forEach(item => {
+                    const list = orderItemsByOrder.get(item.order_id) || [];
+                    list.push(item);
+                    orderItemsByOrder.set(item.order_id, list);
+                });
+            }
+
+            renderOrders();
+        }
+
+        function setupEvents() {
+            els.tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    currentFilter = tab.dataset.filter || "all";
+                    currentPage = 1;
+
+                    els.tabs.forEach(item => {
+                        item.classList.toggle("active", item === tab);
+                        item.setAttribute("aria-selected", item === tab ? "true" : "false");
+                    });
+
+                    renderOrders();
+                });
+            });
+
+            els.search?.addEventListener("click", () => {
+                window.location.href = "search.html";
+            });
+        }
+
+        async function init() {
+            try {
+                const user = await updateAuthUI();
+                if (!user) return;
+
+                setupEvents();
+                await loadOrders(user.id);
+            } catch (error) {
+                console.error("Orders page error:", error);
+
+                els.ordersList.innerHTML = `
+                    <div class="orders-message">
+                        <div class="orders-message-icon">!</div>
+                        <strong>We couldn't load your orders</strong>
+                        <p>Please refresh the page and try again. If the problem continues, sign in again.</p>
+                    </div>
+                `;
+                els.ordersSubtitle.textContent = "Unable to load order history";
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
+

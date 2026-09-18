@@ -8,9 +8,63 @@
     <title>Login | SS Spark Collections</title>
 
     <link rel="stylesheet" href="style.css">
+<style id="login-premium">
+body.auth-body{background:radial-gradient(circle at 8% 10%,rgba(217,77,125,.13),transparent 30%),radial-gradient(circle at 92% 90%,rgba(199,154,69,.10),transparent 28%),linear-gradient(135deg,#fff9fb,#fff 48%,#fff7fa)}
+.auth-wrapper{min-height:100vh;padding:24px;gap:0}
+.auth-brand{position:relative;overflow:hidden;background:linear-gradient(145deg,#8f2c50,#711f41 55%,#56152f)}
+.auth-brand::before{content:"";position:absolute;width:260px;height:260px;right:-120px;top:-100px;border-radius:50%;border:1px solid rgba(255,255,255,.16);box-shadow:0 0 0 35px rgba(255,255,255,.035),0 0 0 70px rgba(255,255,255,.025)}
+.auth-form-section{background:rgba(255,255,255,.78);backdrop-filter:blur(12px)}
+.auth-card{border:1px solid rgba(122,35,68,.14);border-radius:28px;box-shadow:0 24px 70px rgba(92,23,51,.14);background:rgba(255,255,255,.96)}
+.auth-card-logo{width:78px!important;height:78px!important;margin:0 auto 16px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:24px!important;overflow:hidden!important;background:linear-gradient(145deg,#fff4f8,#fff);border:1px solid rgba(217,77,125,.12);box-shadow:0 10px 28px rgba(122,35,68,.10)}
+.auth-card-logo img{display:block!important;width:64px!important;height:64px!important;max-width:64px!important;max-height:64px!important;object-fit:contain!important;margin:0 auto!important}
+.auth-card h2,.auth-subtitle{text-align:center!important}.auth-card h2{color:#5d1733;letter-spacing:-.02em}.auth-subtitle{color:#876b75}
+.form-group{margin-bottom:14px}.form-group label{color:#603342;font-size:12px;font-weight:700;margin-bottom:7px}
+.form-group input{min-height:46px;width:100%;box-sizing:border-box;border:1px solid rgba(122,35,68,.15);border-radius:13px;background:#fff;color:#38242c;box-shadow:0 3px 12px rgba(92,23,51,.035);transition:border-color .18s,box-shadow .18s}
+.form-group input::placeholder{color:#b49aa5}.form-group input:focus{outline:none;border-color:rgba(217,77,125,.58);box-shadow:0 0 0 4px rgba(217,77,125,.09),0 7px 20px rgba(92,23,51,.06)}
+.password-wrap{position:relative!important;width:100%!important}.password-wrap input{width:100%!important;padding-right:48px!important}
+.password-toggle{position:absolute!important;right:7px!important;top:50%!important;transform:translateY(-50%)!important;width:34px!important;height:34px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;z-index:5!important;border:0!important;background:transparent!important;color:#8d6876;cursor:pointer}
+.password-toggle:hover{transform:translateY(-50%)!important;background:#fff1f6;color:#7a2344}
+.auth-submit-btn{width:100%;min-height:48px;border:0;border-radius:14px;background:linear-gradient(135deg,#d94d7d,#9b2d56);box-shadow:0 12px 24px rgba(155,45,86,.20);font-weight:800}.auth-submit-btn:hover{transform:none}
+.auth-message{min-height:0;margin:10px 0 0}.auth-message:not(:empty){padding:10px 12px;border-radius:12px;background:#fff5f8;border:1px solid rgba(217,77,125,.12)}
+.login-welcome{display:flex;align-items:center;gap:10px;margin:0 0 15px;padding:10px 12px;border:1px solid rgba(217,77,125,.16);border-radius:14px;background:linear-gradient(135deg,#fff6fa,#fffaf5);box-shadow:0 7px 20px rgba(122,35,68,.06);color:#653746;position:relative;overflow:hidden}.login-welcome::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,#d94d7d,#c79a45,#d94d7d);opacity:.65}
+.login-welcome-icon{width:30px;height:30px;display:grid;place-items:center;flex:0 0 30px;border-radius:10px;background:linear-gradient(135deg,#d94d7d,#9b2d56);color:#fff;font-size:13px;box-shadow:0 6px 12px rgba(155,45,86,.16)}.login-welcome-copy{min-width:0;display:flex;flex-direction:column;gap:2px}.login-welcome-copy strong{color:#7a2344;font-size:11.5px;font-weight:800}.login-welcome-copy span{color:#947681;font-size:10px;line-height:1.4}
+@media(max-width:700px){.auth-wrapper{display:flex!important;flex-direction:column!important;padding:7px!important}.auth-brand{display:flex!important;min-height:150px!important;height:150px!important;max-height:150px!important;overflow:hidden!important;padding:10px 14px!important;border-radius:20px 20px 0 0!important;justify-content:center!important;text-align:center!important}.auth-brand .auth-logo{display:block!important;width:94px!important;height:94px!important;max-width:94px!important;max-height:94px!important;object-fit:contain!important;margin:0 auto 1px!important}.auth-brand h1{font-size:20px!important;line-height:1.12!important;margin:2px 0!important}.auth-brand p{font-size:9px!important;line-height:1.3!important;max-width:310px!important;margin:2px auto 0!important}.auth-decoration{font-size:8px!important;margin-top:4px!important}.auth-form-section{min-height:auto!important;border-radius:0 0 20px 20px!important;padding:8px 0 14px!important}.auth-card{width:100%;max-width:460px;border-radius:20px!important;padding:20px 17px!important}.auth-card-logo{width:64px!important;height:64px!important;margin:0 auto 11px!important;border-radius:20px!important}.auth-card-logo img{width:51px!important;height:51px!important;max-width:51px!important;max-height:51px!important}.auth-card h2{font-size:23px!important;line-height:1.15!important;margin:0!important}.auth-subtitle{font-size:11px!important;margin:5px 0 13px!important}.form-group{margin-bottom:11px}.form-group input{min-height:43px;font-size:13px}.auth-submit-btn{min-height:45px}.login-welcome{margin-bottom:11px;padding:8px 9px;gap:8px;border-radius:12px}.login-welcome-icon{width:27px;height:27px;flex-basis:27px;border-radius:9px}.login-welcome-copy strong{font-size:10.5px}.login-welcome-copy span{font-size:9px}}
+@media(max-width:380px){.auth-wrapper{padding:5px!important}.auth-brand{min-height:125px!important;height:125px!important;max-height:125px!important;padding:7px 10px!important}.auth-brand .auth-logo{width:78px!important;height:78px!important;max-width:78px!important;max-height:78px!important}.auth-brand h1{font-size:17px!important}.auth-brand p{font-size:8px!important}.auth-decoration{font-size:7px!important}.auth-card{padding:16px 13px!important;border-radius:18px!important}.auth-card-logo{width:56px!important;height:56px!important;margin-bottom:9px!important;border-radius:17px!important}.auth-card-logo img{width:44px!important;height:44px!important;max-width:44px!important;max-height:44px!important}.auth-card h2{font-size:21px!important}.auth-subtitle{font-size:10px!important;margin:4px 0 10px!important}.login-welcome{padding:7px 8px;margin-bottom:10px}.login-welcome-icon{width:25px;height:25px;flex-basis:25px}.login-welcome-copy strong{font-size:10px}.login-welcome-copy span{font-size:8.5px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ===== PREMIUM FORGOT PASSWORD ===== */
+.forgot-password-screen{display:none;margin-top:18px;padding-top:18px;border-top:1px solid rgba(122,35,68,.10)}
+.forgot-password-screen.active{display:block}
+.forgot-password-head{text-align:center;margin-bottom:16px}
+.forgot-password-icon{width:54px;height:54px;margin:0 auto 11px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(145deg,#fff1f6,#fff);border:1px solid rgba(217,77,125,.15);box-shadow:0 9px 22px rgba(122,35,68,.08);color:#9b2d56;font-size:22px}
+.forgot-password-head h3{margin:0 0 5px;color:#5d1733;font-size:18px}.forgot-password-head p{margin:0;color:#8a707b;font-size:11px;line-height:1.55}
+.forgot-password-actions{display:flex;gap:8px;margin-top:10px}.forgot-password-actions button{flex:1;min-height:42px;border-radius:12px;font-weight:800;cursor:pointer}
+.forgot-cancel-btn{border:1px solid rgba(122,35,68,.14);background:#fff;color:#7a2344}.forgot-submit-btn{border:0;background:linear-gradient(135deg,#d94d7d,#9b2d56);color:#fff;box-shadow:0 9px 18px rgba(155,45,86,.18)}
+.forgot-status{min-height:0;margin:10px 0 0}.forgot-status:not(:empty){padding:9px 11px;border-radius:11px;background:#fff7fa;border:1px solid rgba(217,77,125,.12);color:#6f4d5d;font-size:11px;line-height:1.45}
+.forgot-success-box{display:none;text-align:center;margin-top:14px;padding:13px 12px;border:1px solid rgba(52,168,83,.18);border-radius:13px;background:#f8fff9;color:#52715a;font-size:11px;line-height:1.55}.forgot-success-box.active{display:block}
+@media(max-width:700px){.forgot-password-screen{margin-top:14px;padding-top:14px}.forgot-password-icon{width:48px;height:48px;border-radius:16px;font-size:20px}.forgot-password-head h3{font-size:17px}.forgot-password-actions button{min-height:40px;font-size:12px}}
+
+</style>
+
+<style id="login-final-polish">
+/* Final auth polish: same premium language, no functional changes. */
+.login-alert-stack{position:fixed;top:16px;right:16px;z-index:1000;width:min(360px,calc(100vw - 32px));display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.login-alert{display:flex;align-items:flex-start;gap:9px;padding:10px 11px;border:1px solid rgba(122,35,68,.13);border-radius:14px;background:rgba(255,255,255,.97);box-shadow:0 14px 34px rgba(92,23,51,.15);color:#603342;backdrop-filter:blur(10px);animation:loginAlertIn .18s ease both}
+.login-alert.is-hiding{opacity:0;transform:translateY(-5px);transition:opacity .18s ease,transform .18s ease}
+.login-alert-icon{width:28px;height:28px;flex:0 0 28px;display:grid;place-items:center;border-radius:9px;background:linear-gradient(135deg,#d94d7d,#9b2d56);color:#fff;font-size:12px;font-weight:900}
+.login-alert.error .login-alert-icon{background:linear-gradient(135deg,#b84b68,#7a2344)}
+.login-alert.info .login-alert-icon{background:linear-gradient(135deg,#c79a45,#9b7330)}
+.login-alert-content{min-width:0}.login-alert-title{font-size:10.5px;font-weight:800;color:#7a2344;margin-bottom:2px}.login-alert-message{font-size:10px;line-height:1.45;color:#806773}
+@keyframes loginAlertIn{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+.forgot-password-actions button:disabled{opacity:.65;cursor:not-allowed}
+@media(max-width:500px){.login-alert-stack{top:9px;right:9px;width:calc(100vw - 18px)}.login-alert{padding:9px 10px;border-radius:12px}.login-alert-message{font-size:9.5px}}
+@media(max-width:360px){.login-alert-stack{top:6px;right:6px;width:calc(100vw - 12px)}.auth-card{padding-left:12px!important;padding-right:12px!important}.forgot-password-actions{gap:6px}.forgot-password-actions button{font-size:11px}}
+</style>
 </head>
 
 <body class="auth-body">
+
+    <div id="loginAlertStack" class="login-alert-stack" aria-live="polite" aria-atomic="false"></div>
 
     <div class="auth-wrapper">
 
@@ -82,12 +136,15 @@
                             Password
                         </label>
 
-                        <input
+                        <div class="password-wrap">
+<input
                             type="password"
                             id="loginPassword"
                             placeholder="Enter your password"
                             required
                         >
+<button type="button" class="password-toggle" data-target="loginPassword" aria-label="Show password">◉</button>
+</div>
 
                     </div>
 
@@ -99,7 +156,7 @@
                             Remember me
                         </label>
 
-                        <a href="#">
+                        <a href="#" id="forgotPasswordLink">
                             Forgot Password?
                         </a>
 
@@ -116,6 +173,26 @@
 
                 </form>
 
+
+
+                    <!-- PREMIUM FORGOT PASSWORD -->
+                    <div id="forgotPasswordScreen" class="forgot-password-screen" aria-hidden="true">
+                        <div class="forgot-password-head">
+                            <div class="forgot-password-icon">✉</div>
+                            <h3>Reset your password</h3>
+                            <p>Enter your registered email and we'll send you a secure password reset link.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="forgotEmail">Email Address</label>
+                            <input type="email" id="forgotEmail" placeholder="Enter your registered email" autocomplete="email">
+                        </div>
+                        <div class="forgot-password-actions">
+                            <button type="button" id="forgotCancelBtn" class="forgot-cancel-btn">Back to Login</button>
+                            <button type="button" id="forgotSubmitBtn" class="forgot-submit-btn">Send Reset Link</button>
+                        </div>
+                        <p id="forgotPasswordStatus" class="forgot-status"></p>
+                        <div id="forgotSuccessBox" class="forgot-success-box"><strong>Reset link sent ✨</strong><br>Please check your email and follow the secure link to create a new password.</div>
+                    </div>
 
                 <p
                     id="loginMessage"
@@ -153,10 +230,19 @@
     </div>
 
 
-    <script
-        type="module"
-        src="auth.js"
-    ></script>
+    <script>
+document.querySelectorAll(".password-toggle").forEach((button)=>{
+    button.addEventListener("click",()=>{
+        const input=document.getElementById(button.dataset.target);
+        if(!input)return;
+        const visible=input.type==="text";
+        input.type=visible?"password":"text";
+        button.textContent=visible?"◉":"○";
+        button.setAttribute("aria-label",visible?"Show password":"Hide password");
+    });
+});
+</script>
+<script type="module" src="auth.js"></script>
 
 </body>
 

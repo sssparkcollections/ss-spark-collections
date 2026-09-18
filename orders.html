@@ -1,0 +1,3191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Orders | SS Spark Collections</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+    <style>
+
+        /* =====================================================
+           ORDERS PAGE
+        ===================================================== */
+
+        .orders-page {
+            padding: 28px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 6px;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            margin: 6px 0;
+            color: #4c3042;
+        }
+
+
+        /* =====================================================
+           SUMMARY
+        ===================================================== */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 20px;
+
+            box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+
+            cursor: pointer;
+
+            transition:
+                transform .18s ease,
+                box-shadow .18s ease,
+                border-color .18s ease;
+        }
+
+        .summary-card:hover {
+            box-shadow: 0 7px 22px rgba(0,0,0,0.07);
+            border-color: #e6bfd4;
+        }
+
+        .summary-card.active {
+            border-color: #d78bb5;
+            box-shadow: 0 0 0 2px rgba(215,139,181,.12);
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .summary-hint {
+            margin-top: 7px;
+            font-size: 11px;
+            color: #aaa;
+        }
+
+
+        /* =====================================================
+           FILTERS
+        ===================================================== */
+
+        .filter-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 16px;
+
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .filter-grid {
+            display: grid;
+
+            grid-template-columns:
+                2fr
+                1fr
+                1fr
+                1fr
+                auto;
+
+            gap: 12px;
+
+            align-items: end;
+        }
+
+        .filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .filter-field input,
+        .filter-field select {
+            width: 100%;
+            height: 42px;
+
+            padding: 0 12px;
+
+            border: 1px solid #ddd;
+            border-radius: 10px;
+
+            background: #fff;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .filter-field input:focus,
+        .filter-field select:focus {
+            border-color: #d78bb5;
+        }
+
+        .clear-btn {
+            height: 42px;
+
+            padding: 0 18px;
+
+            border: 1px solid #e2c3d4;
+            background: #fff8fc;
+            color: #b04f83;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+        }
+
+        .clear-btn:hover {
+            background: #fdf0f7;
+            border-color: #d78bb5;
+        }
+
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-card {
+            background: #fff;
+
+            border: 1px solid #eee;
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+        }
+
+        .table-header {
+            padding: 18px 20px;
+
+            border-bottom: 1px solid #eee;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .result-count {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+
+            min-width: 950px;
+        }
+
+        .orders-table th {
+            text-align: left;
+
+            padding: 14px 18px;
+
+            background: #fafafa;
+
+            color: #666;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: .04em;
+
+            white-space: nowrap;
+        }
+
+        .orders-table td {
+            padding: 16px 18px;
+
+            border-top: 1px solid #f0f0f0;
+
+            font-size: 14px;
+
+            vertical-align: middle;
+        }
+
+        .orders-table tbody tr:hover {
+            background: #fffafd;
+        }
+
+
+        /* =====================================================
+           SORTABLE HEADERS
+        ===================================================== */
+
+        .sortable-header {
+            cursor: pointer;
+
+            user-select: none;
+
+            transition: color .15s ease;
+        }
+
+        .sortable-header:hover {
+            color: #b04f83;
+        }
+
+        .sort-icon {
+            display: inline-block;
+
+            margin-left: 5px;
+
+            font-size: 11px;
+
+            color: #aaa;
+        }
+
+        .sort-icon.active {
+            color: #b04f83;
+        }
+
+
+        /* =====================================================
+           ORDER DATA
+        ===================================================== */
+
+        .order-number {
+            font-weight: 700;
+            color: #222;
+        }
+
+        .customer-name {
+            font-weight: 600;
+        }
+
+        .customer-email {
+            font-size: 12px;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .order-date {
+            white-space: nowrap;
+        }
+
+        .total-amount {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           BADGES
+        ===================================================== */
+
+        .status-badge,
+        .payment-badge {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 6px 10px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fff5d6;
+            color: #9a7100;
+        }
+
+        .status-confirmed {
+            background: #e9f1ff;
+            color: #3b68b8;
+        }
+
+        .status-processing {
+            background: #eee9ff;
+            color: #6b4fc4;
+        }
+
+        .status-shipped {
+            background: #e6f5ff;
+            color: #1973a5;
+        }
+
+        .status-delivered {
+            background: #e8f7ed;
+            color: #2c8a4b;
+        }
+
+        .status-cancelled {
+            background: #ffe9e9;
+            color: #c14b4b;
+        }
+
+        .status-returned {
+            background: #f2eaea;
+            color: #805858;
+        }
+
+        .payment-pending {
+            background: #fff5d6;
+            color: #9a7100;
+        }
+
+        .payment-paid {
+            background: #e8f7ed;
+            color: #2c8a4b;
+        }
+
+        .payment-failed {
+            background: #ffe9e9;
+            color: #c14b4b;
+        }
+
+        .payment-refunded {
+            background: #eee9ff;
+            color: #6b4fc4;
+        }
+
+        .payment-partially_refunded {
+            background: #e9f1ff;
+            color: #3b68b8;
+        }
+
+
+        /* =====================================================
+           VIEW BUTTON
+        ===================================================== */
+
+        .view-btn {
+            border: 1px solid #e2c3d4;
+
+            background: #fff8fc;
+
+            color: #b04f83;
+
+            padding: 8px 13px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .view-btn:hover {
+            background: #fdf0f7;
+        }
+
+
+        /* =====================================================
+           PAGINATION
+        ===================================================== */
+
+        .pagination {
+            padding: 18px 20px;
+
+            border-top: 1px solid #eee;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .pagination-info {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-btn {
+            min-width: 36px;
+            height: 36px;
+
+            padding: 0 10px;
+
+            border: 1px solid #ddd;
+            background: #fff;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #fff8fc;
+            border-color: #d78bb5;
+            color: #b04f83;
+        }
+
+        .page-btn.active {
+            background: #b04f83;
+            border-color: #b04f83;
+            color: #fff;
+        }
+
+        .page-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+        .page-ellipsis {
+            padding: 0 4px;
+            color: #999;
+        }
+
+
+        /* =====================================================
+           EMPTY / LOADING
+        ===================================================== */
+
+        .table-message {
+            text-align: center;
+
+            padding: 55px 20px;
+
+            color: #777;
+        }
+
+        .table-message strong {
+            display: block;
+
+            color: #444;
+
+            margin-bottom: 6px;
+        }
+
+
+        /* =====================================================
+           MOBILE ORDER CARDS
+        ===================================================== */
+
+        .mobile-orders-list {
+            display: none;
+        }
+
+        .mobile-order-card {
+            background: #fff;
+            border: 1px solid #ead5e1;
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 4px 18px rgba(63,30,48,.05);
+        }
+
+        .mobile-order-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 11px;
+            border-bottom: 1px solid #f2e7ed;
+        }
+
+        .mobile-order-number {
+            font-size: 13px;
+            font-weight: 800;
+            color: #4c3042;
+            word-break: break-word;
+        }
+
+        .mobile-order-date {
+            margin-top: 3px;
+            font-size: 11px;
+            color: #8a7781;
+        }
+
+        .mobile-order-customer {
+            padding: 11px 0;
+        }
+
+        .mobile-order-customer-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #4c3042;
+        }
+
+        .mobile-order-customer-email {
+            margin-top: 3px;
+            font-size: 11px;
+            color: #8a7781;
+            overflow-wrap: anywhere;
+        }
+
+        .mobile-order-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+        }
+
+        .mobile-order-stat {
+            background: #fff8fc;
+            border: 1px solid #f0dfe8;
+            border-radius: 11px;
+            padding: 9px 10px;
+        }
+
+        .mobile-order-stat-label {
+            font-size: 10px;
+            color: #8a7781;
+            margin-bottom: 4px;
+        }
+
+        .mobile-order-stat-value {
+            font-size: 12px;
+            font-weight: 800;
+            color: #4c3042;
+        }
+
+        .mobile-order-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 11px;
+        }
+
+        .mobile-order-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            min-width: 0;
+        }
+
+        .mobile-order-bottom .view-btn {
+            flex: none;
+        }
+
+        .mobile-orders-message {
+            text-align: center;
+            padding: 45px 18px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .mobile-orders-message strong {
+            display: block;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        /* =====================================================
+           PREMIUM ALERT
+        ===================================================== */
+
+        .order-alert-stack {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 9999;
+            width: min(390px, calc(100vw - 40px));
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .order-alert {
+            pointer-events: auto;
+            background: #fff;
+            border: 1px solid #ead5e1;
+            border-radius: 16px;
+            padding: 13px 14px;
+            box-shadow: 0 14px 35px rgba(63,30,48,.18);
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            animation: orderAlertIn .22s ease-out;
+        }
+
+        .order-alert-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #fff0f6;
+            color: #b4235a;
+            font-weight: 900;
+            flex: none;
+        }
+
+        .order-alert-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .order-alert-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #4c3042;
+        }
+
+        .order-alert-message {
+            margin-top: 2px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #816b76;
+        }
+
+        .order-alert.success .order-alert-icon {
+            background: #eaf8f0;
+            color: #25834a;
+        }
+
+        .order-alert.error .order-alert-icon {
+            background: #fff0f2;
+            color: #b4234f;
+        }
+
+        @keyframes orderAlertIn {
+            from { opacity: 0; transform: translateY(16px) scale(.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .order-alert.hide {
+            opacity: 0;
+            transform: translateY(10px) scale(.98);
+            transition: opacity .18s ease, transform .18s ease;
+        }
+
+        @media (max-width: 700px) {
+            .table-wrapper {
+                display: none;
+            }
+
+            .mobile-orders-list {
+                display: grid;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .table-card {
+                overflow: visible;
+            }
+
+            .table-header {
+                padding: 15px;
+            }
+
+            .result-count {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .order-alert-stack {
+                right: 12px;
+                bottom: 14px;
+                width: calc(100vw - 24px);
+            }
+
+            .order-alert {
+                padding: 12px;
+            }
+
+            .mobile-orders-list {
+                padding: 10px;
+            }
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .filter-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .clear-btn {
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .orders-page {
+                padding: 18px;
+            }
+
+            .page-header {
+                flex-direction: column;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pagination {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .pagination-controls {
+                justify-content: center;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body data-admin-page="orders">
+
+<div class="admin-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <div id="admin-navigation"></div>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+    <div>
+
+                <p class="page-label">
+                    ADMIN PANEL
+                </p>
+
+                <h1>
+                    Order Management
+                </h1>
+
+            </div>
+
+    <div
+    class="admin-profile"
+    id="adminProfile"
+    style="margin-left: auto;"
+>
+
+    <button
+        type="button"
+        class="admin-profile-trigger"
+        id="adminProfileTrigger"
+        aria-expanded="false"
+        aria-haspopup="true"
+    >
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div class="profile-details">
+
+            <strong>
+                Admin
+            </strong>
+
+            <span>
+                Administrator
+            </span>
+
+        </div>
+
+        <span class="profile-chevron">
+            ⌄
+        </span>
+
+    </button>
+
+
+    <div
+        class="admin-profile-menu"
+        id="adminProfileMenu"
+    >
+
+        <button
+            type="button"
+            id="logoutBtn"
+            class="profile-menu-item logout-item"
+        >
+
+            <span>
+                ↪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+</header>
+
+        <div class="orders-page">
+
+
+            <!-- =================================================
+                 SUMMARY CARDS
+            ================================================== -->
+
+            <div class="summary-grid">
+
+
+                <div
+                    class="summary-card"
+                    data-status="all"
+                    id="totalCard"
+                >
+
+                    <div class="summary-label">
+                        Total Orders
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="totalOrders"
+                    >
+                        0
+                    </div>
+
+                    <div class="summary-hint">
+                        Click to view all
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="summary-card"
+                    data-status="pending"
+                >
+
+                    <div class="summary-label">
+                        Pending
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="pendingOrders"
+                    >
+                        0
+                    </div>
+
+                    <div class="summary-hint">
+                        Click to filter
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="summary-card"
+                    data-status="processing"
+                >
+
+                    <div class="summary-label">
+                        Processing
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="processingOrders"
+                    >
+                        0
+                    </div>
+
+                    <div class="summary-hint">
+                        Click to filter
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="summary-card"
+                    data-status="shipped"
+                >
+
+                    <div class="summary-label">
+                        Shipped
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="shippedOrders"
+                    >
+                        0
+                    </div>
+
+                    <div class="summary-hint">
+                        Click to filter
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="summary-card"
+                    data-status="delivered"
+                >
+
+                    <div class="summary-label">
+                        Delivered
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="deliveredOrders"
+                    >
+                        0
+                    </div>
+
+                    <div class="summary-hint">
+                        Click to filter
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FILTERS
+            ================================================== -->
+
+            <div class="filter-card">
+
+                <div class="filter-grid">
+
+
+                    <div class="filter-field">
+
+                        <label for="orderSearch">
+                            Search
+                        </label>
+
+                        <input
+                            type="text"
+                            id="orderSearch"
+                            placeholder="Search order number or customer..."
+                        >
+
+                    </div>
+
+
+                    <div class="filter-field">
+
+                        <label for="dateFilter">
+                            Date
+                        </label>
+
+                        <select id="dateFilter">
+
+                            <option value="all">
+                                All Dates
+                            </option>
+
+                            <option value="today">
+                                Today
+                            </option>
+
+                            <option value="7">
+                                Last 7 Days
+                            </option>
+
+                            <option value="30">
+                                Last 30 Days
+                            </option>
+
+                            <option value="90">
+                                Last 90 Days
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-field">
+
+                        <label for="statusFilter">
+                            Order Status
+                        </label>
+
+                        <select id="statusFilter">
+
+                            <option value="all">
+                                All Statuses
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-field">
+
+                        <label for="paymentFilter">
+                            Payment Status
+                        </label>
+
+                        <select id="paymentFilter">
+
+                            <option value="all">
+                                All Payments
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="clearFiltersBtn"
+                        class="clear-btn"
+                    >
+                        Clear
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="table-card">
+
+
+                <div class="table-header">
+
+                    <h2>
+                        All Orders
+                    </h2>
+
+                    <div
+                        id="resultCount"
+                        class="result-count"
+                    >
+                        0 orders
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table class="orders-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Order
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th
+                                    class="sortable-header"
+                                    id="sortItems"
+                                >
+                                    Items
+
+                                    <span
+                                        class="sort-icon"
+                                        id="itemsSortIcon"
+                                    >
+                                        ↕
+                                    </span>
+
+                                </th>
+
+                                <th
+                                    class="sortable-header"
+                                    id="sortAmount"
+                                >
+                                    Total
+
+                                    <span
+                                        class="sort-icon"
+                                        id="amountSortIcon"
+                                    >
+                                        ↕
+                                    </span>
+
+                                </th>
+
+                                <th>
+                                    Payment
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="ordersTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="8"
+                                    class="table-message"
+                                >
+
+                                    <strong>
+                                        Loading orders...
+                                    </strong>
+
+                                    Please wait.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div id="mobileOrdersList" class="mobile-orders-list"></div>
+
+
+                <!-- PAGINATION -->
+
+                <div class="pagination">
+
+                    <div
+                        class="pagination-info"
+                        id="paginationInfo"
+                    >
+                        Showing 0–0 of 0
+                    </div>
+
+
+                    <div
+                        class="pagination-controls"
+                        id="paginationControls"
+                    >
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script type="module">
+
+import { supabase } from "./supabase-client.js";
+
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const PAGE_SIZE = 20;
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentPage = 1;
+
+let totalCount = 0;
+
+let currentSortBy = "created_at";
+
+let currentSortDirection = "desc";
+
+let orderStatuses = [];
+
+let paymentStatuses = [];
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+const orderSearch =
+    document.getElementById("orderSearch");
+
+const dateFilter =
+    document.getElementById("dateFilter");
+
+const statusFilter =
+    document.getElementById("statusFilter");
+
+const paymentFilter =
+    document.getElementById("paymentFilter");
+
+const clearFiltersBtn =
+    document.getElementById("clearFiltersBtn");
+
+const ordersTableBody =
+    document.getElementById("ordersTableBody");
+
+const resultCount =
+    document.getElementById("resultCount");
+
+const paginationInfo =
+    document.getElementById("paginationInfo");
+
+const paginationControls =
+    document.getElementById("paginationControls");
+
+const mobileOrdersList =
+    document.getElementById("mobileOrdersList");
+
+const orderAlertStack =
+    document.getElementById("orderAlertStack");
+
+function showOrderAlert(message, type = "error", title = "") {
+    if (!orderAlertStack) return;
+
+    const alertEl = document.createElement("div");
+    alertEl.className =
+        `order-alert ${type === "error" ? "error" : "success"}`;
+
+    const isError = type === "error";
+    const alertTitle =
+        title || (isError ? "Something went wrong" : "Done");
+    const icon = isError ? "!" : "✓";
+
+    alertEl.innerHTML = `
+        <div class="order-alert-icon">${icon}</div>
+        <div class="order-alert-content">
+            <div class="order-alert-title">${escapeHtml(alertTitle)}</div>
+            <div class="order-alert-message">${escapeHtml(message || (isError ? "Something went wrong." : "Completed successfully."))}</div>
+        </div>
+    `;
+
+    orderAlertStack.appendChild(alertEl);
+
+    setTimeout(() => {
+        alertEl.classList.add("hide");
+        setTimeout(() => alertEl.remove(), 200);
+    }, 2800);
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        await loadParameters();
+
+        await loadSummaryCounts();
+
+        await loadOrders();
+
+    }
+);
+
+
+/* =====================================================
+   LOAD PARAMETERS
+===================================================== */
+
+async function loadParameters() {
+
+    try {
+
+        const { data, error } =
+            await supabase
+                .from("parameter_values")
+                .select(`
+                    id,
+                    parameter_group,
+                    parameter_code,
+                    parameter_name,
+                    display_order,
+                    is_active
+                `)
+                .eq("is_active", true)
+                .in(
+                    "parameter_group",
+                    [
+                        "ORDER_STATUS",
+                        "PAYMENT_STATUS"
+                    ]
+                )
+                .order(
+                    "display_order",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const parameters =
+            data || [];
+
+
+        orderStatuses =
+            parameters.filter(
+                item =>
+                    item.parameter_group ===
+                    "ORDER_STATUS"
+            );
+
+
+        paymentStatuses =
+            parameters.filter(
+                item =>
+                    item.parameter_group ===
+                    "PAYMENT_STATUS"
+            );
+
+
+        populateStatusFilter();
+
+        populatePaymentFilter();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Parameter loading error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   STATUS FILTER
+===================================================== */
+
+function populateStatusFilter() {
+
+    statusFilter.innerHTML = `
+        <option value="all">
+            All Statuses
+        </option>
+    `;
+
+
+    orderStatuses.forEach(
+        status => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                status.parameter_code;
+
+            option.textContent =
+                status.parameter_name;
+
+            statusFilter.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PAYMENT FILTER
+===================================================== */
+
+function populatePaymentFilter() {
+
+    paymentFilter.innerHTML = `
+        <option value="all">
+            All Payments
+        </option>
+    `;
+
+
+    paymentStatuses.forEach(
+        status => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                status.parameter_code;
+
+            option.textContent =
+                status.parameter_name;
+
+            paymentFilter.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD SUMMARY COUNTS
+===================================================== */
+
+async function loadSummaryCounts() {
+
+    try {
+
+        const [
+            totalResult,
+            pendingResult,
+            processingResult,
+            shippedResult,
+            deliveredResult
+        ] = await Promise.all([
+            supabase
+                .from("orders")
+                .select("id", { count: "exact", head: true }),
+
+            supabase
+                .from("orders")
+                .select("id", { count: "exact", head: true })
+                .eq("status", "pending"),
+
+            supabase
+                .from("orders")
+                .select("id", { count: "exact", head: true })
+                .eq("status", "processing"),
+
+            supabase
+                .from("orders")
+                .select("id", { count: "exact", head: true })
+                .eq("status", "shipped"),
+
+            supabase
+                .from("orders")
+                .select("id", { count: "exact", head: true })
+                .eq("status", "delivered")
+        ]);
+
+        const results = [
+            totalResult,
+            pendingResult,
+            processingResult,
+            shippedResult,
+            deliveredResult
+        ];
+
+        const failed = results.find(result => result.error);
+
+        if (failed?.error) {
+            throw failed.error;
+        }
+
+        document.getElementById("totalOrders").textContent =
+            totalResult.count || 0;
+
+        document.getElementById("pendingOrders").textContent =
+            pendingResult.count || 0;
+
+        document.getElementById("processingOrders").textContent =
+            processingResult.count || 0;
+
+        document.getElementById("shippedOrders").textContent =
+            shippedResult.count || 0;
+
+        document.getElementById("deliveredOrders").textContent =
+            deliveredResult.count || 0;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Summary loading error:",
+            error
+        );
+
+        showOrderAlert(
+            error.message || "Unable to load order summary.",
+            "error",
+            "Summary unavailable"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD ORDERS
+===================================================== */
+
+async function loadOrders() {
+
+    ordersTableBody.innerHTML = `
+        <tr>
+            <td colspan="8" class="table-message">
+                <strong>Loading orders...</strong>
+                Please wait.
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+        const search =
+            orderSearch.value.trim() || null;
+
+
+        const status =
+            statusFilter.value === "all"
+                ? null
+                : statusFilter.value;
+
+
+        const paymentStatus =
+            paymentFilter.value === "all"
+                ? null
+                : paymentFilter.value;
+
+
+        const date =
+            dateFilter.value;
+
+
+        const { data, error } =
+            await supabase.rpc(
+                "get_admin_orders",
+                {
+                    p_page:
+                        currentPage,
+
+                    p_page_size:
+                        PAGE_SIZE,
+
+                    p_search:
+                        search,
+
+                    p_status:
+                        status,
+
+                    p_payment_status:
+                        paymentStatus,
+
+                    p_date_filter:
+                        date,
+
+                    p_sort_by:
+                        currentSortBy,
+
+                    p_sort_direction:
+                        currentSortDirection
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const orders =
+            data || [];
+
+
+        totalCount =
+            orders.length
+                ? Number(
+                    orders[0].total_count || 0
+                )
+                : await getFilteredCountFallback();
+
+
+        renderOrders(orders);
+
+        renderPagination();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Order loading error:",
+            error
+        );
+
+
+        ordersTableBody.innerHTML = `
+            <tr>
+                <td colspan="8" class="table-message">
+
+                    <strong>
+                        Unable to load orders
+                    </strong>
+
+                    ${escapeHtml(
+                        error.message ||
+                        "Unknown error"
+                    )}
+
+                </td>
+            </tr>
+        `;
+
+
+        paginationInfo.textContent =
+            "Unable to load orders";
+
+        paginationControls.innerHTML = "";
+
+        if (mobileOrdersList) {
+            mobileOrdersList.innerHTML = `
+                <div class="mobile-orders-message">
+                    <strong>Unable to load orders</strong>
+                    ${escapeHtml(error.message || "Unknown error")}
+                </div>
+            `;
+        }
+
+        showOrderAlert(
+            error.message || "Unable to load orders.",
+            "error",
+            "Orders unavailable"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   COUNT FALLBACK
+===================================================== */
+
+async function getFilteredCountFallback() {
+
+    let query =
+        supabase
+            .from("orders")
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            );
+
+
+    const search =
+        orderSearch.value.trim();
+
+
+    const status =
+        statusFilter.value;
+
+
+    const payment =
+        paymentFilter.value;
+
+
+    const date =
+        dateFilter.value;
+
+
+    if (status !== "all") {
+
+        query =
+            query.eq(
+                "status",
+                status
+            );
+
+    }
+
+
+    if (payment !== "all") {
+
+        query =
+            query.eq(
+                "payment_status",
+                payment
+            );
+
+    }
+
+
+    if (date === "today") {
+
+        const today =
+            new Date();
+
+
+        const start =
+            new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                today.getDate()
+            );
+
+
+        query =
+            query.gte(
+                "created_at",
+                start.toISOString()
+            );
+
+    }
+
+    else if (
+        ["7", "30", "90"]
+            .includes(date)
+    ) {
+
+        const start =
+            new Date(
+                Date.now() -
+                Number(date) *
+                24 *
+                60 *
+                60 *
+                1000
+            );
+
+
+        query =
+            query.gte(
+                "created_at",
+                start.toISOString()
+            );
+
+    }
+
+
+    const { count, error } =
+        await query;
+
+
+    if (error) {
+
+        console.error(
+            "Count fallback error:",
+            error
+        );
+
+        return 0;
+
+    }
+
+
+    return count || 0;
+
+}
+
+
+/* =====================================================
+   RENDER ORDERS
+===================================================== */
+
+function renderOrders(
+    orders
+) {
+
+    const start =
+        totalCount === 0
+            ? 0
+            : ((currentPage - 1) * PAGE_SIZE) + 1;
+
+
+    const end =
+        Math.min(
+            currentPage * PAGE_SIZE,
+            totalCount
+        );
+
+
+    resultCount.textContent =
+        `${totalCount} ${
+            totalCount === 1
+                ? "order"
+                : "orders"
+        }`;
+
+
+    paginationInfo.textContent =
+        `Showing ${start}–${end} of ${totalCount}`;
+
+
+    if (!orders.length) {
+
+        ordersTableBody.innerHTML = `
+            <tr>
+                <td colspan="8" class="table-message">
+
+                    <strong>
+                        No orders found
+                    </strong>
+
+                    Try changing your search
+                    or filters.
+
+                </td>
+            </tr>
+        `;
+
+        if (mobileOrdersList) {
+            mobileOrdersList.innerHTML = `
+                <div class="mobile-orders-message">
+                    <strong>No orders found</strong>
+                    Try changing your search or filters.
+                </div>
+            `;
+        }
+
+        return;
+
+    }
+
+
+    ordersTableBody.innerHTML =
+        orders.map(
+            order => {
+
+                const statusClass =
+                    `status-${safeClass(
+                        order.status
+                    )}`;
+
+
+                const paymentClass =
+                    `payment-${safeClass(
+                        order.payment_status
+                    )}`;
+
+
+                const statusName =
+                    getParameterName(
+                        orderStatuses,
+                        order.status
+                    );
+
+
+                const paymentName =
+                    getParameterName(
+                        paymentStatuses,
+                        order.payment_status
+                    );
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div
+                                class="order-number"
+                            >
+                                ${escapeHtml(
+                                    order.order_number ||
+                                    "-"
+                                )}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="customer-name"
+                            >
+                                ${escapeHtml(
+                                    order.customer_name ||
+                                    "Unknown Customer"
+                                )}
+                            </div>
+
+                            <div
+                                class="customer-email"
+                            >
+                                ${escapeHtml(
+                                    order.customer_email ||
+                                    ""
+                                )}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="order-date"
+                            >
+                                ${formatDate(
+                                    order.created_at
+                                )}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            ${Number(
+                                order.item_count || 0
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="total-amount"
+                            >
+                                ₹${formatMoney(
+                                    order.total_amount
+                                )}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="
+                                    payment-badge
+                                    ${paymentClass}
+                                "
+                            >
+                                ${escapeHtml(
+                                    paymentName
+                                )}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="
+                                    status-badge
+                                    ${statusClass}
+                                "
+                            >
+                                ${escapeHtml(
+                                    statusName
+                                )}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="view-btn"
+                                data-order-id="${order.id}"
+                            >
+                                View
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+
+    if (mobileOrdersList) {
+        mobileOrdersList.innerHTML = orders.map(order => {
+
+            const statusClass =
+                `status-${safeClass(order.status)}`;
+
+            const paymentClass =
+                `payment-${safeClass(order.payment_status)}`;
+
+            const statusName =
+                getParameterName(orderStatuses, order.status);
+
+            const paymentName =
+                getParameterName(paymentStatuses, order.payment_status);
+
+            return `
+                <div class="mobile-order-card">
+                    <div class="mobile-order-top">
+                        <div>
+                            <div class="mobile-order-number">
+                                ${escapeHtml(order.order_number || "-")}
+                            </div>
+                            <div class="mobile-order-date">
+                                ${formatDate(order.created_at)}
+                            </div>
+                        </div>
+                        <div class="total-amount">
+                            ₹${formatMoney(order.total_amount)}
+                        </div>
+                    </div>
+
+                    <div class="mobile-order-customer">
+                        <div class="mobile-order-customer-name">
+                            ${escapeHtml(order.customer_name || "Unknown Customer")}
+                        </div>
+                        <div class="mobile-order-customer-email">
+                            ${escapeHtml(order.customer_email || "")}
+                        </div>
+                    </div>
+
+                    <div class="mobile-order-grid">
+                        <div class="mobile-order-stat">
+                            <div class="mobile-order-stat-label">Items</div>
+                            <div class="mobile-order-stat-value">
+                                ${Number(order.item_count || 0)}
+                            </div>
+                        </div>
+
+                        <div class="mobile-order-stat">
+                            <div class="mobile-order-stat-label">Total</div>
+                            <div class="mobile-order-stat-value">
+                                ₹${formatMoney(order.total_amount)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mobile-order-bottom">
+                        <div class="mobile-order-badges">
+                            <span class="payment-badge ${paymentClass}">
+                                ${escapeHtml(paymentName)}
+                            </span>
+                            <span class="status-badge ${statusClass}">
+                                ${escapeHtml(statusName)}
+                            </span>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="view-btn"
+                            data-order-id="${escapeHtml(order.id)}"
+                        >
+                            View
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    document
+        .querySelectorAll(".view-btn")
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        handleViewOrder(
+                            button.dataset.orderId
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+function renderPagination() {
+
+    paginationControls.innerHTML = "";
+
+
+    const totalPages =
+        Math.ceil(
+            totalCount / PAGE_SIZE
+        );
+
+
+    if (totalPages <= 1) {
+        return;
+    }
+
+
+    /* Previous */
+
+    const previous =
+        createPageButton(
+            "‹",
+            currentPage - 1,
+            currentPage === 1
+        );
+
+
+    paginationControls.appendChild(
+        previous
+    );
+
+
+    /* Page numbers */
+
+    const pages =
+        getPageNumbers(
+            currentPage,
+            totalPages
+        );
+
+
+    pages.forEach(
+        page => {
+
+            if (page === "...") {
+
+                const span =
+                    document.createElement(
+                        "span"
+                    );
+
+                span.className =
+                    "page-ellipsis";
+
+                span.textContent =
+                    "...";
+
+                paginationControls
+                    .appendChild(span);
+
+                return;
+
+            }
+
+
+            const button =
+                createPageButton(
+                    page,
+                    page,
+                    false,
+                    page === currentPage
+                );
+
+
+            paginationControls
+                .appendChild(button);
+
+        }
+    );
+
+
+    /* Next */
+
+    const next =
+        createPageButton(
+            "›",
+            currentPage + 1,
+            currentPage === totalPages
+        );
+
+
+    paginationControls
+        .appendChild(next);
+
+}
+
+
+/* =====================================================
+   PAGE NUMBERS
+===================================================== */
+
+function getPageNumbers(
+    current,
+    total
+) {
+
+    if (total <= 7) {
+
+        return Array.from(
+            {
+                length: total
+            },
+            (_, index) =>
+                index + 1
+        );
+
+    }
+
+
+    const pages = [];
+
+
+    pages.push(1);
+
+
+    if (current > 4) {
+        pages.push("...");
+    }
+
+
+    const start =
+        Math.max(
+            2,
+            current - 1
+        );
+
+
+    const end =
+        Math.min(
+            total - 1,
+            current + 1
+        );
+
+
+    for (
+        let i = start;
+        i <= end;
+        i++
+    ) {
+
+        pages.push(i);
+
+    }
+
+
+    if (current < total - 3) {
+        pages.push("...");
+    }
+
+
+    pages.push(total);
+
+
+    return pages;
+
+}
+
+
+/* =====================================================
+   CREATE PAGE BUTTON
+===================================================== */
+
+function createPageButton(
+    text,
+    page,
+    disabled = false,
+    active = false
+) {
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+
+    button.type = "button";
+
+    button.className =
+        "page-btn" +
+        (active ? " active" : "");
+
+
+    button.textContent =
+        text;
+
+
+    button.disabled =
+        disabled;
+
+
+    if (!disabled) {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                currentPage =
+                    page;
+
+                loadOrders();
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            }
+        );
+
+    }
+
+
+    return button;
+
+}
+
+
+/* =====================================================
+   STATUS CARD CLICK
+===================================================== */
+
+document
+    .querySelectorAll(".summary-card")
+    .forEach(
+        card => {
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    const status =
+                        card.dataset.status;
+
+
+                    statusFilter.value =
+                        status;
+
+
+                    currentPage = 1;
+
+
+                    updateActiveSummaryCard(
+                        status
+                    );
+
+
+                    loadOrders();
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   ACTIVE SUMMARY CARD
+===================================================== */
+
+function updateActiveSummaryCard(
+    status
+) {
+
+    document
+        .querySelectorAll(
+            ".summary-card"
+        )
+        .forEach(
+            card => {
+
+                card.classList.toggle(
+                    "active",
+                    card.dataset.status ===
+                    status
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+let searchTimer = null;
+
+
+orderSearch.addEventListener(
+    "input",
+    () => {
+
+        clearTimeout(
+            searchTimer
+        );
+
+
+        searchTimer =
+            setTimeout(
+                () => {
+
+                    currentPage = 1;
+
+                    loadOrders();
+
+                },
+                350
+            );
+
+    }
+);
+
+
+/* =====================================================
+   FILTER EVENTS
+===================================================== */
+
+dateFilter.addEventListener(
+    "change",
+    () => {
+
+        currentPage = 1;
+
+        updateActiveSummaryCard(
+            statusFilter.value
+        );
+
+        loadOrders();
+
+    }
+);
+
+
+statusFilter.addEventListener(
+    "change",
+    () => {
+
+        currentPage = 1;
+
+        updateActiveSummaryCard(
+            statusFilter.value
+        );
+
+        loadOrders();
+
+    }
+);
+
+
+paymentFilter.addEventListener(
+    "change",
+    () => {
+
+        currentPage = 1;
+
+        loadOrders();
+
+    }
+);
+
+
+/* =====================================================
+   CLEAR FILTERS
+===================================================== */
+
+clearFiltersBtn.addEventListener(
+    "click",
+    () => {
+
+        orderSearch.value = "";
+
+        dateFilter.value =
+            "all";
+
+        statusFilter.value =
+            "all";
+
+        paymentFilter.value =
+            "all";
+
+
+        currentPage = 1;
+
+
+        updateActiveSummaryCard(
+            "all"
+        );
+
+
+        loadOrders();
+
+    }
+);
+
+
+/* =====================================================
+   SORT ITEMS
+===================================================== */
+
+document
+    .getElementById("sortItems")
+    .addEventListener(
+        "click",
+        () => {
+
+            changeSort(
+                "item_count"
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   SORT AMOUNT
+===================================================== */
+
+document
+    .getElementById("sortAmount")
+    .addEventListener(
+        "click",
+        () => {
+
+            changeSort(
+                "total_amount"
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   CHANGE SORT
+===================================================== */
+
+function changeSort(
+    sortBy
+) {
+
+    if (
+        currentSortBy === sortBy
+    ) {
+
+        currentSortDirection =
+            currentSortDirection === "asc"
+                ? "desc"
+                : "asc";
+
+    }
+
+    else {
+
+        currentSortBy =
+            sortBy;
+
+        currentSortDirection =
+            "desc";
+
+    }
+
+
+    updateSortIcons();
+
+
+    currentPage = 1;
+
+
+    loadOrders();
+
+}
+
+
+/* =====================================================
+   SORT ICONS
+===================================================== */
+
+function updateSortIcons() {
+
+    const itemsIcon =
+        document.getElementById(
+            "itemsSortIcon"
+        );
+
+    const amountIcon =
+        document.getElementById(
+            "amountSortIcon"
+        );
+
+
+    itemsIcon.textContent =
+        "↕";
+
+    amountIcon.textContent =
+        "↕";
+
+
+    itemsIcon.classList.remove(
+        "active"
+    );
+
+    amountIcon.classList.remove(
+        "active"
+    );
+
+
+    if (
+        currentSortBy ===
+        "item_count"
+    ) {
+
+        itemsIcon.textContent =
+            currentSortDirection === "asc"
+                ? "↑"
+                : "↓";
+
+        itemsIcon.classList.add(
+            "active"
+        );
+
+    }
+
+
+    if (
+        currentSortBy ===
+        "total_amount"
+    ) {
+
+        amountIcon.textContent =
+            currentSortDirection === "asc"
+                ? "↑"
+                : "↓";
+
+        amountIcon.classList.add(
+            "active"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   VIEW ORDER
+===================================================== */
+
+function handleViewOrder(orderId) {
+
+    if (!orderId) {
+        return;
+    }
+
+    window.location.href =
+        `order-details.html?id=${encodeURIComponent(orderId)}`;
+
+}
+
+
+/* =====================================================
+   PARAMETER NAME
+===================================================== */
+
+function getParameterName(
+    list,
+    code
+) {
+
+    const parameter =
+        list.find(
+            item =>
+                item.parameter_code ===
+                code
+        );
+
+
+    if (parameter) {
+        return parameter.parameter_name;
+    }
+
+
+    return code || "-";
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+        return "-";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "-";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+function formatMoney(
+    value
+) {
+
+    return Number(
+        value || 0
+    ).toLocaleString(
+        "en-IN",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SAFE CSS CLASS
+===================================================== */
+
+function safeClass(
+    value
+) {
+
+    return String(
+        value || ""
+    )
+        .toLowerCase()
+        .replace(
+            /[^a-z0-9_-]/g,
+            ""
+        );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+</script>
+
+<script type="module">
+
+    import { supabase }
+        from "./supabase-client.js";
+
+
+    /* =====================================================
+       LOAD NAVIGATION
+       ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+            const navigationContainer =
+                document.getElementById(
+                    "admin-navigation"
+                );
+
+            if (!navigationContainer) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "admin-navigation.html"
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Navigation could not be loaded."
+                    );
+                }
+
+
+                const navigationHTML =
+                    await response.text();
+
+
+                navigationContainer.innerHTML =
+                    navigationHTML;
+
+
+                /* =================================================
+                   ACTIVE NAVIGATION
+                   ================================================= */
+
+                const currentPage =
+                    document.body.dataset.adminPage;
+
+
+                if (currentPage) {
+
+                    const activeItem =
+                        navigationContainer.querySelector(
+                            `.nav-item[data-page="${currentPage}"]`
+                        );
+
+
+                    if (activeItem) {
+
+                        activeItem.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   ADMIN DROPDOWN
+                   ================================================= */
+
+                const adminProfile =
+                    document.getElementById(
+                        "adminProfile"
+                    );
+
+                const adminProfileTrigger =
+                    document.getElementById(
+                        "adminProfileTrigger"
+                    );
+
+                const adminProfileMenu =
+                    document.getElementById(
+                        "adminProfileMenu"
+                    );
+
+
+                if (
+                    adminProfile &&
+                    adminProfileTrigger &&
+                    adminProfileMenu
+                ) {
+
+                    adminProfileTrigger.addEventListener(
+                        "click",
+                        (event) => {
+
+                            event.stopPropagation();
+
+
+                            const isOpen =
+                                adminProfile.classList.toggle(
+                                    "open"
+                                );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                isOpen
+                                    ? "true"
+                                    : "false"
+                            );
+
+                        }
+                    );
+
+
+                    adminProfileMenu.addEventListener(
+                        "click",
+                        (event) => {
+                            event.stopPropagation();
+                        }
+                    );
+
+
+                    document.addEventListener(
+                        "click",
+                        () => {
+
+                            adminProfile.classList.remove(
+                                "open"
+                            );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   LOGOUT
+                   ================================================= */
+
+                const logoutBtn =
+                    document.getElementById(
+                        "logoutBtn"
+                    );
+
+
+                if (logoutBtn) {
+
+                    logoutBtn.addEventListener(
+                        "click",
+                        async () => {
+
+                            logoutBtn.disabled =
+                                true;
+
+
+                            logoutBtn.innerHTML = `
+                                <span>↪</span>
+                                <span>Logging out...</span>
+                            `;
+
+
+                            try {
+
+                                const {
+                                    error
+                                } =
+                                    await supabase
+                                        .auth
+                                        .signOut();
+
+
+                                if (error) {
+                                    throw error;
+                                }
+
+
+                                window.location.href =
+                                    "index.html";
+
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Logout failed:",
+                                    error
+                                );
+
+
+                                logoutBtn.disabled =
+                                    false;
+
+
+                                logoutBtn.innerHTML = `
+                                    <span>↪</span>
+                                    <span>Logout</span>
+                                `;
+
+
+                                showOrderAlert(
+                                    error.message ||
+                                    "Unable to logout. Please try again.",
+                                    "error",
+                                    "Logout failed"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to load admin navigation:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+<div id="orderAlertStack" class="order-alert-stack" aria-live="polite"></div>
+
+</body>
+</html>

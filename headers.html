@@ -1,0 +1,654 @@
+<!-- SS Spark Collections — Shared Store Header -->
+<style>
+/* =========================================================
+   SS SPARK — SHARED HEADER
+   Self-contained HTML + CSS + JS.
+   No page-specific styles or functionality are required.
+========================================================= */
+:root{
+  --ss-pink:#d6336c;
+  --ss-pink-dark:#b92357;
+  --ss-rose:#8f294f;
+  --ss-ink:#542238;
+  --ss-muted:#987080;
+  --ss-border:#efdce4;
+  --ss-soft:#fff7fa;
+  --ss-gold:#c99a55;
+}
+
+.ss-site-header,
+.ss-site-header *{box-sizing:border-box}
+
+.ss-top-bar{
+  width:100%;
+  min-height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:7px 14px;
+  background:linear-gradient(90deg,#c2185b 0%,#d6336c 50%,#c2185b 100%);
+  color:#fff;
+  font:600 11px/1.2 Arial,sans-serif;
+  letter-spacing:.1px;
+  text-align:center;
+  white-space:nowrap;
+}
+
+.ss-top-bar .ss-top-divider{opacity:.5;margin:0 4px}
+
+.ss-main-header{
+  position:relative;
+  z-index:1000;
+  width:100%;
+  min-height:78px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:28px;
+  padding:7px clamp(18px,5vw,72px);
+  background:rgba(255,255,255,.98);
+  border-bottom:1px solid var(--ss-border);
+  box-shadow:0 5px 24px rgba(83,35,52,.055);
+}
+
+.ss-brand-logo{
+  display:flex;
+  align-items:center;
+  flex:none;
+  text-decoration:none;
+}
+
+.ss-brand-logo img{
+  display:block;
+  width:92px;
+  height:64px;
+  object-fit:contain;
+}
+
+.ss-main-nav{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(18px,2.5vw,34px);
+}
+
+.ss-main-nav a{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  min-height:40px;
+  padding:4px 1px;
+  color:#4b303b;
+  text-decoration:none;
+  font:600 13px/1 Arial,sans-serif;
+  white-space:nowrap;
+  transition:color .2s ease;
+}
+
+.ss-main-nav a::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:0;
+  width:0;
+  height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--ss-pink),#ef7fa2);
+  transform:translateX(-50%);
+  transition:width .22s ease;
+}
+
+.ss-main-nav a:hover,
+.ss-main-nav a.active{color:var(--ss-pink-dark)}
+.ss-main-nav a:hover::after,
+.ss-main-nav a.active::after{width:100%}
+
+.ss-header-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  min-width:0;
+}
+
+.ss-icon-btn,
+.ss-cart-btn{
+  position:relative;
+  width:38px;
+  height:38px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  border-radius:50%;
+  color:var(--ss-ink);
+  text-decoration:none;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease,color .2s ease;
+}
+
+.ss-icon-btn{
+  padding:0;
+  border:1px solid transparent;
+  background:transparent;
+  cursor:pointer;
+}
+
+.ss-icon-btn:hover,
+.ss-cart-btn:hover{
+  background:#fff4f8;
+  color:var(--ss-pink);
+  transform:translateY(-1px);
+}
+
+.ss-icon-btn svg,
+.ss-cart-btn svg{width:18px;height:18px;display:block}
+
+.ss-cart-btn{border:1px solid #f0dfe6}
+
+.ss-cart-count{
+  position:absolute;
+  top:-3px;
+  right:-3px;
+  min-width:17px;
+  height:17px;
+  padding:0 4px;
+  display:grid;
+  place-items:center;
+  border:2px solid #fff;
+  border-radius:999px;
+  background:var(--ss-pink);
+  color:#fff;
+  font:800 8px/1 Arial,sans-serif;
+}
+
+/* Auth starts visually hidden. It becomes visible only after Supabase
+   has resolved the session, so Login/Create Account never flashes first. */
+.ss-auth-area{
+  display:flex;
+  align-items:center;
+  min-width:0;
+  margin-left:2px;
+}
+.ss-auth-area.ss-auth-loading{visibility:hidden}
+
+.ss-login-btn,
+.ss-signup-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  border-radius:999px;
+  text-decoration:none;
+  white-space:nowrap;
+  font:700 11px/1 Arial,sans-serif;
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+
+.ss-login-btn{
+  min-width:72px;
+  padding:0 13px;
+  border:1px solid #e2b9c9;
+  color:#a52b58;
+  background:#fff;
+}
+
+.ss-login-btn:hover{
+  background:#fff5f8;
+  border-color:#d88ba8;
+  transform:translateY(-1px);
+}
+
+.ss-signup-btn{
+  min-width:108px;
+  margin-left:6px;
+  padding:0 15px;
+  color:#fff;
+  background:linear-gradient(135deg,#d6336c,#e75480);
+  box-shadow:0 6px 16px rgba(214,51,108,.18);
+}
+
+.ss-signup-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 9px 20px rgba(214,51,108,.25);
+}
+
+/* Logged-in UI — intentionally keeps the existing interaction pattern. */
+.ss-profile-dropdown{position:relative;min-width:0}
+
+.ss-profile-trigger{
+  max-width:210px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-height:40px;
+  padding:5px 10px 5px 6px;
+  border:1px solid #e7c2d1;
+  border-radius:999px;
+  background:#fff;
+  color:var(--ss-rose);
+  cursor:pointer;
+  font:700 11px/1 Arial,sans-serif;
+  box-shadow:0 3px 12px rgba(83,35,52,.035);
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+
+.ss-profile-trigger:hover,
+.ss-profile-trigger[aria-expanded="true"]{
+  border-color:#dca0b8;
+  background:#fff8fa;
+  box-shadow:0 7px 20px rgba(214,51,108,.1);
+}
+
+.ss-profile-avatar,
+.ss-profile-menu-avatar{
+  display:grid;
+  place-items:center;
+  flex:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,#f8d3e0,#e75480);
+  color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.45);
+}
+.ss-profile-avatar{width:27px;height:27px;font-size:12px}
+.ss-profile-trigger-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ss-profile-arrow{
+  width:7px;
+  height:7px;
+  flex:none;
+  margin-left:2px;
+  border-right:1.5px solid var(--ss-rose);
+  border-bottom:1.5px solid var(--ss-rose);
+  transform:rotate(45deg) translateY(-1px);
+  transition:transform .2s ease;
+}
+.ss-profile-trigger[aria-expanded="true"] .ss-profile-arrow{transform:rotate(225deg) translate(-1px,-1px)}
+
+.ss-profile-menu{
+  position:absolute;
+  top:calc(100% + 10px);
+  right:0;
+  width:250px;
+  padding:10px;
+  border:1px solid #f0dce4;
+  border-radius:19px;
+  background:rgba(255,255,255,.99);
+  box-shadow:0 20px 50px rgba(83,35,52,.16),0 4px 12px rgba(83,35,52,.05);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-7px) scale(.985);
+  transform-origin:top right;
+  transition:opacity .18s ease,visibility .18s ease,transform .18s ease;
+}
+.ss-profile-menu.show{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+}
+
+.ss-profile-menu-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 9px 11px;
+}
+.ss-profile-menu-avatar{width:38px;height:38px;font-size:15px}
+.ss-profile-menu-header div:last-child{min-width:0;display:flex;flex-direction:column;gap:4px}
+.ss-profile-menu-header strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ss-ink);font:700 12px/1.2 Arial,sans-serif}
+.ss-profile-menu-header small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ss-muted);font:400 9px/1.2 Arial,sans-serif}
+.ss-profile-menu-divider{height:1px;margin:4px 5px;background:#f1e2e8}
+.ss-profile-menu-item,
+.ss-profile-menu-logout{
+  width:100%;
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 10px;
+  border:0;
+  border-radius:11px;
+  background:transparent;
+  color:#6f3a4f;
+  text-decoration:none;
+  text-align:left;
+  cursor:pointer;
+  font:600 10px/1 Arial,sans-serif;
+}
+.ss-profile-menu-item span:first-child,
+.ss-profile-menu-logout span:first-child{width:20px;text-align:center;color:var(--ss-pink);font-size:16px}
+.ss-profile-menu-item:hover,
+.ss-profile-menu-logout:hover{background:#fff3f7;color:var(--ss-pink-dark)}
+.ss-profile-menu-logout{color:#9b415d}
+
+.ss-header-focus:focus-visible,
+.ss-main-nav a:focus-visible,
+.ss-login-btn:focus-visible,
+.ss-signup-btn:focus-visible,
+.ss-profile-menu-item:focus-visible,
+.ss-profile-menu-logout:focus-visible,
+.ss-profile-trigger:focus-visible,
+.ss-cart-btn:focus-visible{
+  outline:2px solid var(--ss-pink);
+  outline-offset:3px;
+}
+
+@media(max-width:1000px){
+  .ss-main-header{grid-template-columns:auto minmax(0,1fr) auto;gap:16px;padding-inline:20px}
+  .ss-main-nav{gap:18px}
+  .ss-main-nav a{font-size:12px}
+  .ss-brand-logo img{width:84px;height:60px}
+  .ss-profile-trigger{max-width:175px}
+}
+
+@media(max-width:700px){
+  .ss-top-bar{min-height:29px;padding:6px 7px;font-size:9.5px;gap:5px}
+  .ss-top-bar .ss-top-divider{margin:0 2px}
+
+  .ss-main-header{
+    min-height:64px;
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:64px 35px;
+    gap:0 6px;
+    padding:0 9px;
+    box-shadow:0 4px 18px rgba(83,35,52,.055);
+  }
+
+  .ss-brand-logo img{width:78px;height:55px}
+
+  .ss-header-actions{gap:2px}
+  .ss-icon-btn,.ss-cart-btn{width:31px;height:31px}
+  .ss-icon-btn svg,.ss-cart-btn svg{width:16px;height:16px}
+  .ss-cart-count{min-width:14px;height:14px;font-size:7px;top:-2px;right:-2px}
+
+  .ss-profile-trigger{max-width:118px;min-height:34px;padding:4px 7px 4px 4px;gap:5px;font-size:9.5px}
+  .ss-profile-avatar{width:24px;height:24px;font-size:10px}
+  .ss-profile-arrow{width:6px;height:6px}
+
+  .ss-login-btn,.ss-signup-btn{min-height:31px;font-size:9px}
+  .ss-login-btn{min-width:55px;padding:0 8px}
+  .ss-signup-btn{min-width:78px;margin-left:3px;padding:0 8px}
+
+  .ss-main-nav{
+    grid-column:1 / -1;
+    grid-row:2;
+    width:100%;
+    min-width:0;
+    justify-content:flex-start;
+    gap:22px;
+    padding:0 2px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .ss-main-nav::-webkit-scrollbar{display:none}
+  .ss-main-nav a{min-height:34px;padding:3px 0;font-size:10.5px;flex:none}
+
+  .ss-profile-menu{width:220px;top:calc(100% + 8px)}
+}
+
+@media(max-width:380px){
+  .ss-main-header{padding-inline:7px}
+  .ss-brand-logo img{width:72px}
+  .ss-profile-trigger{max-width:104px}
+  .ss-profile-trigger-label{max-width:65px}
+  .ss-main-nav{gap:18px}
+  .ss-main-nav a{font-size:10px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ss-site-header *,
+  .ss-site-header *::before,
+  .ss-site-header *::after{transition-duration:.01ms!important}
+}
+</style>
+
+<div class="ss-site-header" data-ss-common-header>
+  <div class="ss-top-bar">
+    <span>✨ Free Shipping Across India</span>
+    <span class="ss-top-divider">|</span>
+    <span>💝 Carefully Packed With Love</span>
+  </div>
+
+  <header class="ss-main-header">
+    <a href="index.html" class="ss-brand-logo" aria-label="SS Spark Collections Home">
+      <img src="assets/logo.png" alt="SS Spark Collections">
+    </a>
+
+    <nav class="ss-main-nav" aria-label="Main navigation">
+      <a href="index.html" data-header-page="index.html">Home</a>
+      <a href="shop.html" data-header-page="shop.html">Shop</a>
+      <a href="product-list.html" data-header-page="product-list.html">Products</a>
+      <a href="new-arrivals.html" data-header-page="new-arrivals.html">New Arrivals</a>
+      <a href="contact.html" data-header-page="contact.html">Contact</a>
+    </nav>
+
+    <div class="ss-header-actions">
+      <button class="ss-icon-btn ss-header-focus" id="headerSearchBtn" type="button" title="Search" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.2" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+
+      <a href="cart.html" class="ss-cart-btn" title="Shopping Cart" aria-label="Shopping Cart">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h2l1.2 9.1a2 2 0 0 0 2 1.9h7.9a2 2 0 0 0 1.9-1.5L21 8H7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="19" r="1.2" fill="currentColor"/><circle cx="18" cy="19" r="1.2" fill="currentColor"/></svg>
+        <span id="cartCount" class="ss-cart-count">0</span>
+      </a>
+
+      <div id="authArea" class="ss-auth-area ss-auth-loading" aria-live="polite"></div>
+    </div>
+  </header>
+</div>
+
+<script>
+(async () => {
+  const { supabase } = await import("./supabase-client.js");
+  const root = document.querySelector("[data-ss-common-header]");
+  if (!root) return;
+
+  const authArea = root.querySelector("#authArea");
+  const cartCount = root.querySelector("#cartCount");
+  const searchButton = root.querySelector("#headerSearchBtn");
+  const navLinks = [...root.querySelectorAll("[data-header-page]")];
+
+  const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#039;", '"':"&quot;"
+  }[char]));
+
+  function setAuthReady(){
+    authArea?.classList.remove("ss-auth-loading");
+  }
+
+  async function refreshCartCount(user = null){
+    if (!cartCount) return;
+    try{
+      if (!user) {
+        const result = await supabase.auth.getUser();
+        user = result?.data?.user || null;
+      }
+      if (!user){
+        cartCount.textContent = "0";
+        return;
+      }
+
+      const { data: cart, error: cartError } = await supabase
+        .from("carts")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (cartError) throw cartError;
+      if (!cart){
+        cartCount.textContent = "0";
+        return;
+      }
+
+      const { data: items, error: itemsError } = await supabase
+        .from("cart_items")
+        .select("quantity")
+        .eq("cart_id", cart.id);
+      if (itemsError) throw itemsError;
+
+      const count = (items || []).reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      cartCount.textContent = String(count);
+    }catch(error){
+      console.warn("Shared header cart count error:", error);
+    }
+  }
+
+  function closeProfileMenu(){
+    const menu = root.querySelector("#profileMenu");
+    const trigger = root.querySelector("#profileTrigger");
+    menu?.classList.remove("show");
+    trigger?.setAttribute("aria-expanded", "false");
+  }
+
+  function bindProfileEvents(){
+    const trigger = root.querySelector("#profileTrigger");
+    const menu = root.querySelector("#profileMenu");
+    const logout = root.querySelector("#logoutBtn");
+    if (!trigger || !menu) return;
+
+    trigger.addEventListener("click", event => {
+      event.stopPropagation();
+      const open = !menu.classList.contains("show");
+      menu.classList.toggle("show", open);
+      trigger.setAttribute("aria-expanded", String(open));
+    });
+
+    if (logout){
+      logout.addEventListener("click", async () => {
+        logout.disabled = true;
+        try{
+          await supabase.auth.signOut();
+        }finally{
+          window.location.reload();
+        }
+      });
+    }
+  }
+
+  async function updateAuthUI(userOverride = undefined){
+    if (!authArea) return;
+
+    try{
+      const user = userOverride === undefined
+        ? (await supabase.auth.getUser())?.data?.user || null
+        : userOverride;
+
+      if (!user){
+        authArea.innerHTML = `
+          <a href="login.html" class="ss-login-btn">Login</a>
+          <a href="create-account.html" class="ss-signup-btn">Create Account</a>
+        `;
+        cartCount && (cartCount.textContent = "0");
+        setAuthReady();
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      const displayName = profile?.full_name || user.user_metadata?.full_name || user.email || "Sparkle Lover";
+
+      authArea.innerHTML = `
+        <div class="ss-profile-dropdown">
+          <button class="ss-profile-trigger" id="profileTrigger" type="button" aria-expanded="false" aria-haspopup="true">
+            <span class="ss-profile-avatar">✦</span>
+            <span class="ss-profile-trigger-label">Hi, ${escapeHtml(displayName)}</span>
+            <span class="ss-profile-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="ss-profile-menu" id="profileMenu">
+            <div class="ss-profile-menu-header">
+              <div class="ss-profile-menu-avatar">✦</div>
+              <div>
+                <strong>${escapeHtml(displayName)}</strong>
+                <small>${escapeHtml(user.email || "")}</small>
+              </div>
+            </div>
+            <div class="ss-profile-menu-divider"></div>
+            <a href="wishlist.html" class="ss-profile-menu-item"><span>♡</span><span>Wishlist</span></a>
+            <a href="order-lists.html" class="ss-profile-menu-item"><span>♧</span><span>My Orders</span></a>
+            ${profile?.role === "admin" ? `
+              <a href="admin.html" class="ss-profile-menu-item"><span>⚙</span><span>Admin Panel</span></a>
+            ` : ""}
+            <div class="ss-profile-menu-divider"></div>
+            <button id="logoutBtn" class="ss-profile-menu-logout" type="button"><span>↪</span><span>Logout</span></button>
+          </div>
+        </div>
+      `;
+
+      bindProfileEvents();
+      setAuthReady();
+      await refreshCartCount(user);
+    }catch(error){
+      console.error("Shared header auth error:", error);
+      /* Never leave the header looking stuck if auth/profile is temporarily unreadable. */
+      authArea.innerHTML = `
+        <a href="login.html" class="ss-login-btn">Login</a>
+        <a href="create-account.html" class="ss-signup-btn">Create Account</a>
+      `;
+      setAuthReady();
+    }
+  }
+
+  function markActiveNav(){
+    const current = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+    navLinks.forEach(link => {
+      const target = (link.dataset.headerPage || "").toLowerCase();
+      link.classList.toggle("active", target === current || (current === "" && target === "index.html"));
+    });
+  }
+
+  searchButton?.addEventListener("click", () => {
+    window.location.href = "search.html";
+  });
+
+  document.addEventListener("click", event => {
+    const menu = root.querySelector("#profileMenu");
+    const trigger = root.querySelector("#profileTrigger");
+    if (menu && trigger && !menu.contains(event.target) && !trigger.contains(event.target)) {
+      closeProfileMenu();
+    }
+  });
+
+  markActiveNav();
+
+  /* Start auth immediately. A safety fallback prevents a permanently hidden
+     auth area if the Supabase module is temporarily slow/unavailable. */
+  const authPromise = updateAuthUI();
+  window.setTimeout(() => {
+    if (authArea?.classList.contains("ss-auth-loading")) {
+      authArea.innerHTML = `
+        <a href="login.html" class="ss-login-btn">Login</a>
+        <a href="create-account.html" class="ss-signup-btn">Create Account</a>
+      `;
+      setAuthReady();
+    }
+  }, 2500);
+
+  /* Keep header state synchronized when auth changes in another tab/page. */
+  supabase.auth.onAuthStateChange((_event, session) => {
+    updateAuthUI(session?.user || null);
+  });
+
+  /* Allow existing page scripts to refresh the shared cart badge without
+     taking ownership of cart behavior away from those pages. */
+  window.ssSparkHeader = {
+    refreshCartCount,
+    updateAuthUI
+  };
+
+  window.dispatchEvent(new CustomEvent("ss-header-ready"));
+})().catch(error => {
+  console.error("Shared header initialization failed:", error);
+  const authArea = document.querySelector("[data-ss-common-header] #authArea");
+  if (authArea) {
+    authArea.innerHTML = `
+      <a href="login.html" class="ss-login-btn">Login</a>
+      <a href="create-account.html" class="ss-signup-btn">Create Account</a>
+    `;
+    authArea.classList.remove("ss-auth-loading");
+  }
+});
+</script>

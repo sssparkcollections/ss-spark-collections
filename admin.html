@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Admin Dashboard | SS Spark Collections
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+</head>
+
+
+<body data-admin-page="dashboard" class="admin-auth-pending">
+
+<style>
+body.admin-auth-pending > *{visibility:hidden}
+#adminAccessGate{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:18px;background:radial-gradient(circle at 15% 15%,rgba(184,132,159,.16),transparent 30%),radial-gradient(circle at 88% 85%,rgba(110,54,86,.12),transparent 34%),linear-gradient(145deg,#fcf8fb,#f7eef3 52%,#fbf8fa);visibility:visible}
+#adminAccessGate[hidden]{display:none}
+.admin-access-card{width:min(470px,100%);padding:34px 28px 29px;text-align:center;background:rgba(255,255,255,.94);border:1px solid #ead5e1;border-radius:26px;box-shadow:0 26px 80px rgba(77,38,61,.14);position:relative;overflow:hidden}
+.admin-access-card:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6e3656,#b8849f,#6e3656)}
+.admin-access-icon{width:72px;height:72px;margin:0 auto 18px;display:grid;place-items:center;border-radius:22px;background:#faf0f6;border:1px solid #ead5e1;color:#6e3656;font-size:30px;box-shadow:0 10px 28px rgba(110,54,86,.10)}
+.admin-access-kicker{margin:0 0 8px;color:#987e8d;font-size:10px;font-weight:850;letter-spacing:.15em;text-transform:uppercase}
+.admin-access-card h2{margin:0;color:#4d263d;font-size:28px;line-height:1.15;letter-spacing:-.025em}
+.admin-access-card p{margin:12px auto 0;max-width:390px;color:#806b77;font-size:13px;line-height:1.6}
+.admin-access-status{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 13px;border-radius:999px;background:#fff7e9;border:1px solid #f0dcc0;color:#795b36;font-size:11px;font-weight:800}
+.admin-access-status-dot{width:7px;height:7px;border-radius:50%;background:#c58a35;box-shadow:0 0 0 4px rgba(197,138,53,.11)}
+.admin-access-action{display:inline-flex;align-items:center;justify-content:center;min-width:130px;margin-top:21px;padding:11px 17px;border:0;border-radius:11px;background:#6e3656;color:#fff;font:800 12px inherit;text-decoration:none;cursor:pointer;box-shadow:0 8px 20px rgba(110,54,86,.16)}
+@media(max-width:480px){#adminAccessGate{padding:12px}.admin-access-card{padding:28px 18px 23px;border-radius:22px}.admin-access-icon{width:64px;height:64px;border-radius:19px}.admin-access-card h2{font-size:24px}.admin-access-card p{font-size:12px}.admin-access-action{width:100%}}
+</style>
+<div id="adminAccessGate" aria-live="polite">
+<section class="admin-access-card" role="status" aria-labelledby="adminAccessTitle">
+<div class="admin-access-icon" aria-hidden="true">🔐</div>
+<p class="admin-access-kicker">SS Spark Collections</p>
+<h2 id="adminAccessTitle">Verifying access</h2>
+<p id="adminAccessMessage">Please wait while we securely verify your administrator access.</p>
+<div class="admin-access-status" id="adminAccessStatus"><span class="admin-access-status-dot"></span>Checking authorization</div>
+</section>
+</div>
+<script type="module">
+(async()=>{
+const gate=document.getElementById("adminAccessGate"),title=document.getElementById("adminAccessTitle"),message=document.getElementById("adminAccessMessage"),status=document.getElementById("adminAccessStatus");
+const denied=(h,m)=>{title.textContent=h;message.textContent=m;status.innerHTML='<span class="admin-access-status-dot"></span> Access restricted';status.style.background="#fff0f2";status.style.borderColor="#efc9cc";status.style.color="#a43e45";const a=document.createElement("a");a.className="admin-access-action";a.href="index.html";a.textContent="Return to Store";document.querySelector(".admin-access-card").appendChild(a);document.body.classList.remove("admin-auth-pending")};
+try{
+const {supabase}=await import("./supabase-client.js");
+const {data:{user},error:authError}=await supabase.auth.getUser();
+if(authError)throw authError;
+if(!user){denied("You’re not authorized","This page is reserved for authorized administrators. Please sign in with an administrator account to continue.");return}
+const {data:profile,error:profileError}=await supabase.from("profiles").select("role,is_active").eq("id",user.id).maybeSingle();
+if(profileError)throw profileError;
+if(profile?.role!=="admin"||profile?.is_active!==true){denied("Access restricted","You are not authorized to view this page. Administrator access is required.");return}
+gate.hidden=true;document.body.classList.remove("admin-auth-pending");
+}catch(error){console.error("Admin authorization check failed:",error);denied("Unable to verify access","We could not verify your administrator access right now. Please sign in again and try once more.")}
+})();
+</script>
+
+
+
+    <div class="admin-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <div id="adminNavigation"></div>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="main-content">
+
+
+            <!-- =================================================
+                 TOP BAR
+                 ================================================= -->
+
+            <header class="topbar">
+
+
+                <div>
+
+                    <p class="page-label">
+                        ADMIN PANEL
+                    </p>
+
+                    <h1>
+                        Dashboard
+                    </h1>
+
+                </div>
+
+
+                <!-- =================================================
+                     ADMIN PROFILE
+                     ================================================= -->
+
+                <div
+                    class="admin-profile"
+                    id="adminProfile"
+                >
+
+                    <button
+                        type="button"
+                        class="admin-profile-trigger"
+                        id="adminProfileTrigger"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                    >
+
+                        <div class="profile-icon">
+                            👤
+                        </div>
+
+
+                        <div class="profile-details">
+
+                            <strong>
+                                Admin
+                            </strong>
+
+                            <span>
+                                Administrator
+                            </span>
+
+                        </div>
+
+
+                        <span class="profile-chevron">
+                            ⌄
+                        </span>
+
+                    </button>
+
+
+                    <!-- DROPDOWN -->
+
+                    <div
+                        class="admin-profile-menu"
+                        id="adminProfileMenu"
+                    >
+
+                        <button
+                            type="button"
+                            id="logoutBtn"
+                            class="profile-menu-item logout-item"
+                        >
+
+                            <span>
+                                ↪
+                            </span>
+
+                            <span>
+                                Logout
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 WELCOME
+                 ================================================= -->
+
+            <section class="welcome-card">
+
+                <div>
+
+                    <span class="welcome-small">
+                        WELCOME BACK ✨
+                    </span>
+
+
+                    <h2>
+
+                        Manage your
+
+                        <span>
+                            SS Spark
+                        </span>
+
+                        Collections
+
+                    </h2>
+
+
+                    <p>
+                        Manage products, orders, customers and your
+                        beautiful jewellery collection from one place.
+                    </p>
+
+                </div>
+
+
+                <div class="welcome-decoration">
+                    ✦ ♡ ✦
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 STAT CARDS
+                 ================================================= -->
+
+            <section class="stats-grid">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ✦
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Products
+                        </span>
+
+                        <h3 id="totalProducts">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ▣
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Orders
+                        </span>
+
+                        <h3 id="totalOrders">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ♙
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Customers
+                        </span>
+
+                        <h3 id="totalCustomers">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ₹
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Revenue
+                        </span>
+
+                        <h3 id="totalRevenue">
+                            ₹0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span>
+                            QUICK ACTIONS
+                        </span>
+
+                        <h2>
+                            Manage Store
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-grid">
+
+
+                    <button
+                        class="quick-card"
+                        id="addProductBtn"
+                    >
+
+                        <div class="quick-icon">
+                            ＋
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Add Product
+                            </h3>
+
+                            <p>
+                                Add a new jewellery product
+                            </p>
+
+                        </div>
+
+                    </button>
+
+
+
+                    <button class="quick-card">
+
+                        <div class="quick-icon">
+                            ▤
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Manage Products
+                            </h3>
+
+                            <p>
+                                View and update products
+                            </p>
+
+                        </div>
+
+                    </button>
+
+
+
+                    <button class="quick-card">
+
+                        <div class="quick-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                View Orders
+                            </h3>
+
+                            <p>
+                                Manage customer orders
+                            </p>
+
+                        </div>
+
+                    </button>
+
+
+
+                    <button class="quick-card">
+
+                        <div class="quick-icon">
+                            ♢
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Manage Banners
+                            </h3>
+
+                            <p>
+                                Update homepage banners
+                            </p>
+
+                        </div>
+
+                    </button>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 RECENT PRODUCTS
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+
+                <div class="section-heading section-heading-row">
+
+
+                    <div>
+
+                        <span>
+                            STORE
+                        </span>
+
+                        <h2>
+                            Recent Products
+                        </h2>
+
+                    </div>
+
+
+                    <button class="view-all-btn">
+                        View All →
+                    </button>
+
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Price
+                                </th>
+
+                                <th>
+                                    Stock
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="recentProducts">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="empty-state"
+                                >
+                                    No products added yet
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUPABASE + ADMIN LOGIC
+         ===================================================== -->
+
+    <script type="module">
+
+        import { supabase }
+            from "./supabase-client.js";
+
+
+        /* =====================================================
+           LOAD NAVIGATION
+           ===================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            async () => {
+
+
+                const navigationContainer =
+                    document.getElementById(
+                        "adminNavigation"
+                    );
+
+
+                if (!navigationContainer) {
+                    return;
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "admin-navigation.html"
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Navigation could not be loaded."
+                        );
+
+                    }
+
+
+                    const navigationHTML =
+                        await response.text();
+
+
+                    navigationContainer.innerHTML =
+                        navigationHTML;
+
+
+
+                    /* =============================================
+                       ACTIVE NAVIGATION
+                       ============================================= */
+
+                    const currentPage =
+                        document.body.dataset.adminPage;
+
+
+                    if (currentPage) {
+
+                        const activeItem =
+                            navigationContainer.querySelector(
+                                `.nav-item[data-page="${currentPage}"]`
+                            );
+
+
+                        if (activeItem) {
+
+                            activeItem.classList.add(
+                                "active"
+                            );
+
+                        }
+
+                    }
+
+
+
+                    /* =============================================
+                       ADMIN DROPDOWN
+                       ============================================= */
+
+                    const adminProfile =
+                        document.getElementById(
+                            "adminProfile"
+                        );
+
+
+                    const adminProfileTrigger =
+                        document.getElementById(
+                            "adminProfileTrigger"
+                        );
+
+
+                    const adminProfileMenu =
+                        document.getElementById(
+                            "adminProfileMenu"
+                        );
+
+
+                    if (
+                        adminProfile &&
+                        adminProfileTrigger &&
+                        adminProfileMenu
+                    ) {
+
+
+                        adminProfileTrigger.addEventListener(
+                            "click",
+                            (event) => {
+
+                                event.stopPropagation();
+
+
+                                const isOpen =
+                                    adminProfile.classList.toggle(
+                                        "open"
+                                    );
+
+
+                                adminProfileTrigger.setAttribute(
+                                    "aria-expanded",
+                                    isOpen
+                                        ? "true"
+                                        : "false"
+                                );
+
+                            }
+                        );
+
+
+                        adminProfileMenu.addEventListener(
+                            "click",
+                            (event) => {
+
+                                event.stopPropagation();
+
+                            }
+                        );
+
+
+                        document.addEventListener(
+                            "click",
+                            () => {
+
+                                adminProfile.classList.remove(
+                                    "open"
+                                );
+
+
+                                adminProfileTrigger.setAttribute(
+                                    "aria-expanded",
+                                    "false"
+                                );
+
+                            }
+                        );
+
+                    }
+
+
+
+                    /* =============================================
+                       LOGOUT
+                       ============================================= */
+
+                    const logoutBtn =
+                        document.getElementById(
+                            "logoutBtn"
+                        );
+
+
+                    if (logoutBtn) {
+
+                        logoutBtn.addEventListener(
+                            "click",
+                            async () => {
+
+
+                                logoutBtn.disabled =
+                                    true;
+
+
+                                logoutBtn.innerHTML =
+                                    `
+                                    <span>↪</span>
+                                    <span>Logging out...</span>
+                                    `;
+
+
+                                try {
+
+                                    const {
+                                        error
+                                    } =
+                                        await supabase
+                                            .auth
+                                            .signOut();
+
+
+                                    if (error) {
+
+                                        throw error;
+
+                                    }
+
+
+                                    window.location.href =
+                                        "index.html";
+
+
+                                } catch (error) {
+
+                                    console.error(
+                                        "Logout failed:",
+                                        error
+                                    );
+
+
+                                    logoutBtn.disabled =
+                                        false;
+
+
+                                    logoutBtn.innerHTML =
+                                        `
+                                        <span>↪</span>
+                                        <span>Logout</span>
+                                        `;
+
+                                    alert(
+                                        "Unable to logout. Please try again."
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Failed to load admin navigation:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

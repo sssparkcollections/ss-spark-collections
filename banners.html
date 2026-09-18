@@ -1,0 +1,4652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Banners | SS Spark Collections
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           BANNERS PAGE
+        ===================================================== */
+
+        .banners-page {
+            margin-top: 10px;
+        }
+
+
+        /* =====================================================
+           TOOLBAR
+        ===================================================== */
+
+        .banners-toolbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .banner-search {
+
+            flex: 1;
+
+            max-width: 420px;
+
+            padding: 13px 16px;
+
+            border: 1px solid #ead5e1;
+
+            border-radius: 12px;
+
+            background: white;
+
+            outline: none;
+
+            font-family: inherit;
+
+        }
+
+
+        .banner-search:focus {
+
+            border-color: #c83288;
+
+        }
+
+
+        .primary-btn {
+
+            border: none;
+
+            border-radius: 12px;
+
+            padding: 13px 20px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #d63391,
+                    #c84c94
+                );
+
+            color: white;
+
+            font-family: inherit;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+        }
+
+
+        .primary-btn:hover {
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 7px 18px
+                rgba(
+                    196,
+                    67,
+                    139,
+                    .22
+                );
+
+        }
+
+
+        /* =====================================================
+           BANNER TABLE
+        ===================================================== */
+
+        .banners-card {
+
+            background: white;
+
+            border:
+                1px solid #ecdbe4;
+
+            border-radius: 17px;
+
+            overflow: hidden;
+
+        }
+
+
+        .banners-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        .banners-table th {
+
+            text-align: left;
+
+            padding: 15px 18px;
+
+            background: #fff5fa;
+
+            color: #936379;
+
+            font-size: 10px;
+
+            letter-spacing: .8px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .banners-table td {
+
+            padding: 15px 18px;
+
+            border-top:
+                1px solid #f1e6ec;
+
+            font-size: 12px;
+
+            vertical-align: middle;
+
+        }
+
+
+        .banner-thumb {
+
+            width: 120px;
+
+            height: 62px;
+
+            object-fit: cover;
+
+            border-radius: 10px;
+
+            border:
+                1px solid #f0dce7;
+
+            background: #fff7fb;
+
+            display: block;
+
+        }
+
+
+        .banner-name {
+
+            font-weight: 700;
+
+            color: #4c3042;
+
+        }
+
+
+        .banner-subtitle {
+
+            margin-top: 4px;
+
+            color: #9b8490;
+
+            font-size: 10px;
+
+            max-width: 250px;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .status-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+        }
+
+
+        .status-live {
+
+            background: #e7f7ed;
+
+            color: #25834a;
+
+        }
+
+
+        .status-scheduled {
+
+            background: #fff2dc;
+
+            color: #9a6815;
+
+        }
+
+
+        .status-expired {
+
+            background: #f8e7ec;
+
+            color: #a14b68;
+
+        }
+
+
+        .status-inactive {
+
+            background: #eee8ec;
+
+            color: #75626c;
+
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .action-group {
+
+            display: flex;
+
+            gap: 7px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .action-btn {
+
+            border:
+                1px solid #ead5e1;
+
+            background: white;
+
+            color: #9b3d74;
+
+            padding: 7px 11px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 10px;
+
+            font-family: inherit;
+
+        }
+
+        .action-btn.enable-btn {
+
+    color: #25834a;
+
+    border-color: #bfe5cc;
+
+    background: #f0fbf4;
+
+}
+
+
+.action-btn.enable-btn:hover {
+
+    background: #e5f7eb;
+
+}
+
+
+.action-btn.disable-btn {
+
+    color: #a66a12;
+
+    border-color: #f0d8a8;
+
+    background: #fff8e9;
+
+}
+
+
+.action-btn.disable-btn:hover {
+
+    background: #fff1d2;
+
+}
+
+
+        .action-btn:hover {
+
+            background: #fff1f7;
+
+        }
+
+
+        .action-btn.danger {
+
+            color: #b34d69;
+
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty-banners {
+
+            text-align: center;
+
+            padding: 55px 20px;
+
+            color: #aa8b9c;
+
+        }
+
+
+        .empty-banners-icon {
+
+            font-size: 38px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .banner-form-card {
+
+            background: white;
+
+            border:
+                1px solid #ecdbe4;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(
+                    120,
+                    70,
+                    100,
+                    .06
+                );
+
+        }
+
+
+        .form-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .form-header span {
+
+            color: #c83288;
+
+            font-size: 10px;
+
+            letter-spacing: 1.5px;
+
+            font-weight: 600;
+
+        }
+
+
+        .form-header h2 {
+
+            margin: 6px 0;
+
+            color: #4c3042;
+
+        }
+
+
+        .form-header p {
+
+            margin: 0;
+
+            color: #9b8490;
+
+            font-size: 12px;
+
+        }
+
+
+        .close-form-btn {
+
+            border: none;
+
+            background: #fff1f7;
+
+            color: #b72c78;
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 50%;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+
+        }
+
+
+        .full-width {
+
+            grid-column: 1 / -1;
+
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+        }
+
+
+        .form-group label {
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #68485a;
+
+        }
+
+
+        .form-group input,
+        .form-group textarea {
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 12px 14px;
+
+            border:
+                1px solid #ead5e1;
+
+            border-radius: 11px;
+
+            outline: none;
+
+            font-family: inherit;
+
+            color: #4c3042;
+
+            background: white;
+
+        }
+
+
+        .form-group textarea {
+
+            resize: vertical;
+
+            min-height: 85px;
+
+        }
+
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+
+            border-color: #c83288;
+
+        }
+
+
+        .form-group input[type="file"] {
+
+            padding: 10px;
+
+            cursor: pointer;
+
+        }
+
+
+        .upload-hint {
+
+            margin-top: 2px;
+
+            font-size: 10px;
+
+            color: #a58d99;
+
+        }
+
+
+        /* =====================================================
+           IMAGE PREVIEW
+        ===================================================== */
+
+        .banner-image-preview {
+
+            margin-top: 10px;
+
+            display: none;
+
+        }
+
+
+        .banner-image-preview img {
+
+            width: 240px;
+
+            height: 125px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            border:
+                1px solid #ead5e1;
+
+            display: block;
+
+            background: #fff7fb;
+
+        }
+
+
+        .current-image {
+
+            margin-top: 10px;
+
+        }
+
+
+        .current-image span {
+
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-size: 10px;
+
+            color: #9b8490;
+
+        }
+
+
+        .current-image img {
+
+            width: 180px;
+
+            height: 95px;
+
+            object-fit: cover;
+
+            border-radius: 10px;
+
+            border:
+                1px solid #ead5e1;
+
+        }
+
+
+        /* =====================================================
+           CHECKBOX
+        ===================================================== */
+
+        .banner-options {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 20px;
+
+        }
+
+
+        .banner-options label {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 13px;
+
+            border:
+                1px solid #ecdbe4;
+
+            border-radius: 10px;
+
+            background: #fff8fb;
+
+            font-size: 11px;
+
+            color: #68485a;
+
+        }
+
+
+        .banner-options input {
+
+            accent-color: #c83288;
+
+        }
+
+
+        /* =====================================================
+           FORM ACTIONS
+        ===================================================== */
+
+        .form-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            margin-top: 25px;
+
+        }
+
+
+        .secondary-btn {
+
+            border:
+                1px solid #e3cbd8;
+
+            background: white;
+
+            color: #68485a;
+
+            padding: 12px 20px;
+
+            border-radius: 11px;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+        }
+
+
+        .secondary-btn:hover {
+
+            background: #fff5fa;
+
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .toast {
+
+            position: fixed;
+
+            right: 25px;
+
+            bottom: 25px;
+
+            z-index: 9999;
+
+            min-width: 260px;
+
+            max-width: 360px;
+
+            padding: 14px 16px;
+
+            border-radius: 12px;
+
+            background: white;
+
+            border:
+                1px solid #ead5e1;
+
+            box-shadow:
+                0 12px 35px
+                rgba(
+                    80,
+                    40,
+                    65,
+                    .14
+                );
+
+            display: none;
+
+        }
+
+
+        .toast-title {
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #4c3042;
+
+        }
+
+
+        .toast-message {
+
+            margin-top: 3px;
+
+            font-size: 10px;
+
+            color: #8b747f;
+
+        }
+
+
+        .toast.success {
+
+            border-left:
+                4px solid #25834a;
+
+        }
+
+
+        .toast.error {
+
+            border-left:
+                4px solid #b34d69;
+
+        }
+
+
+        /* =====================================================
+           CONFIRM MODAL
+        ===================================================== */
+
+        .modal-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(
+                    50,
+                    25,
+                    40,
+                    .28
+                );
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            z-index: 10000;
+
+            padding: 20px;
+
+        }
+
+
+        .confirm-modal {
+
+            width: 100%;
+
+            max-width: 390px;
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 20px 50px
+                rgba(
+                    50,
+                    25,
+                    40,
+                    .18
+                );
+
+        }
+
+
+        .confirm-modal h3 {
+
+            margin: 0 0 7px;
+
+            color: #4c3042;
+
+        }
+
+
+        .confirm-modal p {
+
+            margin: 0;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            color: #8b747f;
+
+        }
+
+
+        .confirm-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 9px;
+
+            margin-top: 22px;
+
+        }
+
+
+        .delete-btn {
+
+            border: none;
+
+            background: #b34d69;
+
+            color: white;
+
+            padding: 11px 17px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .full-width {
+
+                grid-column: auto;
+
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .banners-toolbar {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+
+            .banner-search {
+
+                max-width: none;
+
+            }
+
+
+            .primary-btn {
+
+                width: 100%;
+
+            }
+
+
+            .banners-card {
+
+                overflow-x: auto;
+
+            }
+
+
+            .banners-table {
+
+                min-width: 850px;
+
+            }
+
+
+            .banner-form-card {
+
+                padding: 18px;
+
+            }
+
+
+            .form-actions {
+
+                flex-direction: column;
+
+            }
+
+
+            .form-actions button {
+
+                width: 100%;
+
+            }
+
+        }
+
+        .action-btn.enable-btn {
+    color: #25834a;
+    border-color: #bfe5cc;
+    background: #f0fbf4;
+}
+
+.action-btn.enable-btn:hover {
+    background: #e5f7eb;
+}
+
+.action-btn.disable-btn {
+    color: #a66a12;
+    border-color: #f0d8a8;
+    background: #fff8e9;
+}
+
+.action-btn.disable-btn:hover {
+    background: #fff1d2;
+}
+
+
+        /* =====================================================
+           PREMIUM FORM POLISH - STEP 2
+           UI only; existing functionality/selectors preserved.
+        ===================================================== */
+
+        .banner-form-card {
+            position: relative;
+            border: 1px solid #edd6e2;
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+            background:
+                linear-gradient(180deg, #fffafd 0%, #ffffff 28%);
+            box-shadow:
+                0 18px 48px rgba(91, 38, 66, .09),
+                0 3px 12px rgba(214, 51, 108, .04);
+        }
+
+        .banner-form-card::before {
+            content: "";
+            display: block;
+            height: 4px;
+            background: linear-gradient(90deg, #d63391, #e7549a, #c83288);
+        }
+
+        .banner-form-card .form-header {
+            padding: 24px 25px 20px;
+            margin-bottom: 0;
+            border-bottom: 1px solid #f1e2e9;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(214,51,145,.08), transparent 30%),
+                linear-gradient(180deg, #fff7fb 0%, #fffafd 100%);
+        }
+
+        .banner-form-card .form-header span {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #b72c78;
+            font-size: 9px;
+            letter-spacing: 1.8px;
+        }
+
+        .banner-form-card .form-header span::before {
+            content: "✦";
+            font-size: 10px;
+        }
+
+        .banner-form-card .form-header h2 {
+            margin: 7px 0 5px;
+            color: #47283a;
+            font: 500 25px/1.15 Georgia, "Times New Roman", serif;
+        }
+
+        .banner-form-card .form-header p {
+            color: #967887;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .banner-form-card .close-form-btn {
+            width: 34px;
+            height: 34px;
+            border: 1px solid #efd9e4;
+            background: rgba(255,255,255,.85);
+            box-shadow: 0 5px 14px rgba(83,35,52,.06);
+            transition: border-color .18s ease, background .18s ease, color .18s ease;
+        }
+
+        .banner-form-card .close-form-btn:hover {
+            background: #fff1f7;
+            border-color: #e2b6ca;
+            color: #a62268;
+        }
+
+        .banner-form-card form {
+            padding: 23px 25px 25px;
+        }
+
+        .banner-form-card .form-grid {
+            gap: 17px 18px;
+        }
+
+        .banner-form-card .form-group {
+            gap: 6px;
+        }
+
+        .banner-form-card .form-group label {
+            display: flex;
+            align-items: center;
+            min-height: 16px;
+            color: #624255;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .15px;
+        }
+
+        .banner-form-card .form-group label[for="bannerImage"]::after {
+            content: "Recommended wide format";
+            margin-left: auto;
+            color: #ad8b9b;
+            font-size: 8px;
+            font-weight: 500;
+        }
+
+        .banner-form-card .form-group input:not([type="file"]),
+        .banner-form-card .form-group textarea,
+        .banner-form-card .form-group select {
+            min-height: 42px;
+            padding: 11px 13px;
+            border: 1px solid #ead7e1;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: inset 0 1px 2px rgba(83,35,52,.015);
+            transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .banner-form-card .form-group textarea {
+            min-height: 90px;
+        }
+
+        .banner-form-card .form-group input:not([type="file"]):hover,
+        .banner-form-card .form-group textarea:hover,
+        .banner-form-card .form-group select:hover {
+            border-color: #e1c3d1;
+        }
+
+        .banner-form-card .form-group input:not([type="file"]):focus,
+        .banner-form-card .form-group textarea:focus,
+        .banner-form-card .form-group select:focus {
+            border-color: #d45a95;
+            background: #fffafd;
+            box-shadow:
+                0 0 0 3px rgba(214,51,145,.08),
+                0 5px 14px rgba(83,35,52,.035);
+        }
+
+        .banner-form-card .form-group input[type="file"] {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 76px;
+            padding: 20px 15px;
+            border: 1px dashed #dfb9cc;
+            border-radius: 13px;
+            background:
+                linear-gradient(180deg, #fff9fc, #fff);
+            color: #765467;
+            font-size: 10px;
+            transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+        }
+
+        .banner-form-card .form-group input[type="file"]:hover {
+            border-color: #d45a95;
+            background: #fff6fa;
+            box-shadow: 0 6px 18px rgba(214,51,145,.06);
+        }
+
+        .banner-form-card .upload-hint {
+            color: #a08794;
+            font-size: 9px;
+            line-height: 1.45;
+        }
+
+        .banner-form-card .banner-image-preview {
+            padding: 10px;
+            border: 1px solid #ecdbe4;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 8px 22px rgba(83,35,52,.06);
+        }
+
+        .banner-form-card .banner-image-preview img {
+            width: 100%;
+            max-width: 420px;
+            height: 145px;
+            border-radius: 10px;
+        }
+
+        .banner-form-card .current-image {
+            padding: 10px;
+            border: 1px solid #ecdbe4;
+            border-radius: 14px;
+            background: #fff;
+        }
+
+        .banner-form-card .current-image span {
+            color: #a08794;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .banner-form-card .current-image img {
+            width: 220px;
+            max-width: 100%;
+            height: 112px;
+            border-radius: 10px;
+            box-shadow: 0 7px 18px rgba(83,35,52,.06);
+        }
+
+        .banner-form-card .banner-options {
+            margin-top: 19px;
+        }
+
+        .banner-form-card .banner-options label {
+            position: relative;
+            min-width: 116px;
+            justify-content: space-between;
+            padding: 8px 10px 8px 12px;
+            border-radius: 999px;
+            background: #fffafd;
+            color: #68485a;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .banner-form-card .banner-options label input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .banner-form-card .banner-options label::after {
+    content: "";
+    width: 40px;
+    height: 20px;
+    flex: 0 0 40px;
+    border-radius: 999px;
+    background: #d8cbd1;
+    box-shadow: inset 0 0 0 1px rgba(83,35,52,.08);
+    transition: background .18s ease;
+}
+
+.banner-form-card .banner-options label::before {
+    content: "";
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(83,35,52,.18);
+    transition: transform .18s ease;
+    z-index: 1;
+}
+
+.banner-form-card .banner-options label:has(input:checked)::after {
+    background: #48a967;
+}
+
+.banner-form-card .banner-options label:has(input:checked)::before {
+    transform: translateX(20px);
+}
+
+        .banner-form-card .form-actions {
+            margin-top: 24px;
+            padding-top: 19px;
+            border-top: 1px solid #f0e2e8;
+        }
+
+        .banner-form-card .secondary-btn,
+        .banner-form-card .form-actions .primary-btn {
+            min-height: 40px;
+            padding: 0 18px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .banner-form-card .secondary-btn {
+            border-color: #e5d0da;
+            background: #fff;
+            color: #745264;
+        }
+
+        .banner-form-card .secondary-btn:hover {
+            background: #fff6fa;
+            border-color: #dfbfd0;
+        }
+
+        .banner-form-card .form-actions .primary-btn {
+            box-shadow: 0 8px 20px rgba(200,50,136,.16);
+            background: linear-gradient(135deg, #d63391, #c83288);
+        }
+
+        .banner-form-card .form-actions .primary-btn:hover {
+            transform: none;
+            box-shadow: 0 9px 22px rgba(200,50,136,.21);
+        }
+
+        @media (max-width: 700px) {
+            .banner-form-card .form-header {
+                padding: 20px 18px 17px;
+            }
+
+            .banner-form-card form {
+                padding: 19px 18px 20px;
+            }
+
+            .banner-form-card .form-header h2 {
+                font-size: 23px;
+            }
+
+            .banner-form-card .form-group label[for="bannerImage"]::after {
+                display: none;
+            }
+
+            .banner-form-card .banner-image-preview img {
+                height: 120px;
+            }
+
+            .banner-form-card .current-image img {
+                width: 100%;
+                height: 120px;
+            }
+
+            .banner-form-card .banner-options {
+                margin-top: 16px;
+            }
+        }
+
+
+        /* =====================================================
+           PREMIUM MOBILE BANNER CARDS - STEP 3
+           Desktop table remains unchanged.
+        ===================================================== */
+
+        .mobile-banner-list {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+            .banners-card {
+                overflow: visible;
+                border: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            .banners-card .banners-table {
+                display: none;
+            }
+
+            .mobile-banner-list {
+                display: grid;
+                gap: 13px;
+            }
+
+            .mobile-banner-card {
+                overflow: hidden;
+                border: 1px solid #ecdbe4;
+                border-radius: 17px;
+                background: #fff;
+                box-shadow: 0 10px 28px rgba(83,35,52,.065);
+            }
+
+            .mobile-banner-image-wrap {
+                position: relative;
+                padding: 10px 10px 0;
+            }
+
+            .mobile-banner-image {
+                display: block;
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 12px;
+                border: 1px solid #f0dce7;
+                background: #fff7fb;
+            }
+
+            .mobile-banner-status {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+            }
+
+            .mobile-banner-body {
+                padding: 15px 15px 14px;
+            }
+
+            .mobile-banner-top {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 12px;
+            }
+
+            .mobile-banner-name {
+                min-width: 0;
+                color: #4c3042;
+                font: 600 18px/1.2 Georgia, "Times New Roman", serif;
+            }
+
+            .mobile-banner-order {
+                flex: 0 0 auto;
+                min-width: 29px;
+                height: 29px;
+                display: grid;
+                place-items: center;
+                border: 1px solid #ecd5e1;
+                border-radius: 9px;
+                background: #fff7fb;
+                color: #a34b78;
+                font: 700 10px/1 Arial, sans-serif;
+            }
+
+            .mobile-banner-subtitle {
+                margin-top: 6px;
+                color: #987988;
+                font-size: 10px;
+                line-height: 1.45;
+            }
+
+            .mobile-banner-schedule {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin-top: 13px;
+                padding: 10px;
+                border: 1px solid #f0e2e8;
+                border-radius: 11px;
+                background: #fffafd;
+            }
+
+            .mobile-banner-date {
+                min-width: 0;
+            }
+
+            .mobile-banner-date + .mobile-banner-date {
+                padding-left: 10px;
+                border-left: 1px solid #eedfe6;
+            }
+
+            .mobile-banner-date-label {
+                display: block;
+                margin-bottom: 4px;
+                color: #ad8b9b;
+                font-size: 7px;
+                font-weight: 700;
+                letter-spacing: .8px;
+                text-transform: uppercase;
+            }
+
+            .mobile-banner-date-value {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: #68485a;
+                font-size: 9px;
+                font-weight: 600;
+            }
+
+            .mobile-banner-actions {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 7px;
+                margin-top: 13px;
+            }
+
+            .mobile-banner-actions .action-btn {
+                min-height: 35px;
+                padding: 0 7px;
+                border-radius: 9px;
+                font-size: 9px;
+                white-space: nowrap;
+            }
+
+            .mobile-banner-actions .action-btn:hover {
+                transform: none;
+            }
+
+            .mobile-banner-empty {
+                padding: 42px 18px;
+                border: 1px solid #ecdbe4;
+                border-radius: 17px;
+                background: #fff;
+                text-align: center;
+                color: #aa8b9c;
+                box-shadow: 0 10px 28px rgba(83,35,52,.05);
+            }
+
+            .mobile-banner-empty strong {
+                display: block;
+                margin-top: 7px;
+                color: #68485a;
+                font: 500 19px Georgia, "Times New Roman", serif;
+            }
+
+            .mobile-banner-empty p {
+                margin: 5px 0 0;
+                font-size: 9px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body data-admin-page="banners">
+
+
+<div class="admin-layout">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
+
+    <div id="admin-navigation"></div>
+
+
+        
+
+
+    <!-- =================================================
+         MAIN
+    ================================================= -->
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+
+            <div
+    class="admin-profile"
+    id="adminProfile"
+    style="margin-left: auto;"
+>
+
+    <button
+        type="button"
+        class="admin-profile-trigger"
+        id="adminProfileTrigger"
+        aria-expanded="false"
+        aria-haspopup="true"
+    >
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div class="profile-details">
+
+            <strong>
+                Admin
+            </strong>
+
+            <span>
+                Administrator
+            </span>
+
+        </div>
+
+        <span class="profile-chevron">
+            ⌄
+        </span>
+
+    </button>
+
+
+    <div
+        class="admin-profile-menu"
+        id="adminProfileMenu"
+    >
+
+        <button
+            type="button"
+            id="logoutBtn"
+            class="profile-menu-item logout-item"
+        >
+
+            <span>
+                ↪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+        </header>
+
+
+        <section class="banners-page">
+
+
+            <!-- =================================================
+                 HEADING
+            ================================================= -->
+
+            <div class="section-heading section-heading-row">
+
+                <div>
+
+                    <span>
+                        STORE
+                    </span>
+
+                    <h2>
+                        Manage Banners
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TOOLBAR
+            ================================================= -->
+
+            <div class="banners-toolbar">
+
+    <div
+        style="
+            display:flex;
+            gap:10px;
+            flex:1;
+            max-width:650px;
+        "
+    >
+
+        <input
+            type="search"
+            id="bannerSearch"
+            class="banner-search"
+            placeholder="Search banners..."
+            style="max-width:none;"
+        >
+
+        <select
+            id="bannerFilter"
+            style="
+                min-width:150px;
+                padding:13px 14px;
+                border:1px solid #ead5e1;
+                border-radius:12px;
+                background:white;
+                color:#68485a;
+                font-family:inherit;
+                outline:none;
+                cursor:pointer;
+            "
+        >
+
+            <option value="all">
+                All Banners
+            </option>
+
+            <option value="live">
+                Live
+            </option>
+
+            <option value="scheduled">
+                Scheduled
+            </option>
+
+            <option value="expired">
+                Expired
+            </option>
+
+            <option value="inactive">
+                Inactive
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <button
+        type="button"
+        class="primary-btn"
+        id="addBannerBtn"
+    >
+        ＋ Add Banner
+    </button>
+
+</div>
+
+
+            <!-- =================================================
+                 FORM
+            ================================================= -->
+
+            <div
+                id="bannerFormCard"
+                class="banner-form-card"
+                style="display:none;"
+            >
+
+
+                <div class="form-header">
+
+
+                    <div>
+
+                        <span>
+                            BANNER MANAGEMENT
+                        </span>
+
+                        <h2 id="formTitle">
+                            Add New Banner
+                        </h2>
+
+                        <p>
+                            Create a promotional banner for your store.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="close-form-btn"
+                        id="closeBannerForm"
+                    >
+                        ✕
+                    </button>
+
+
+                </div>
+
+
+                <form id="bannerForm">
+
+
+                    <div class="form-grid">
+
+
+                        <!-- TITLE -->
+
+                        <div class="form-group">
+
+                            <label for="bannerTitle">
+                                Title
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bannerTitle"
+                                placeholder="New Collection"
+                            >
+
+                        </div>
+
+
+                        <!-- SUBTITLE -->
+
+                        <div class="form-group">
+
+                            <label for="bannerSubtitle">
+                                Subtitle
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bannerSubtitle"
+                                placeholder="Discover our latest arrivals"
+                            >
+
+                        </div>
+
+
+                        <!-- BUTTON TEXT -->
+
+                        <div class="form-group">
+
+                            <label for="bannerButtonText">
+                                Button Text
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bannerButtonText"
+                                placeholder="Shop Now"
+                            >
+
+                        </div>
+
+
+                        <!-- BUTTON LINK -->
+
+                        <div class="form-group">
+
+                            <label for="bannerButtonLink">
+                                Button Link
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bannerButtonLink"
+                                placeholder="products.html"
+                            >
+
+                        </div>
+
+
+                        <!-- IMAGE -->
+
+                        <div class="form-group full-width">
+
+                            <label for="bannerImage">
+                                Banner Image *
+                            </label>
+
+
+                            <input
+                                type="file"
+                                id="bannerImage"
+                                accept="image/jpeg,image/png,image/webp"
+                            >
+
+
+                            <div class="upload-hint">
+
+                                JPG, PNG or WEBP. Maximum 5 MB.
+                                Recommended: wide banner image.
+
+                            </div>
+
+
+                            <div
+                                id="currentImage"
+                                class="current-image"
+                                style="display:none;"
+                            >
+
+                                <span>
+                                    Current image
+                                </span>
+
+                                <img
+                                    id="currentImagePreview"
+                                    src=""
+                                    alt="Current banner"
+                                >
+
+                            </div>
+
+
+                            <div
+                                id="bannerImagePreview"
+                                class="banner-image-preview"
+                            >
+
+                                <img
+                                    id="bannerPreviewImg"
+                                    src=""
+                                    alt="Banner preview"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- START DATE -->
+
+                        <div class="form-group">
+
+                            <label for="bannerStartDate">
+                                Start Date
+                            </label>
+
+                            <input
+                                type="datetime-local"
+                                id="bannerStartDate"
+                            >
+
+                        </div>
+
+
+                        <!-- END DATE -->
+
+                        <div class="form-group">
+
+                            <label for="bannerEndDate">
+                                End Date
+                            </label>
+
+                            <input
+                                type="datetime-local"
+                                id="bannerEndDate"
+                            >
+
+                        </div>
+
+
+                        <!-- DISPLAY ORDER -->
+
+                        <div class="form-group">
+
+                            <label for="bannerDisplayOrder">
+                                Display Order
+                            </label>
+
+                            <input
+                                type="number"
+                                id="bannerDisplayOrder"
+                                min="0"
+                                value="0"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="banner-options">
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                id="bannerActive"
+                                checked
+                            >
+
+                            Active
+
+                        </label>
+
+
+                    </div>
+
+
+                    <div
+                        id="bannerFormMessage"
+                        style="
+                            margin-top:12px;
+                            min-height:18px;
+                            font-size:11px;
+                        "
+                    ></div>
+
+
+                    <div class="form-actions">
+
+
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            id="cancelBanner"
+                        >
+                            Cancel
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                            id="saveBannerBtn"
+                        >
+                            ✦ Save Banner
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================= -->
+
+
+            <div id="mobileBannerList" class="mobile-banner-list"></div>
+
+            <div class="banners-card">
+
+
+                <table class="banners-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Image
+                            </th>
+
+                            <th>
+                                Banner
+                            </th>
+
+                            <th>
+                                Schedule
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Order
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="bannersTableBody">
+
+
+                        <tr>
+
+                            <td colspan="6">
+
+                                <div class="empty-banners">
+
+                                    <div class="empty-banners-icon">
+                                        ▤
+                                    </div>
+
+                                    <div>
+                                        Loading banners...
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+    id="toast"
+    class="toast"
+>
+
+    <div
+        id="toastTitle"
+        class="toast-title"
+    ></div>
+
+    <div
+        id="toastMessage"
+        class="toast-message"
+    ></div>
+
+</div>
+
+
+<!-- =====================================================
+     CONFIRM MODAL
+===================================================== -->
+
+<div
+    id="confirmOverlay"
+    class="modal-overlay"
+>
+
+    <div class="confirm-modal">
+
+
+        <h3>
+            Delete Banner?
+        </h3>
+
+
+        <p id="confirmText">
+            This banner will be permanently removed.
+        </p>
+
+
+        <div class="confirm-actions">
+
+
+            <button
+                type="button"
+                class="secondary-btn"
+                id="cancelDelete"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="delete-btn"
+                id="confirmDelete"
+            >
+                Delete Banner
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script type="module">
+
+
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
+
+    import {
+        supabase
+    } from "./supabase-client.js";
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const addBannerBtn =
+        document.getElementById(
+            "addBannerBtn"
+        );
+
+
+    const bannerFormCard =
+        document.getElementById(
+            "bannerFormCard"
+        );
+
+
+    const closeBannerForm =
+        document.getElementById(
+            "closeBannerForm"
+        );
+
+
+    const cancelBanner =
+        document.getElementById(
+            "cancelBanner"
+        );
+
+
+    const bannerForm =
+        document.getElementById(
+            "bannerForm"
+        );
+
+
+    const bannerImage =
+        document.getElementById(
+            "bannerImage"
+        );
+
+
+    const bannerImagePreview =
+        document.getElementById(
+            "bannerImagePreview"
+        );
+
+
+    const bannerPreviewImg =
+        document.getElementById(
+            "bannerPreviewImg"
+        );
+
+
+    const currentImage =
+        document.getElementById(
+            "currentImage"
+        );
+
+
+    const currentImagePreview =
+        document.getElementById(
+            "currentImagePreview"
+        );
+
+
+    const bannerSearch =
+        document.getElementById(
+            "bannerSearch"
+        );
+    
+    const bannerFilter =
+    document.getElementById(
+        "bannerFilter"
+    );
+
+
+    const bannersTableBody =
+        document.getElementById(
+            "bannersTableBody"
+        );
+
+
+    const mobileBannerList =
+        document.getElementById(
+            "mobileBannerList"
+        );
+
+
+    const bannerFormMessage =
+        document.getElementById(
+            "bannerFormMessage"
+        );
+
+
+    const formTitle =
+        document.getElementById(
+            "formTitle"
+        );
+
+
+    const saveBannerBtn =
+        document.getElementById(
+            "saveBannerBtn"
+        );
+
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    const toastTitle =
+        document.getElementById(
+            "toastTitle"
+        );
+
+
+    const toastMessage =
+        document.getElementById(
+            "toastMessage"
+        );
+
+
+    const confirmOverlay =
+        document.getElementById(
+            "confirmOverlay"
+        );
+
+
+    const confirmDelete =
+        document.getElementById(
+            "confirmDelete"
+        );
+
+
+    const cancelDelete =
+        document.getElementById(
+            "cancelDelete"
+        );
+
+
+    /* =====================================================
+       STATE
+    ===================================================== */
+
+    let allBanners = [];
+
+    let editingBannerId = null;
+
+    let deleteBannerId = null;
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    let toastTimer = null;
+
+
+    function showToast(
+        title,
+        message,
+        type = "success"
+    ) {
+
+        clearTimeout(
+            toastTimer
+        );
+
+
+        toast.className =
+            `toast ${type}`;
+
+
+        toastTitle.textContent =
+            title;
+
+
+        toastMessage.textContent =
+            message;
+
+
+        toast.style.display =
+            "block";
+
+
+        toastTimer =
+            setTimeout(
+                () => {
+
+                    toast.style.display =
+                        "none";
+
+                },
+                3500
+            );
+
+    }
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+            return "";
+        }
+
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "—";
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            return "—";
+        }
+
+
+        return date.toLocaleString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+    }
+
+
+    function toDateTimeLocal(value) {
+
+        if (!value) {
+            return "";
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            return "";
+        }
+
+
+        const pad =
+            number =>
+                String(number)
+                    .padStart(
+                        2,
+                        "0"
+                    );
+
+
+        return (
+            date.getFullYear() +
+            "-" +
+            pad(
+                date.getMonth() + 1
+            ) +
+            "-" +
+            pad(
+                date.getDate()
+            ) +
+            "T" +
+            pad(
+                date.getHours()
+            ) +
+            ":" +
+            pad(
+                date.getMinutes()
+            )
+        );
+
+    }
+
+
+    function statusForBanner(
+        banner
+    ) {
+
+        if (!banner.is_active) {
+
+            return {
+                text: "Inactive",
+                className: "status-inactive"
+            };
+
+        }
+
+
+        const now =
+            new Date();
+
+
+        const start =
+            banner.start_date
+                ? new Date(
+                    banner.start_date
+                )
+                : null;
+
+
+        const end =
+            banner.end_date
+                ? new Date(
+                    banner.end_date
+                )
+                : null;
+
+
+        if (
+            start &&
+            now < start
+        ) {
+
+            return {
+                text: "Scheduled",
+                className: "status-scheduled"
+            };
+
+        }
+
+
+        if (
+            end &&
+            now > end
+        ) {
+
+            return {
+                text: "Expired",
+                className: "status-expired"
+            };
+
+        }
+
+
+        return {
+            text: "Live",
+            className: "status-live"
+        };
+
+    }
+
+    function getBannerStatus(
+    banner
+) {
+
+    if (!banner.is_active) {
+
+        return "inactive";
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    const start =
+        banner.start_date
+            ? new Date(
+                banner.start_date
+            )
+            : null;
+
+
+    const end =
+        banner.end_date
+            ? new Date(
+                banner.end_date
+            )
+            : null;
+
+
+    if (
+        start &&
+        now < start
+    ) {
+
+        return "scheduled";
+
+    }
+
+
+    if (
+        end &&
+        now > end
+    ) {
+
+        return "expired";
+
+    }
+
+
+    return "live";
+
+}
+
+
+    function resetForm() {
+
+        bannerForm.reset();
+
+
+        document.getElementById(
+            "bannerDisplayOrder"
+        ).value = "0";
+
+
+        document.getElementById(
+            "bannerActive"
+        ).checked = true;
+
+
+        bannerImagePreview.style.display =
+            "none";
+
+
+        currentImage.style.display =
+            "none";
+
+
+        bannerPreviewImg.src =
+            "";
+
+
+        currentImagePreview.src =
+            "";
+
+
+        bannerFormMessage.textContent =
+            "";
+
+
+        editingBannerId =
+            null;
+
+
+        formTitle.textContent =
+            "Add New Banner";
+
+
+        saveBannerBtn.textContent =
+            "✦ Save Banner";
+
+    }
+
+
+    function openForm() {
+
+        bannerFormCard.style.display =
+            "block";
+
+
+        bannerFormCard.scrollIntoView(
+            {
+                behavior: "smooth",
+                block: "start"
+            }
+        );
+
+    }
+
+
+    function closeForm() {
+
+        bannerFormCard.style.display =
+            "none";
+
+
+        resetForm();
+
+    }
+
+
+    /* =====================================================
+       LOAD BANNERS
+    ===================================================== */
+
+    async function loadBanners() {
+
+        bannersTableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+
+                    <div class="empty-banners">
+
+                        <div class="empty-banners-icon">
+                            ▤
+                        </div>
+
+                        <div>
+                            Loading banners...
+                        </div>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        const {
+            data,
+            error
+        } = await supabase
+
+            .from("banners")
+
+            .select(`
+            id,
+            title,
+            subtitle,
+            image_url,
+            button_text,
+            button_link,
+            is_active,
+            display_order,
+            start_date,
+            end_date,
+            created_at
+        `)
+
+            .order(
+                "display_order",
+                {
+                    ascending: true
+                }
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Banner loading error:",
+                error
+            );
+
+
+            bannersTableBody.innerHTML = `
+
+                <tr>
+
+                    <td colspan="6">
+
+                        <div class="empty-banners">
+
+                            <div class="empty-banners-icon">
+                                ⚠
+                            </div>
+
+                            <div>
+                                Unable to load banners
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            showToast(
+                "Unable to load",
+                error.message ||
+                    "Could not load banners.",
+                "error"
+            );
+
+
+            return;
+
+        }
+
+
+        allBanners =
+            data || [];
+
+
+        renderBanners(
+            allBanners
+        );
+
+    }
+
+
+    /* =====================================================
+       RENDER
+    ===================================================== */
+
+    function renderBanners(
+        banners
+    ) {
+
+        if (
+            banners.length === 0
+        ) {
+
+            bannersTableBody.innerHTML = `
+
+                <tr>
+
+                    <td colspan="6">
+
+                        <div class="empty-banners">
+
+                            <div class="empty-banners-icon">
+                                ▤
+                            </div>
+
+                            <div>
+                                No banners added yet
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            return;
+
+        }
+
+
+
+        if (mobileBannerList) {
+            if (banners.length === 0) {
+                mobileBannerList.innerHTML = `
+                    <div class="mobile-banner-empty">
+                        <div class="empty-banners-icon">▤</div>
+                        <strong>No banners added yet</strong>
+                        <p>Create your first promotional banner to get started.</p>
+                    </div>
+                `;
+            } else {
+                mobileBannerList.innerHTML = banners.map(banner => {
+                    const status = statusForBanner(banner);
+                    const title = banner.title || "Untitled Banner";
+                    const subtitle = banner.subtitle || "";
+
+                    return `
+                        <article class="mobile-banner-card">
+                            <div class="mobile-banner-image-wrap">
+                                <img
+                                    src="${escapeHtml(banner.image_url || "")}"
+                                    alt="${escapeHtml(title)}"
+                                    class="mobile-banner-image"
+                                    loading="lazy"
+                                >
+                                <span class="status-badge ${status.className} mobile-banner-status">
+                                    ${status.text}
+                                </span>
+                            </div>
+
+                            <div class="mobile-banner-body">
+                                <div class="mobile-banner-top">
+                                    <div class="mobile-banner-name">
+                                        ${escapeHtml(title)}
+                                    </div>
+                                    <div class="mobile-banner-order">
+                                        ${Number(banner.display_order || 0)}
+                                    </div>
+                                </div>
+
+                                ${
+                                    subtitle
+                                        ? `<div class="mobile-banner-subtitle">${escapeHtml(subtitle)}</div>`
+                                        : ""
+                                }
+
+                                <div class="mobile-banner-schedule">
+                                    <div class="mobile-banner-date">
+                                        <span class="mobile-banner-date-label">Starts</span>
+                                        <span class="mobile-banner-date-value">
+                                            ${banner.start_date
+                                                ? escapeHtml(formatDate(banner.start_date))
+                                                : "No start date"}
+                                        </span>
+                                    </div>
+
+                                    <div class="mobile-banner-date">
+                                        <span class="mobile-banner-date-label">Ends</span>
+                                        <span class="mobile-banner-date-value">
+                                            ${banner.end_date
+                                                ? escapeHtml(formatDate(banner.end_date))
+                                                : "No end date"}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mobile-banner-actions">
+                                    <button
+                                        type="button"
+                                        class="action-btn"
+                                        data-action="edit"
+                                        data-id="${banner.id}"
+                                    >✎ Edit</button>
+
+                                    <button
+                                        type="button"
+                                        class="action-btn ${banner.is_active ? "disable-btn" : "enable-btn"}"
+                                        data-action="toggle"
+                                        data-id="${banner.id}"
+                                    >${banner.is_active ? "Disable" : "Enable"}</button>
+
+                                    <button
+                                        type="button"
+                                        class="action-btn danger"
+                                        data-action="delete"
+                                        data-id="${banner.id}"
+                                    >🗑 Delete</button>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join("");
+            }
+        }
+
+        bannersTableBody.innerHTML =
+            banners
+                .map(
+                    banner => {
+
+                        const status =
+                            statusForBanner(
+                                banner
+                            );
+
+
+                        const title =
+                            banner.title ||
+                            "Untitled Banner";
+
+
+                        const subtitle =
+                            banner.subtitle ||
+                            "";
+
+
+                        return `
+
+                            <tr>
+
+                                <td>
+
+                                    <img
+                                        src="${escapeHtml(
+                                            banner.image_url
+                                        )}"
+                                        alt="${escapeHtml(
+                                            title
+                                        )}"
+                                        class="banner-thumb"
+                                        loading="lazy"
+                                    >
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="banner-name">
+                                        ${escapeHtml(
+                                            title
+                                        )}
+                                    </div>
+
+                                    ${
+                                        subtitle
+                                            ? `
+                                                <div class="banner-subtitle">
+                                                    ${escapeHtml(
+                                                        subtitle
+                                                    )}
+                                                </div>
+                                              `
+                                            : ""
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    <div>
+                                        ${banner.start_date
+                                            ? escapeHtml(
+                                                formatDate(
+                                                    banner.start_date
+                                                )
+                                            )
+                                            : "No start date"
+                                        }
+                                    </div>
+
+                                    <div
+                                        style="
+                                            margin-top:4px;
+                                            color:#9b8490;
+                                            font-size:10px;
+                                        "
+                                    >
+                                        ${
+                                            banner.end_date
+                                                ? escapeHtml(
+                                                    formatDate(
+                                                        banner.end_date
+                                                    )
+                                                )
+                                                : "No end date"
+                                        }
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="status-badge ${status.className}"
+                                    >
+                                        ${status.text}
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    ${Number(
+                                        banner.display_order || 0
+                                    )}
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="action-group">
+
+
+                                        <button
+                                            type="button"
+                                            class="action-btn"
+                                            data-action="edit"
+                                            data-id="${banner.id}"
+                                        >
+                                            ✎ Edit
+                                        </button>
+
+
+<button
+    type="button"
+    class="action-btn ${
+        banner.is_active
+            ? "disable-btn"
+            : "enable-btn"
+    }"
+    data-action="toggle"
+    data-id="${banner.id}"
+>
+    ${
+        banner.is_active
+            ? "Disable"
+            : "Enable"
+    }
+</button>
+
+                                        <button
+                                            type="button"
+                                            class="action-btn danger"
+                                            data-action="delete"
+                                            data-id="${banner.id}"
+                                        >
+                                            🗑 Delete
+                                        </button>
+
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+    /* =====================================================
+       IMAGE PREVIEW
+    ===================================================== */
+
+    bannerImage.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                bannerImage.files[0];
+
+
+            if (!file) {
+
+                bannerImagePreview.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            if (
+                ![
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp"
+                ].includes(
+                    file.type
+                )
+            ) {
+
+                bannerImage.value =
+                    "";
+
+
+                bannerImagePreview.style.display =
+                    "none";
+
+
+                showToast(
+                    "Invalid image",
+                    "Please select JPG, PNG or WEBP.",
+                    "error"
+                );
+
+
+                return;
+
+            }
+
+
+            
+
+            const MAX_BANNER_IMAGE_SIZE =
+                5 * 1024 * 1024;
+
+            if (
+                file.size >
+                MAX_BANNER_IMAGE_SIZE
+            ) {
+
+                bannerImage.value =
+                    "";
+
+                bannerImagePreview.style.display =
+                    "none";
+
+                showToast(
+                    "Image too large",
+                    "Please select an image up to 5 MB.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+const reader =
+                new FileReader();
+
+
+            reader.onload =
+                event => {
+
+                    bannerPreviewImg.src =
+                        event.target.result;
+
+
+                    bannerImagePreview.style.display =
+                        "block";
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       UPLOAD IMAGE
+    ===================================================== */
+
+    async function uploadBannerImage(
+        file
+    ) {
+
+        const extension =
+            file.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
+
+        const filePath =
+            `${crypto.randomUUID()}.${extension}`;
+
+
+        const {
+            error: uploadError
+        } = await supabase.storage
+
+            .from("banners")
+
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: false
+                }
+            );
+
+
+        if (uploadError) {
+
+            throw uploadError;
+
+        }
+
+
+        const {
+            data
+        } = supabase.storage
+
+            .from("banners")
+
+            .getPublicUrl(
+                filePath
+            );
+
+
+        if (
+            !data ||
+            !data.publicUrl
+        ) {
+
+            throw new Error(
+                "Unable to get banner image URL."
+            );
+
+        }
+
+
+        return {
+            url: data.publicUrl,
+            path: filePath
+        };
+
+    }
+
+
+    /* =====================================================
+       DELETE STORAGE IMAGE
+    ===================================================== */
+
+    async function deleteStorageImage(
+        imageUrl
+    ) {
+
+        if (!imageUrl) {
+            return;
+        }
+
+
+        try {
+
+            const marker =
+                "/banners/";
+
+
+            const index =
+                imageUrl.indexOf(
+                    marker
+                );
+
+
+            if (
+                index === -1
+            ) {
+                return;
+            }
+
+
+            const path =
+                decodeURIComponent(
+                    imageUrl.substring(
+                        index +
+                        marker.length
+                    )
+                );
+
+
+            if (!path) {
+                return;
+            }
+
+
+            const {
+                error
+            } = await supabase.storage
+
+                .from("banners")
+
+                .remove([
+                    path
+                ]);
+
+
+            if (error) {
+
+                console.warn(
+                    "Storage image delete warning:",
+                    error
+                );
+
+            }
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Storage cleanup warning:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SAVE / UPDATE
+    ===================================================== */
+
+    bannerForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const title =
+                document.getElementById(
+                    "bannerTitle"
+                )
+                    .value
+                    .trim();
+
+
+            const subtitle =
+                document.getElementById(
+                    "bannerSubtitle"
+                )
+                    .value
+                    .trim();
+
+
+            const buttonText =
+                document.getElementById(
+                    "bannerButtonText"
+                )
+                    .value
+                    .trim();
+
+
+            const buttonLink =
+                document.getElementById(
+                    "bannerButtonLink"
+                )
+                    .value
+                    .trim();
+
+
+            const startDateValue =
+                document.getElementById(
+                    "bannerStartDate"
+                ).value;
+
+
+            const endDateValue =
+                document.getElementById(
+                    "bannerEndDate"
+                ).value;
+
+
+            const displayOrder =
+                Number(
+                    document.getElementById(
+                        "bannerDisplayOrder"
+                    ).value
+                );
+
+
+            const isActive =
+                document.getElementById(
+                    "bannerActive"
+                ).checked;
+
+
+            const selectedFile =
+                bannerImage.files[0];
+
+
+            /* ---------------------------------------------
+               VALIDATION
+            --------------------------------------------- */
+
+            if (
+                displayOrder < 0
+            ) {
+
+                showToast(
+                    "Invalid order",
+                    "Display order cannot be negative.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                startDateValue &&
+                endDateValue
+            ) {
+
+                const start =
+                    new Date(
+                        startDateValue
+                    );
+
+
+                const end =
+                    new Date(
+                        endDateValue
+                    );
+
+
+                if (
+                    end <= start
+                ) {
+
+                    showToast(
+                        "Invalid dates",
+                        "End date must be after start date.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+            }
+
+
+            if (
+                !editingBannerId &&
+                !selectedFile
+            ) {
+
+                showToast(
+                    "Image required",
+                    "Please select a banner image.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            saveBannerBtn.disabled =
+                true;
+
+
+            saveBannerBtn.textContent =
+                editingBannerId
+                    ? "Updating Banner..."
+                    : "Saving Banner...";
+
+
+            bannerFormMessage.textContent =
+                "";
+
+
+            try {
+
+                let imageUrl =
+                    editingBannerId
+                        ? (
+                            allBanners.find(
+                                banner =>
+                                    banner.id ===
+                                    editingBannerId
+                            )?.image_url || ""
+                        )
+                        : "";
+
+
+                let oldImageUrl =
+                    imageUrl;
+
+
+                /* -----------------------------------------
+                   UPLOAD NEW IMAGE
+                ----------------------------------------- */
+
+                if (
+                    selectedFile
+                ) {
+
+                    const uploaded =
+                        await uploadBannerImage(
+                            selectedFile
+                        );
+
+
+                    imageUrl =
+                        uploaded.url;
+
+                }
+
+
+                const payload = {
+
+                    title:
+                        title || null,
+
+                    subtitle:
+                        subtitle || null,
+
+                    image_url:
+                        imageUrl,
+
+                    button_text:
+                        buttonText || null,
+
+                    button_link:
+                        buttonLink || null,
+
+                    is_active:
+                        isActive,
+
+                    display_order:
+                        displayOrder,
+
+                    start_date:
+                        startDateValue
+                            ? new Date(
+                                startDateValue
+                            ).toISOString()
+                            : null,
+
+                    end_date:
+                        endDateValue
+                            ? new Date(
+                                endDateValue
+                            ).toISOString()
+                            : null
+
+                };
+
+
+                /* -----------------------------------------
+                   INSERT
+                ----------------------------------------- */
+
+                if (
+                    !editingBannerId
+                ) {
+
+                    const {
+                        error
+                    } = await supabase
+
+                        .from("banners")
+
+                        .insert(
+                            payload
+                        );
+
+
+                    if (error) {
+
+                        if (
+                            selectedFile &&
+                            imageUrl
+                        ) {
+
+                            try {
+                                await deleteStorageImage(
+                                imageUrl
+                            );
+                            } catch (cleanupError) {
+                                console.warn(
+                                    "Uploaded image cleanup warning:",
+                                    cleanupError
+                                );
+                            }
+
+                        }
+
+                        throw error;
+
+                    }
+
+
+                    showToast(
+                        "Banner created",
+                        "Banner has been added successfully."
+                    );
+
+                }
+
+
+                /* -----------------------------------------
+                   UPDATE
+                ----------------------------------------- */
+
+                else {
+
+                    const {
+                        error
+                    } = await supabase
+
+                        .from("banners")
+
+                        .update(
+                            payload
+                        )
+
+                        .eq(
+                            "id",
+                            editingBannerId
+                        );
+
+
+                    if (error) {
+
+                        if (
+                            selectedFile &&
+                            imageUrl &&
+                            imageUrl !== oldImageUrl
+                        ) {
+
+                            await deleteStorageImage(
+                                imageUrl
+                            );
+
+                        }
+
+                        throw error;
+
+                    }
+
+
+                    if (
+                        selectedFile &&
+                        oldImageUrl &&
+                        oldImageUrl !== imageUrl
+                    ) {
+
+                        await deleteStorageImage(
+                            oldImageUrl
+                        );
+
+                    }
+
+
+                    showToast(
+                        "Banner updated",
+                        "Banner has been updated successfully."
+                    );
+
+                }
+
+
+                closeForm();
+
+                await loadBanners();
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Banner save error:",
+                    error
+                );
+
+
+                bannerFormMessage.textContent =
+                    error.message ||
+                    "Unable to save banner.";
+
+
+                bannerFormMessage.style.color =
+                    "#b34d69";
+
+
+                showToast(
+                    "Save failed",
+                    error.message ||
+                        "Unable to save banner.",
+                    "error"
+                );
+
+            }
+            finally {
+
+                saveBannerBtn.disabled =
+                    false;
+
+
+                saveBannerBtn.textContent =
+                    editingBannerId
+                        ? "✦ Update Banner"
+                        : "✦ Save Banner";
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       EDIT
+    ===================================================== */
+
+    function editBanner(
+        bannerId
+    ) {
+
+        const banner =
+            allBanners.find(
+                item =>
+                    item.id ===
+                    bannerId
+            );
+
+
+        if (!banner) {
+
+            showToast(
+                "Banner not found",
+                "The selected banner is no longer available.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        editingBannerId =
+            banner.id;
+
+
+        formTitle.textContent =
+            "Edit Banner";
+
+
+        saveBannerBtn.textContent =
+            "✦ Update Banner";
+
+
+        document.getElementById(
+            "bannerTitle"
+        ).value =
+            banner.title || "";
+
+
+        document.getElementById(
+            "bannerSubtitle"
+        ).value =
+            banner.subtitle || "";
+
+
+        document.getElementById(
+            "bannerButtonText"
+        ).value =
+            banner.button_text || "";
+
+
+        document.getElementById(
+            "bannerButtonLink"
+        ).value =
+            banner.button_link || "";
+
+
+        document.getElementById(
+            "bannerStartDate"
+        ).value =
+            toDateTimeLocal(
+                banner.start_date
+            );
+
+
+        document.getElementById(
+            "bannerEndDate"
+        ).value =
+            toDateTimeLocal(
+                banner.end_date
+            );
+
+
+        document.getElementById(
+            "bannerDisplayOrder"
+        ).value =
+            Number(
+                banner.display_order || 0
+            );
+
+
+        document.getElementById(
+            "bannerActive"
+        ).checked =
+            Boolean(
+                banner.is_active
+            );
+
+
+        bannerImage.value =
+            "";
+
+
+        bannerImagePreview.style.display =
+            "none";
+
+
+        if (
+            banner.image_url
+        ) {
+
+            currentImagePreview.src =
+                banner.image_url;
+
+
+            currentImage.style.display =
+                "block";
+
+        }
+        else {
+
+            currentImage.style.display =
+                "none";
+
+        }
+
+
+        openForm();
+
+    }
+
+
+    /* =====================================================
+       TOGGLE ACTIVE
+    ===================================================== */
+
+    async function toggleBanner(
+        bannerId
+    ) {
+
+        const banner =
+            allBanners.find(
+                item =>
+                    item.id ===
+                    bannerId
+            );
+
+
+        if (!banner) {
+            return;
+        }
+
+
+        const newStatus =
+            !banner.is_active;
+
+
+        const {
+            error
+        } = await supabase
+
+            .from("banners")
+
+            .update({
+                is_active:
+                    newStatus
+            })
+
+            .eq(
+                "id",
+                bannerId
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Banner status error:",
+                error
+            );
+
+
+            showToast(
+                "Update failed",
+                error.message ||
+                    "Unable to update banner status.",
+                "error"
+            );
+
+
+            return;
+
+        }
+
+
+        showToast(
+            newStatus
+                ? "Banner enabled"
+                : "Banner disabled",
+            newStatus
+                ? "Banner is now active."
+                : "Banner is now inactive."
+        );
+
+
+        await loadBanners();
+
+    }
+
+
+    /* =====================================================
+       DELETE
+    ===================================================== */
+
+    function askDelete(
+        bannerId
+    ) {
+
+        const banner =
+            allBanners.find(
+                item =>
+                    item.id ===
+                    bannerId
+            );
+
+
+        if (!banner) {
+            return;
+        }
+
+
+        deleteBannerId =
+            bannerId;
+
+
+        document.getElementById(
+            "confirmText"
+        ).textContent =
+            `Delete "${banner.title || "Untitled Banner"}"? This cannot be undone.`;
+
+
+        confirmOverlay.style.display =
+            "flex";
+
+    }
+
+
+    async function performDelete() {
+
+        if (!deleteBannerId) {
+            return;
+        }
+
+
+        const banner =
+            allBanners.find(
+                item =>
+                    item.id ===
+                    deleteBannerId
+            );
+
+
+        confirmDelete.disabled =
+            true;
+
+
+        confirmDelete.textContent =
+            "Deleting...";
+
+
+        try {
+
+            const {
+                error
+            } = await supabase
+
+                .from("banners")
+
+                .delete()
+
+                .eq(
+                    "id",
+                    deleteBannerId
+                );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            if (
+                banner &&
+                banner.image_url
+            ) {
+
+                await deleteStorageImage(
+                    banner.image_url
+                );
+
+            }
+
+
+            confirmOverlay.style.display =
+                "none";
+
+
+            showToast(
+                "Banner deleted",
+                "Banner has been removed successfully."
+            );
+
+
+            deleteBannerId =
+                null;
+
+
+            await loadBanners();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Banner delete error:",
+                error
+            );
+
+
+            showToast(
+                "Delete failed",
+                error.message ||
+                    "Unable to delete banner.",
+                "error"
+            );
+
+        }
+        finally {
+
+            confirmDelete.disabled =
+                false;
+
+
+            confirmDelete.textContent =
+                "Delete Banner";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       TABLE ACTIONS
+    ===================================================== */
+
+
+    if (mobileBannerList) {
+        mobileBannerList.addEventListener(
+            "click",
+            event => {
+                const button =
+                    event.target.closest(
+                        "button[data-action]"
+                    );
+
+                if (!button) {
+                    return;
+                }
+
+                const action =
+                    button.dataset.action;
+
+                const id =
+                    button.dataset.id;
+
+                if (action === "edit") {
+                    editBanner(id);
+                }
+
+                if (action === "toggle") {
+                    toggleBanner(id);
+                }
+
+                if (action === "delete") {
+                    askDelete(id);
+                }
+            }
+        );
+    }
+
+    bannersTableBody.addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    "button[data-action]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const action =
+                button.dataset.action;
+
+
+            const id =
+                button.dataset.id;
+
+
+            if (
+                action === "edit"
+            ) {
+
+                editBanner(id);
+
+            }
+
+
+            else if (
+                action === "toggle"
+            ) {
+
+                toggleBanner(id);
+
+            }
+
+
+            else if (
+                action === "delete"
+            ) {
+
+                askDelete(id);
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+   SEARCH + FILTER
+===================================================== */
+
+function applyBannerFilters() {
+
+    const query =
+        bannerSearch.value
+            .trim()
+            .toLowerCase();
+
+    const filter =
+        bannerFilter.value;
+
+
+    const filtered =
+        allBanners.filter(
+            banner => {
+
+                /* SEARCH */
+
+                const matchesSearch =
+                    !query ||
+                    [
+                        banner.title,
+                        banner.subtitle,
+                        banner.button_text,
+                        banner.button_link
+                    ]
+                        .filter(Boolean)
+                        .some(
+                            value =>
+                                String(value)
+                                    .toLowerCase()
+                                    .includes(query)
+                        );
+
+
+                if (!matchesSearch) {
+                    return false;
+                }
+
+
+                /* STATUS FILTER */
+
+                if (filter === "all") {
+                    return true;
+                }
+
+
+                return (
+                    getBannerStatus(banner) ===
+                    filter
+                );
+
+            }
+        );
+
+
+    renderBanners(filtered);
+
+}
+
+
+bannerSearch.addEventListener(
+    "input",
+    applyBannerFilters
+);
+
+
+bannerFilter.addEventListener(
+    "change",
+    applyBannerFilters
+);
+
+
+    /* =====================================================
+       FORM BUTTONS
+    ===================================================== */
+
+    addBannerBtn.addEventListener(
+        "click",
+        () => {
+
+            resetForm();
+
+            openForm();
+
+        }
+    );
+
+
+    closeBannerForm.addEventListener(
+        "click",
+        closeForm
+    );
+
+
+    cancelBanner.addEventListener(
+        "click",
+        closeForm
+    );
+
+
+    /* =====================================================
+       CONFIRM MODAL
+    ===================================================== */
+
+    cancelDelete.addEventListener(
+        "click",
+        () => {
+
+            deleteBannerId =
+                null;
+
+
+            confirmOverlay.style.display =
+                "none";
+
+        }
+    );
+
+
+    confirmDelete.addEventListener(
+        "click",
+        performDelete
+    );
+
+
+    confirmOverlay.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                confirmOverlay
+            ) {
+
+                deleteBannerId =
+                    null;
+
+
+                confirmOverlay.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+/* =====================================================
+       INITIAL LOAD
+    ===================================================== */
+
+    loadBanners();
+
+</script>
+
+<script type="module">
+
+    import { supabase }
+        from "./supabase-client.js";
+
+
+    /* =====================================================
+       LOAD NAVIGATION
+       ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+            const navigationContainer =
+                document.getElementById(
+                    "admin-navigation"
+                );
+
+            if (!navigationContainer) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "admin-navigation.html"
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Navigation could not be loaded."
+                    );
+                }
+
+
+                const navigationHTML =
+                    await response.text();
+
+
+                navigationContainer.innerHTML =
+                    navigationHTML;
+
+
+                /* =================================================
+                   ACTIVE NAVIGATION
+                   ================================================= */
+
+                const currentPage =
+                    document.body.dataset.adminPage;
+
+
+                if (currentPage) {
+
+                    const activeItem =
+                        navigationContainer.querySelector(
+                            `.nav-item[data-page="${currentPage}"]`
+                        );
+
+
+                    if (activeItem) {
+
+                        activeItem.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   ADMIN DROPDOWN
+                   ================================================= */
+
+                const adminProfile =
+                    document.getElementById(
+                        "adminProfile"
+                    );
+
+                const adminProfileTrigger =
+                    document.getElementById(
+                        "adminProfileTrigger"
+                    );
+
+                const adminProfileMenu =
+                    document.getElementById(
+                        "adminProfileMenu"
+                    );
+
+
+                if (
+                    adminProfile &&
+                    adminProfileTrigger &&
+                    adminProfileMenu
+                ) {
+
+                    adminProfileTrigger.addEventListener(
+                        "click",
+                        (event) => {
+
+                            event.stopPropagation();
+
+
+                            const isOpen =
+                                adminProfile.classList.toggle(
+                                    "open"
+                                );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                isOpen
+                                    ? "true"
+                                    : "false"
+                            );
+
+                        }
+                    );
+
+
+                    adminProfileMenu.addEventListener(
+                        "click",
+                        (event) => {
+                            event.stopPropagation();
+                        }
+                    );
+
+
+                    document.addEventListener(
+                        "click",
+                        () => {
+
+                            adminProfile.classList.remove(
+                                "open"
+                            );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   LOGOUT
+                   ================================================= */
+
+                const logoutBtn =
+                    document.getElementById(
+                        "logoutBtn"
+                    );
+
+
+                if (logoutBtn) {
+
+                    logoutBtn.addEventListener(
+                        "click",
+                        async () => {
+
+                            logoutBtn.disabled =
+                                true;
+
+
+                            logoutBtn.innerHTML = `
+                                <span>↪</span>
+                                <span>Logging out...</span>
+                            `;
+
+
+                            try {
+
+                                const {
+                                    error
+                                } =
+                                    await supabase
+                                        .auth
+                                        .signOut();
+
+
+                                if (error) {
+                                    throw error;
+                                }
+
+
+                                window.location.href =
+                                    "index.html";
+
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Logout failed:",
+                                    error
+                                );
+
+
+                                logoutBtn.disabled =
+                                    false;
+
+
+                                logoutBtn.innerHTML = `
+                                    <span>↪</span>
+                                    <span>Logout</span>
+                                `;
+
+
+                                alert(
+                                    "Unable to logout. Please try again."
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to load admin navigation:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

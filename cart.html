@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart | SS Spark Collections</title>
+<link rel="stylesheet" href="style.css">
+<style>
+:root{--pink:#d6336c;--pink2:#b92357;--rose:#8f294f;--ink:#542238;--muted:#987080;--border:#edd9e2;--soft:#fff7fa;--green:#218a57;--shadow:0 18px 50px rgba(83,35,52,.08)}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink)}button,a,input{font:inherit}button{cursor:pointer}.cart-page{min-height:100vh;background:linear-gradient(180deg,#fff9fb 0,#fff 30%)}
+.cart-wrap{width:min(1180px,92%);margin:auto;padding:34px 0 80px}.back{display:inline-flex;gap:8px;align-items:center;text-decoration:none;color:var(--rose);font:700 11px Arial;padding:10px 15px;border:1px solid var(--border);border-radius:999px;background:#fff;box-shadow:0 7px 20px rgba(83,35,52,.04)}
+.page-head{display:flex;justify-content:space-between;align-items:end;margin:30px 0 24px;gap:20px}.eyebrow{margin:0 0 8px;color:var(--pink);font:700 9px Arial;letter-spacing:3px}.page-title{margin:0;font:500 clamp(32px,5vw,48px)/1.05 Georgia,serif}.item-count{color:var(--muted);font:11px Arial}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(330px,.7fr);gap:25px;align-items:start}
+.card{background:#fff;border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow)}.cart-card{overflow:hidden}.cart-card-head{padding:18px 22px;border-bottom:1px solid #f3e4e9;display:flex;justify-content:space-between;align-items:center}.cart-card-head strong{font:600 15px Georgia,serif}.continue{color:var(--pink);font:700 10px Arial;text-decoration:none}
+.item{display:grid;grid-template-columns:112px minmax(0,1fr) auto;gap:20px;padding:20px 22px;border-bottom:1px solid #f4e7eb}.item:last-child{border-bottom:0}.item-img{width:112px;height:128px;border-radius:17px;overflow:hidden;background:#fff3f7;border:1px solid #f1dfe6}.item-img img{width:100%;height:100%;object-fit:cover}.item-info{min-width:0;padding:4px 0}.item-category{margin:0 0 7px;color:var(--pink);font:700 8px Arial;letter-spacing:1.8px;text-transform:uppercase}.item-name{margin:0;color:var(--ink);font:600 19px/1.2 Georgia,serif}.item-price{margin-top:9px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.now{font:700 14px Arial;color:var(--pink)}.old{font:11px Arial;color:#a98e99;text-decoration:line-through}.save{font:700 8px Arial;color:var(--pink);background:#fff0f5;border-radius:999px;padding:5px 7px}.item-meta{margin-top:10px;color:var(--muted);font:10px/1.6 Arial}.item-actions{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:12px}.remove{border:0;background:transparent;color:#c52d61;font-size:20px;width:34px;height:34px;border-radius:50%}.remove:hover{background:#fff0f5}.qty{height:40px;display:flex;align-items:center;border:1px solid #e7cbd6;border-radius:12px;overflow:hidden;background:#fff}.qty button{border:0;background:#fff;color:var(--rose);width:38px;height:100%;font-size:18px}.qty button:hover{background:var(--soft);color:var(--pink)}.qty span{min-width:42px;text-align:center;font:700 12px Arial;border-left:1px solid #f1e0e6;border-right:1px solid #f1e0e6;height:100%;display:grid;place-items:center}.move{border:0;background:transparent;color:var(--muted);font:700 9px Arial;text-decoration:underline;text-underline-offset:3px}.move:hover{color:var(--pink)}
+.summary{padding:22px;position:sticky;top:20px}.summary-title{font:500 24px Georgia,serif;margin:0}.summary-sub{margin:7px 0 20px;color:var(--muted);font:10px Arial}.line{display:flex;justify-content:space-between;gap:20px;padding:11px 0;font:11px Arial}.line span:last-child{font-weight:700}.discount-line{color:var(--pink)}.total{margin-top:9px;padding-top:17px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}.total span:first-child{font:600 16px Georgia,serif}.total span:last-child{font:700 22px Arial;color:var(--pink)}
+
+.checkout{width:100%;height:52px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font:700 11px Arial;letter-spacing:.3px;box-shadow:0 12px 26px rgba(214,51,108,.22);margin-top:17px}.checkout:hover{transform:translateY(-1px)}.checkout:disabled{opacity:.55;cursor:not-allowed;transform:none}.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.trust div{padding:10px 5px;text-align:center;border:1px solid var(--border);border-radius:11px;background:#fffafd}.trust b{display:block;font:700 8px Arial}.trust span{display:block;margin-top:3px;color:var(--muted);font:8px Arial}.shipping-note{margin-top:12px;padding:11px;border-radius:12px;background:#fff5e9;border:1px solid #f5dfc1;text-align:center;color:#79531e;font:700 9px Arial}
+.empty{padding:70px 25px;text-align:center}.empty-icon{width:70px;height:70px;margin:0 auto 17px;border-radius:50%;display:grid;place-items:center;background:#fff0f5;color:var(--pink);font-size:29px}.empty h2{margin:0;font:500 28px Georgia,serif}.empty p{color:var(--muted);font:11px Arial;margin:9px 0 22px}.shop-btn{display:inline-flex;text-decoration:none;background:var(--pink);color:#fff;border-radius:12px;padding:13px 20px;font:700 10px Arial}
+.loading{padding:70px;text-align:center;color:var(--muted);font:11px Arial}.toast{position:fixed;right:20px;bottom:20px;z-index:99;padding:13px 17px;border:1px solid #eccbd8;border-radius:13px;background:#fff;color:var(--ink);box-shadow:0 16px 38px rgba(83,35,52,.16);font:600 11px Arial;opacity:0;transform:translateY(10px);pointer-events:none;transition:.22s}.toast.show{opacity:1;transform:none}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.summary{position:static}.cart-wrap{width:min(720px,92%)}}@media(max-width:600px){.cart-wrap{width:calc(100% - 24px);padding:18px 0 55px}.page-head{margin:23px 0 17px}.page-title{font-size:34px}.cart-card-head{padding:15px}.item{grid-template-columns:78px minmax(0,1fr);gap:13px;padding:15px}.item-img{width:78px;height:94px}.item-info{padding:0}.item-name{font-size:15px}.item-price{margin-top:7px}.item-meta{font-size:9px}.item-actions{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between}.remove{order:3}.qty{height:37px}.qty button{width:34px}.qty span{min-width:38px}.summary{padding:17px}.trust{grid-template-columns:1fr 1fr 1fr}.trust div{padding:9px 3px}.shipping-note{font-size:8px}}
+</style>
+</head>
+<body>
+<div class="top-bar">✨ Free Shipping Across India <span>|</span> 💝 Carefully Packed With Love</div>
+<header class="main-header">
+<a href="index.html" class="brand-logo"><img src="assets/logo.png" alt="SS Spark Collections"></a>
+<nav class="main-nav"><a href="index.html" class="active">Home</a><a href="shop.html">Shop</a><a href="product-list.html">Products</a><a href="new-arrivals.html">New Arrivals</a><a href="contact.html">Contact</a></nav>
+<div class="header-actions"><button class="icon-btn" id="headerSearchBtn" type="button" aria-label="Search">🔍</button><a href="cart.html" class="cart-btn" aria-label="Shopping Cart">🛒<span id="cartCount">0</span></a><div id="authArea" class="auth-area"><a href="login.html" class="login-btn">Login</a><a href="create-account.html" class="signup-btn">Create Account</a></div></div>
+</header>
+<main class="cart-page"><div class="cart-wrap"><a class="back" href="shop.html">← <span>Continue Shopping</span></a><div id="cartRoot" class="loading">Loading your cart...</div></div></main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module">
+import { supabase } from "./supabase-client.js";
+const root=document.getElementById("cartRoot"),cartCount=document.getElementById("cartCount"),authArea=document.getElementById("authArea"),toast=document.getElementById("toast");
+let user=null,cart=null,items=[],toastTimer=null;
+let shippingMinimumAmount=1000;
+let shippingCharge=99;
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function money(v){const n=Number(v);return Number.isFinite(n)?`₹${n.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"₹0.00"}
+function toastMsg(m){clearTimeout(toastTimer);toast.textContent=m;toast.classList.add("show");toastTimer=setTimeout(()=>toast.classList.remove("show"),2200)}
+function discount(p){const o=Number(p.compare_at_price),n=Number(p.price);return o>n&&o>0?Math.round((o-n)/o*100):null}
+async function getUser(){const {data}=await supabase.auth.getUser();return data?.user||null}
+async function authUI(){user=await getUser();if(!user){authArea.innerHTML='<a href="login.html" class="login-btn">Login</a><a href="create-account.html" class="signup-btn">Create Account</a>';cartCount.textContent="0";return}const {data:p}=await supabase.from("profiles").select("full_name,role").eq("id",user.id).maybeSingle();const name=esc(p?.full_name||user.user_metadata?.full_name||user.email||"");authArea.innerHTML=`<div class="profile-dropdown"><button class="profile-trigger" id="profileTrigger" type="button"><span class="profile-avatar">✦</span><span>Hi, ${name}</span><span class="profile-arrow">⌄</span></button><div class="profile-menu" id="profileMenu"><div class="profile-menu-header"><div class="profile-menu-avatar">✦</div><div><strong>${name}</strong><small>${esc(user.email||"")}</small></div></div><div class="profile-menu-divider"></div><a href="wishlist.html" class="profile-menu-item"><span>♡</span><span>Wishlist</span></a><a href="order-lists.html" class="profile-menu-item"><span>♧</span><span>My Orders</span></a><div class="profile-menu-divider"></div><button id="logoutBtn" class="profile-menu-logout" type="button"><span>↪</span><span>Logout</span></button></div></div>`;const t=document.getElementById("profileTrigger"),m=document.getElementById("profileMenu");t?.addEventListener("click",e=>{e.stopPropagation();m?.classList.toggle("show")});document.addEventListener("click",e=>{if(m&&!m.contains(e.target)&&!t?.contains(e.target))m.classList.remove("show")});document.getElementById("logoutBtn")?.addEventListener("click",async()=>{await supabase.auth.signOut();location.reload()})}
+async function loadCart(){if(!user){renderLogin();return}let r=await supabase.from("carts").select("id").eq("user_id",user.id).maybeSingle();if(r.error)throw r.error;if(!r.data){items=[];render();return}cart=r.data;const q=await supabase.from("cart_items").select(`id,cart_id,product_id,quantity,products(id,name,slug,price,compare_at_price,stock_quantity,is_active,category_id,categories(name,slug),product_images(image_url,is_primary,display_order))`).eq("cart_id",cart.id).order("created_at",{ascending:false});if(q.error)throw q.error;items=(q.data||[]).filter(x=>x.products);await refreshCount();render()}
+async function refreshCount(){cartCount.textContent=String(items.reduce((s,x)=>s+Number(x.quantity||0),0))}
+function renderLogin(){root.className="card empty";root.innerHTML='<div class="empty-icon">♡</div><h2>Your cart is waiting</h2><p>Sign in to view and manage the items you have saved.</p><a class="shop-btn" href="login.html">Login to Continue</a>'}
+function subtotal(){return items.reduce((s,x)=>s+Number(x.products?.price||0)*Number(x.quantity||0),0)}
+function shipping(sub){
+  if(sub<=0)return 0;
+  return sub>=shippingMinimumAmount?0:shippingCharge;
+}
+function render(){if(!items.length){root.className="card empty";root.innerHTML='<div class="empty-icon">🛍</div><h2>Your cart is empty</h2><p>Discover something special and bring a little sparkle home.</p><a class="shop-btn" href="shop.html">Explore Collection →</a>';return}const sub=subtotal(),ship=shipping(sub),total=sub+ship;root.className="";root.innerHTML=`<div class="page-head"><div><p class="eyebrow">YOUR COLLECTION</p><h1 class="page-title">My Cart</h1></div><span class="item-count">${items.length} ${items.length===1?'item':'items'}</span></div><div class="layout"><section class="card cart-card"><div class="cart-card-head"><strong>Selected Pieces</strong><a class="continue" href="shop.html">Continue Shopping →</a></div><div id="itemsList">${items.map(renderItem).join("")}</div></section><aside class="card summary"><h2 class="summary-title">Order Summary</h2><p class="summary-sub">A quick look before you checkout.</p><div class="line"><span>Subtotal</span><span>${money(sub)}</span></div><div class="line"><span>Shipping</span><span>${ship===0?'Free':money(ship)}</span></div><div class="total"><span>Total</span><span>${money(total)}</span></div><button class="checkout" id="checkoutBtn">Proceed to Checkout <span>→</span></button><div class="trust"><div><b>🔒 Secure</b><span>Checkout</span></div><div><b>📦 Careful</b><span>Packing</span></div><div><b>✦ Trusted</b><span>Shopping</span></div></div>${ship===0?'<div class="shipping-note">🎁 You are eligible for free shipping!</div>':`<div class="shipping-note">Add ${money(Math.max(0,shippingMinimumAmount-sub))} more for free shipping</div>`}</aside></div>`;bind();}
+function renderItem(x){const p=x.products||{},pics=[...(p.product_images||[])].sort((a,b)=>(a.display_order||0)-(b.display_order||0)),pic=pics.find(i=>i.is_primary)||pics[0],d=discount(p),line=Number(p.price||0)*Number(x.quantity||0);return `<article class="item" data-id="${x.id}"><a class="item-img" href="product-details.html?id=${encodeURIComponent(p.id)}">${pic?`<img src="${esc(pic.image_url)}" alt="${esc(p.name)}">`:'<img src="assets/logo.png" alt="">'}</a><div class="item-info"><p class="item-category">${esc(p.categories?.name||"")}</p><h3 class="item-name">${esc(p.name)}</h3><div class="item-price"><span class="now">${money(p.price)}</span>${Number(p.compare_at_price)>Number(p.price)?`<span class="old">${money(p.compare_at_price)}</span>`:''}${d?`<span class="save">${d}% OFF</span>`:''}</div><p class="item-meta">${Number(p.stock_quantity)>0?`${p.stock_quantity} available`:'Currently unavailable'} · ${money(line)} total</p></div><div class="item-actions"><button class="remove" data-action="remove" type="button" aria-label="Remove item">♡</button><div class="qty"><button data-action="minus" type="button">−</button><span>${x.quantity}</span><button data-action="plus" type="button">+</button></div><button class="move" data-action="wishlist" type="button">Move to Wishlist</button></div></article>`}
+function bind(){document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",async e=>{const action=b.dataset.action,id=b.closest(".item")?.dataset.id;if(!id)return;if(action==="remove"){await changeItem(id,0);return}const x=items.find(i=>i.id===id);if(!x)return;if(action==="minus")await changeItem(id,Number(x.quantity)-1);if(action==="plus")await changeItem(id,Math.min(Number(x.quantity)+1,Number(x.products.stock_quantity||0)));if(action==="wishlist")moveWishlist(x)}));document.getElementById("checkoutBtn")?.addEventListener("click",checkout)}
+async function changeItem(id,qty){const x=items.find(i=>i.id===id);if(!x)return;if(qty<=0){const {error}=await supabase.from("cart_items").delete().eq("id",id);if(error){toastMsg("Unable to remove item");return}toastMsg("Item removed")}else{const max=Number(x.products?.stock_quantity||0);if(max<1){toastMsg("This item is out of stock");return}qty=Math.min(qty,max);const {error}=await supabase.from("cart_items").update({quantity:qty,updated_at:new Date().toISOString()}).eq("id",id);if(error){toastMsg("Unable to update quantity");return}}await loadCart()}
+function moveWishlist(x){try{let list=JSON.parse(localStorage.getItem("ss_spark_wishlist")||"[]");if(!list.includes(x.product_id))list.push(x.product_id);localStorage.setItem("ss_spark_wishlist",JSON.stringify(list));toastMsg("Moved to wishlist")}catch{toastMsg("Unable to move item")}}
+function checkout(){const stockIssue=items.find(x=>Number(x.products?.stock_quantity||0)<Number(x.quantity||0));if(stockIssue){toastMsg(`${stockIssue.products.name} has insufficient stock`);return}sessionStorage.removeItem("ssSparkCartSummary");location.href="checkout.html"}
+document.getElementById("headerSearchBtn")?.addEventListener("click", () => {
+    window.location.href = "search.html";
+});
+
+async function loadShippingParameters(){
+  const {data,error}=await supabase
+    .from("parameter_values")
+    .select("parameter_code,description")
+    .eq("parameter_group","SHIPPING")
+    .in("parameter_code",["MINIMUM_ORDER_AMOUNT","SHIPPING_CHARGE"])
+    .eq("is_active",true);
+
+  if(error) throw error;
+
+  for(const p of data||[]){
+    const value=Number(p.description);
+    if(!Number.isFinite(value)||value<0) continue;
+
+    if(p.parameter_code==="MINIMUM_ORDER_AMOUNT"){
+      shippingMinimumAmount=value;
+    }
+
+    if(p.parameter_code==="SHIPPING_CHARGE"){
+      shippingCharge=value;
+    }
+  }
+}
+
+async function init(){try{await authUI();await loadShippingParameters();await loadCart()}catch(e){console.error(e);root.className="card empty";root.innerHTML='<div class="empty-icon">!</div><h2>We could not load your cart</h2><p>Please refresh and try again.</p>'}}
+init();
+</script>
+</body>
+</html>

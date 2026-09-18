@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | Admin</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+    <style>
+        /* =========================================================
+           CUSTOMERS MODULE — PAGE ONLY
+           Common admin shell remains handled by admin.css +
+           admin-navigation.html.
+           ========================================================= */
+
+        .customers-page {
+            padding: 24px 28px 36px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .customer-page-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .customer-page-head .eyebrow {
+            margin: 0 0 6px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: #a98598;
+        }
+
+        .customer-page-head h2 {
+            margin: 0;
+            color: #4d263d;
+            font-size: 25px;
+            line-height: 1.15;
+        }
+
+        .customer-page-head p {
+            margin: 7px 0 0;
+            color: #8b7180;
+            font-size: 13px;
+        }
+
+        .customer-stats {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+             width: 100%;
+            min-width: 0;
+        }
+
+.stat-card {
+    background: rgba(255,255,255,.92);
+    border: 1px solid #ead5e1;
+    border-radius: 15px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(82, 37, 64, .05);
+    min-width: 0;
+    box-sizing: border-box;
+    position: relative;
+}
+
+        .stat-label {
+            color: #987e8d;
+            font-size: 8.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+        }
+
+   .stat-value {
+    margin-top: 2px;
+    color: #4d263d;
+    font-size: 15px;
+    font-weight: 1000;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: default;
+}
+.stat-card[data-full-value] {
+    position: relative;
+}
+
+.stat-card[data-full-value]:hover::after {
+    content: attr(data-full-value);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+
+    background: #4d263d;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+
+    box-shadow: 0 8px 20px rgba(77, 38, 61, .20);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.stat-card[data-full-value]:hover::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 5px);
+    transform: translateX(-50%);
+
+    border: 5px solid transparent;
+    border-top-color: #4d263d;
+
+    z-index: 9999;
+    pointer-events: none;
+}
+        .customer-toolbar {
+            display: grid;
+            grid-template-columns: minmax(230px, 1.8fr) repeat(4, minmax(130px, 1fr)) auto;
+            gap: 9px;
+            align-items: end;
+            padding: 14px;
+            background: rgba(255,255,255,.94);
+            border: 1px solid #ead5e1;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(82, 37, 64, .05);
+            margin-bottom: 14px;
+        }
+
+        .filter-field {
+            min-width: 0;
+        }
+
+        .filter-field label {
+            display: block;
+            margin: 0 0 6px 2px;
+            color: #856b7a;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .filter-field input,
+        .filter-field select {
+            width: 100%;
+            height: 38px;
+            box-sizing: border-box;
+            border: 1px solid #ead5e1;
+            border-radius: 9px;
+            background: #fff;
+            color: #68485a;
+            font-size: 12px;
+            outline: none;
+            padding: 0 11px;
+        }
+
+        .filter-field input:focus,
+        .filter-field select:focus {
+            border-color: #c83288;
+            box-shadow: 0 0 0 3px rgba(200,50,136,.08);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .tool-btn {
+            height: 38px;
+            padding: 0 13px;
+            border-radius: 9px;
+            border: 1px solid #ead5e1;
+            background: #fff;
+            color: #68485a;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tool-btn:hover {
+            border-color: #d8b6ca;
+            background: #fff8fc;
+        }
+
+        .customers-card {
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid #ead5e1;
+            border-radius: 15px;
+            box-shadow: 0 10px 28px rgba(82,37,64,.06);
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .mobile-customer-list { display: none; }
+        .mobile-customer-card { padding:14px; border-bottom:1px solid #f1e4eb; background:#fff; cursor:pointer; }
+        .mobile-customer-card:last-child { border-bottom:0; }
+        .mobile-customer-top { display:flex; align-items:center; gap:10px; }
+        .mobile-customer-main { min-width:0; flex:1; }
+        .mobile-customer-name { color:#4d263d; font-size:13px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .mobile-customer-email { margin-top:3px; color:#9a8190; font-size:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .mobile-customer-badges { display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; }
+        .mobile-customer-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
+        .mobile-metric { padding:9px 10px; border:1px solid #f0e0e8; border-radius:10px; background:#fffafd; }
+        .mobile-metric-label { color:#9b8290; font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+        .mobile-metric-value { margin-top:3px; color:#5a3548; font-size:12px; font-weight:800; }
+        .mobile-customer-footer { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:10px; }
+
+        .parameter-alert-stack {
+            position:fixed; right:20px; bottom:20px; z-index:5000;
+            display:flex; flex-direction:column; gap:10px;
+            width:min(380px,calc(100vw - 28px)); pointer-events:none;
+        }
+        .parameter-alert {
+            display:flex; align-items:flex-start; gap:11px; padding:13px 14px;
+            border:1px solid #ead5e1; border-radius:13px; background:rgba(255,255,255,.98);
+            box-shadow:0 14px 34px rgba(77,38,61,.16); pointer-events:auto;
+            animation:customerAlertIn .2s ease both;
+        }
+        .parameter-alert.success { border-color:#cfe9d8; }
+        .parameter-alert.error { border-color:#f0cbd6; }
+        .parameter-alert-icon { width:26px;height:26px;flex:0 0 26px;display:grid;place-items:center;border-radius:50%;background:#fff0f7;color:#a12870;font-size:13px;font-weight:900; }
+        .parameter-alert.success .parameter-alert-icon { background:#e9f8ef;color:#27824b; }
+        .parameter-alert.error .parameter-alert-icon { background:#fff0f3;color:#b4234d; }
+        .parameter-alert-content { min-width:0; }
+        .parameter-alert-title { color:#4d263d;font-size:12px;font-weight:900; }
+        .parameter-alert-message { margin-top:3px;color:#846b7a;font-size:11px;line-height:1.45; }
+        @keyframes customerAlertIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+        @media (max-width:700px) {
+            .table-scroll { display:none; }
+            .mobile-customer-list { display:block; }
+            .pager { flex-direction:column; align-items:stretch; }
+            .pager-actions { justify-content:stretch; }
+            .pager-actions .tool-btn { flex:1; }
+        }
+        @media (max-width:480px) {
+            .parameter-alert-stack { right:14px;bottom:14px; }
+        }
+
+        .customers-table {
+            width: 100%;
+            min-width: 1120px;
+            border-collapse: collapse;
+        }
+
+        .customers-table th {
+            padding: 13px 14px;
+            text-align: left;
+            background: #fff9fc;
+            color: #896f7e;
+            border-bottom: 1px solid #ead5e1;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            white-space: nowrap;
+        }
+
+        .customers-table td {
+            padding: 13px 14px;
+            color: #63495a;
+            border-bottom: 1px solid #f1e4eb;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .customers-table tbody tr {
+            transition: background .15s ease;
+            cursor: pointer;
+        }
+
+        .customers-table tbody tr:hover {
+            background: #fff9fc;
+        }
+
+        .customer-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 190px;
+        }
+
+        .customer-avatar {
+            width: 36px;
+            height: 36px;
+            flex: 0 0 36px;
+            border-radius: 11px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #f4d9e8, #ead5e1);
+            display: grid;
+            place-items: center;
+            color: #8b426d;
+            font-weight: 800;
+            overflow: hidden;
+        }
+
+        .customer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .customer-name {
+            color: #4d263d;
+            font-weight: 800;
+        }
+
+        .customer-email {
+            margin-top: 3px;
+            color: #9a8190;
+            font-size: 11px;
+        }
+
+        .status-pill,
+        .role-pill,
+        .cart-pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 0 9px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .status-active { background: #e9f8ef; color: #27824b; }
+        .status-inactive { background: #f6e9ee; color: #9a536f; }
+        .role-customer { background: #f2e9f7; color: #75458c; }
+        .role-admin { background: #fff0d9; color: #a6671b; }
+        .cart-has { background: #f1e8fb; color: #7545a0; }
+        .order-has { background: #e8f3ff; color: #3b6f9f; }
+        .cart-empty { background: #f3f3f5; color: #77737a; }
+
+        .row-action {
+            border: 0;
+            background: #fff5fa;
+            color: #a12870;
+            border: 1px solid #efd5e3;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .row-action:hover {
+            background: #fbe7f2;
+        }
+
+        .loading-row,
+        .empty-row {
+            padding: 34px;
+            text-align: center;
+            color: #947d8a;
+        }
+
+        .pager {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            border-top: 1px solid #f1e4eb;
+        }
+
+        .pager-info {
+            color: #907887;
+            font-size: 11px;
+        }
+
+        .pager-actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        /* =========================================================
+           DETAIL DRAWER
+           ========================================================= */
+
+        .customer-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: none;
+            background: rgba(45, 21, 36, .32);
+            backdrop-filter: blur(4px);
+        }
+
+        .customer-overlay.open {
+            display: block;
+        }
+
+        .customer-drawer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: min(720px, 94vw);
+            height: 100%;
+            overflow-y: auto;
+            background: #fff;
+            box-shadow: -18px 0 50px rgba(50, 22, 39, .18);
+        }
+
+        .drawer-head {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255,255,255,.96);
+            border-bottom: 1px solid #ead5e1;
+            backdrop-filter: blur(10px);
+        }
+
+        .drawer-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .drawer-title h3 {
+            margin: 0;
+            color: #4d263d;
+            font-size: 19px;
+        }
+
+        .drawer-title p {
+            margin: 4px 0 0;
+            color: #947b89;
+            font-size: 11px;
+        }
+
+        .drawer-close {
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ead5e1;
+            border-radius: 9px;
+            background: #fff;
+            color: #68485a;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .drawer-body {
+            padding: 18px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .detail-card {
+            padding: 14px;
+            border: 1px solid #ead5e1;
+            border-radius: 13px;
+            background: #fffafd;
+        }
+
+        .detail-card.full {
+            grid-column: 1 / -1;
+        }
+
+        .detail-label {
+            color: #9b8290;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .detail-value {
+            margin-top: 6px;
+            color: #553448;
+            font-size: 13px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .section-card {
+            margin-top: 12px;
+            border: 1px solid #ead5e1;
+            border-radius: 13px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .section-card-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 13px 14px;
+            background: #fff9fc;
+            border-bottom: 1px solid #ead5e1;
+        }
+
+        .section-card-head h4 {
+            margin: 0;
+            color: #5a3548;
+            font-size: 12px;
+        }
+
+        .cart-summary {
+            color: #947887;
+            font-size: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1e4eb;
+        }
+
+        .cart-item:last-child {
+            border-bottom: 0;
+        }
+
+        .cart-image {
+            width: 52px;
+            height: 52px;
+            flex: 0 0 52px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #f7eaf1;
+        }
+
+        .cart-item-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .cart-product-name {
+            color: #553448;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .cart-product-meta {
+            margin-top: 4px;
+            color: #9a8190;
+            font-size: 10px;
+        }
+
+        .cart-item-total {
+            color: #6c3155;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .drawer-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .role-select,
+        .active-toggle {
+            height: 36px;
+            border: 1px solid #ead5e1;
+            border-radius: 9px;
+            background: #fff;
+            color: #68485a;
+            padding: 0 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .save-btn {
+            height: 36px;
+            border: 0;
+            border-radius: 9px;
+            padding: 0 14px;
+            background: linear-gradient(135deg, #a92b78, #c83288);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .save-btn:disabled {
+            opacity: .55;
+            cursor: default;
+        }
+
+        @media (max-width: 1050px) {
+            .customer-stats {
+                grid-template-columns: repeat(3, minmax(0,1fr));
+            }
+
+            .customer-toolbar {
+                grid-template-columns: repeat(3, minmax(0,1fr));
+            }
+
+            .customer-toolbar .search-field {
+                grid-column: 1 / -1;
+            }
+
+            .filter-actions {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .customers-page {
+                padding: 18px 14px 28px;
+            }
+
+            .customer-page-head {
+                align-items: flex-start;
+            }
+
+            .customer-page-head h2 {
+                font-size: 21px;
+            }
+
+            .customer-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .stat-value {
+        font-size: 20px;
+    }
+    .stat-card[data-full-value]:active::after {
+        content: attr(data-full-value);
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 10px);
+        transform: translateX(-50%);
+
+        background: #4d263d;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+
+        box-shadow: 0 8px 20px rgba(77, 38, 61, .20);
+        z-index: 9999;
+        pointer-events: none;
+    }
+
+    .stat-card[data-full-value]:active::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 5px);
+        transform: translateX(-50%);
+
+        border: 5px solid transparent;
+        border-top-color: #4d263d;
+
+        z-index: 9999;
+    }
+
+            .customer-toolbar {
+                grid-template-columns: repeat(2, minmax(0,1fr));
+            }
+
+            .customer-toolbar .search-field,
+            .filter-actions {
+                grid-column: 1 / -1;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-card.full {
+                grid-column: auto;
+            }
+
+            .customer-drawer {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .customer-stats {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .customer-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .customer-toolbar .search-field,
+            .filter-actions {
+                grid-column: auto;
+            }
+
+            .filter-actions {
+                justify-content: stretch;
+            }
+
+            .filter-actions .tool-btn {
+                flex: 1;
+            }
+
+            .drawer-body {
+                padding: 13px;
+            }
+        }
+    </style>
+
+<style>
+/* Customer metrics — compact, premium, and contained inside table cells */
+.customer-metric,
+.cart-value-badge,
+.order-value-badge {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 5px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+    vertical-align: middle;
+}
+
+.cart-value-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #dbeafe;
+}
+
+.order-value-badge {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #d1fae5;
+}
+
+.customer-table th,
+.customer-table td {
+    vertical-align: middle;
+}
+
+.customer-table td.cart-value-cell,
+.customer-table td.order-value-cell {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.customer-table td.cart-value-cell > *,
+.customer-table td.order-value-cell > * {
+    max-width: 120px;
+}
+
+@media (max-width: 768px) {
+    .customer-table td.cart-value-cell > *,
+    .customer-table td.order-value-cell > * {
+        max-width: 95px;
+    }
+}
+</style>
+
+</head>
+
+<body data-admin-page="customers">
+
+<div class="admin-layout">
+
+    <!-- COMMON ADMIN NAVIGATION -->
+    <div id="admin-navigation"></div>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="page-label">ADMIN PANEL</p>
+                <h1>Customers</h1>
+            </div>
+
+            <div
+                class="admin-profile"
+                id="adminProfile"
+                style="margin-left:auto;"
+            >
+                <button
+                    type="button"
+                    class="admin-profile-trigger"
+                    id="adminProfileTrigger"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                >
+                    <div class="profile-icon">👤</div>
+
+                    <div class="profile-details">
+                        <strong>Admin</strong>
+                        <span>Administrator</span>
+                    </div>
+
+                    <span class="profile-chevron">⌄</span>
+                </button>
+
+                <div
+                    class="admin-profile-menu"
+                    id="adminProfileMenu"
+                >
+                    <button
+                        type="button"
+                        id="logoutBtn"
+                        class="profile-menu-item logout-item"
+                    >
+                        <span>↪</span>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="customers-page">
+
+            <div class="customer-page-head">
+                <div>
+                    <p class="eyebrow">CUSTOMER MANAGEMENT</p>
+                    <h2>Customers</h2>
+                    <p>Search, review account activity, inspect carts and manage access.</p>
+                </div>
+            </div>
+
+            <div class="customer-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Customers</div>
+                    <div class="stat-value" id="statCustomers">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Active</div>
+                    <div class="stat-value" id="statActive">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">With Cart</div>
+                    <div class="stat-value" id="statWithCart">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Cart Value</div>
+                    <div class="stat-value" id="statCartValue">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-value" id="statTotalOrders">—</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Order Value</div>
+                    <div class="stat-value" id="statOrderValue">—</div>
+                </div>
+            </div>
+
+            <div class="customer-toolbar">
+
+                <div class="filter-field search-field">
+                    <label for="customerSearch">Search</label>
+                    <input
+                        id="customerSearch"
+                        type="search"
+                        placeholder="Name, email or phone"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="filter-field">
+                    <label for="customerRole">Role</label>
+                    <select id="customerRole">
+                        <option value="">All roles</option>
+                        <option value="customer">Customer</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label for="customerStatus">Status</label>
+                    <select id="customerStatus">
+                        <option value="">All status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label for="customerCart">Cart</label>
+                    <select id="customerCart">
+                        <option value="">All carts</option>
+                        <option value="has_cart">Has items</option>
+                        <option value="empty">Empty</option>
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label for="customerSort">Sort by</label>
+                    <select id="customerSort">
+                        <option value="created_at">Created date</option>
+                        <option value="full_name">Name</option>
+                        <option value="email">Email</option>
+                        <option value="cart_value">Cart value</option>
+                        <option value="cart_items">Cart items</option>
+                        <option value="cart_updated_at">Cart updated</option>
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label for="customerDirection">Direction</label>
+                    <select id="customerDirection">
+                        <option value="desc">High → Low / Newest</option>
+                        <option value="asc">Low → High / Oldest</option>
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="tool-btn" id="resetFilters" type="button">Reset</button>
+                    <button class="tool-btn" id="refreshCustomers" type="button">Refresh</button>
+                </div>
+
+            </div>
+
+            <div class="customers-card">
+
+                <div class="table-scroll">
+                    <table class="customers-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Phone</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Cart Items</th>
+                                <th>Cart Value</th>
+                                <th>Total Orders</th>
+                                <th>Order Value</th>
+                                <th>Cart Updated</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="customersTableBody">
+                            <tr>
+                                <td colspan="10">
+                                    <div class="loading-row">Loading customers…</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mobile-customer-list" id="mobileCustomerList"></div>
+
+                <div class="pager">
+                    <div class="pager-info" id="pagerInfo">—</div>
+
+                    <div class="pager-actions">
+                        <button class="tool-btn" id="prevPage" type="button">Previous</button>
+                        <button class="tool-btn" id="nextPage" type="button">Next</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<div id="customerAlertStack" class="parameter-alert-stack" aria-live="polite"></div>
+
+<!-- CUSTOMER DETAIL DRAWER -->
+<div class="customer-overlay" id="customerOverlay">
+
+    <aside class="customer-drawer">
+
+        <div class="drawer-head">
+
+            <div class="drawer-title">
+                <div class="customer-avatar" id="drawerAvatar">?</div>
+
+                <div>
+                    <h3 id="drawerName">Customer</h3>
+                    <p id="drawerEmail">—</p>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="drawer-close"
+                id="drawerClose"
+                aria-label="Close"
+            >×</button>
+
+        </div>
+
+        <div class="drawer-body">
+
+            <div class="detail-grid">
+
+                <div class="detail-card">
+                    <div class="detail-label">Full name</div>
+                    <div class="detail-value" id="detailName">—</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value" id="detailEmail">—</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value" id="detailPhone">—</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-label">User ID</div>
+                    <div class="detail-value" id="detailId">—</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-label">Role</div>
+                    <div class="detail-value" id="detailRole">—</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-label">Account status</div>
+                    <div class="detail-value" id="detailStatus">—</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-label">Created</div>
+                    <div class="detail-value" id="detailCreated">—</div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-label">Updated</div>
+                    <div class="detail-value" id="detailUpdated">—</div>
+                </div>
+
+                <div class="detail-card full">
+                    <div class="detail-label">Avatar URL</div>
+                    <div class="detail-value" id="detailAvatar">—</div>
+                </div>
+
+            </div>
+
+            <div class="section-card">
+
+                <div class="section-card-head">
+                    <h4>Your Last 10 Orders</h4>
+                    <span class="cart-summary" id="drawerOrderSummary">—</span>
+                </div>
+
+                <div id="orderSummaryContainer"></div>
+
+            </div>
+
+            <div class="section-card">
+
+                <div class="section-card-head">
+                    <h4>Cart</h4>
+                    <span class="cart-summary" id="drawerCartSummary">—</span>
+                </div>
+
+                <div id="cartItemsContainer"></div>
+
+            </div>
+
+            <div class="drawer-actions">
+
+                <select class="role-select" id="drawerRole">
+                    <option value="customer">Customer</option>
+                    <option value="admin">Admin</option>
+                </select>
+
+                <select class="active-toggle" id="drawerActive">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+
+                <button
+                    type="button"
+                    class="save-btn"
+                    id="saveCustomer"
+                >
+                    Save account
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+</div>
+
+<script type="module">
+    import { supabase } from "./supabase-client.js";
+
+    /* =========================================================
+       COMMON ADMIN NAVIGATION / PROFILE / LOGOUT
+       Same working pattern as the Categories / Products pages.
+       ========================================================= */
+
+    document.addEventListener("DOMContentLoaded", async () => {
+
+        const navigationContainer =
+            document.getElementById("admin-navigation");
+
+        if (navigationContainer) {
+            try {
+                const response =
+                    await fetch("admin-navigation.html");
+
+                if (!response.ok) {
+                    throw new Error("Navigation could not be loaded.");
+                }
+
+                navigationContainer.innerHTML =
+                    await response.text();
+
+                const currentPage =
+                    document.body.dataset.adminPage;
+
+                const activeItem =
+                    navigationContainer.querySelector(
+                        `.nav-item[data-page="${currentPage}"]`
+                    );
+
+                if (activeItem) {
+                    activeItem.classList.add("active");
+                }
+
+            } catch (error) {
+                console.error(
+                    "Failed to load admin navigation:",
+                    error
+                );
+            }
+        }
+
+        const adminProfile =
+            document.getElementById("adminProfile");
+
+        const adminProfileTrigger =
+            document.getElementById("adminProfileTrigger");
+
+        const adminProfileMenu =
+            document.getElementById("adminProfileMenu");
+
+        if (
+            adminProfile &&
+            adminProfileTrigger &&
+            adminProfileMenu
+        ) {
+            adminProfileTrigger.addEventListener(
+                "click",
+                event => {
+                    event.stopPropagation();
+
+                    const isOpen =
+                        adminProfile.classList.toggle("open");
+
+                    adminProfileTrigger.setAttribute(
+                        "aria-expanded",
+                        isOpen ? "true" : "false"
+                    );
+                }
+            );
+
+            adminProfileMenu.addEventListener(
+                "click",
+                event => event.stopPropagation()
+            );
+
+            document.addEventListener("click", () => {
+                adminProfile.classList.remove("open");
+
+                adminProfileTrigger.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            });
+        }
+
+        const logoutBtn =
+            document.getElementById("logoutBtn");
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener(
+                "click",
+                async () => {
+
+                    logoutBtn.disabled = true;
+
+                    try {
+                        const { error } =
+                            await supabase.auth.signOut();
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        window.location.href = "index.html";
+
+                    } catch (error) {
+
+                        console.error(
+                            "Logout failed:",
+                            error
+                        );
+
+                        logoutBtn.disabled = false;
+
+                        showCustomerAlert(
+                            "Unable to logout. Please try again.",
+                            "error",
+                            "Logout failed"
+                        );
+                    }
+                }
+            );
+        }
+
+        await initCustomers();
+    });
+
+    /* =========================================================
+       CUSTOMER MODULE
+       ========================================================= */
+
+    const state = {
+        page: 1,
+        pageSize: 20,
+        total: 0,
+        rows: [],
+        selectedCustomerId: null,
+        loadToken: 0,
+        statsLoading: false
+    };
+
+    let globalStats = {
+        customers: null,
+        active: null,
+        withCart: null,
+        cartValue: null,
+        totalOrders: null,
+        orderValue: null
+    };
+
+    const $ = id =>
+        document.getElementById(id);
+
+    const money = value => {
+        const number = Number(value || 0);
+
+        return new Intl.NumberFormat(
+            undefined,
+            {
+                style: "currency",
+                currency: "INR",
+                maximumFractionDigits: 2
+            }
+        ).format(number);
+    };
+
+    const dateTime = value => {
+        if (!value) return "—";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "—";
+        }
+
+        return new Intl.DateTimeFormat(
+            undefined,
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        ).format(date);
+    };
+
+    const escapeHtml = value => {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    };
+
+    const initials = name => {
+        const value =
+            String(name || "")
+                .trim();
+
+        if (!value) return "?";
+
+        return value
+            .split(/\s+/)
+            .slice(0, 2)
+            .map(part => part[0])
+            .join("")
+            .toUpperCase();
+    };
+
+    function showCustomerAlert(message, type = "error", title = "") {
+        const stack = $("customerAlertStack");
+        if (!stack) return;
+
+        const alertEl = document.createElement("div");
+        alertEl.className = `parameter-alert ${type}`;
+        const icon = type === "error" ? "!" : type === "success" ? "✓" : "i";
+
+        alertEl.innerHTML = `
+            <div class="parameter-alert-icon">${icon}</div>
+            <div class="parameter-alert-content">
+                <div class="parameter-alert-title">${escapeHtml(title || (type === "error" ? "Something went wrong" : "Done"))}</div>
+                <div class="parameter-alert-message">${escapeHtml(message)}</div>
+            </div>
+        `;
+
+        stack.appendChild(alertEl);
+
+        setTimeout(() => {
+            alertEl.style.opacity = "0";
+            alertEl.style.transform = "translateY(10px)";
+            alertEl.style.transition = "opacity .18s ease, transform .18s ease";
+            setTimeout(() => alertEl.remove(), 200);
+        }, 2800);
+    }
+
+    async function initCustomers() {
+
+        [
+            "customerSearch",
+            "customerRole",
+            "customerStatus",
+            "customerCart",
+            "customerSort",
+            "customerDirection"
+        ].forEach(id => {
+            $(id).addEventListener(
+                "input",
+                debounce(() => {
+                    state.page = 1;
+                    loadCustomers();
+                }, 250)
+            );
+        });
+
+        $("resetFilters").addEventListener(
+            "click",
+            () => {
+                $("customerSearch").value = "";
+                $("customerRole").value = "";
+                $("customerStatus").value = "";
+                $("customerCart").value = "";
+                $("customerSort").value = "created_at";
+                $("customerDirection").value = "desc";
+                state.page = 1;
+                loadCustomers();
+            }
+        );
+
+        $("refreshCustomers").addEventListener(
+            "click",
+            () => {
+                state.page = 1;
+                loadGlobalStats();
+                loadCustomers();
+            }
+        );
+
+        $("prevPage").addEventListener(
+            "click",
+            () => {
+                if (state.page > 1) {
+                    state.page--;
+                    loadCustomers();
+                }
+            }
+        );
+
+        $("nextPage").addEventListener(
+            "click",
+            () => {
+                const maxPage =
+                    Math.max(
+                        1,
+                        Math.ceil(
+                            state.total /
+                            state.pageSize
+                        )
+                    );
+
+                if (state.page < maxPage) {
+                    state.page++;
+                    loadCustomers();
+                }
+            }
+        );
+
+        $("customersTableBody").addEventListener(
+            "click",
+            event => {
+
+                const row =
+                    event.target.closest(
+                        "[data-customer-id]"
+                    );
+
+                if (!row) return;
+
+                openCustomer(
+                    row.dataset.customerId
+                );
+            }
+        );
+
+        $("mobileCustomerList").addEventListener(
+            "click",
+            event => {
+                const card = event.target.closest("[data-customer-id]");
+                if (!card) return;
+                openCustomer(card.dataset.customerId);
+            }
+        );
+
+        $("drawerClose").addEventListener(
+            "click",
+            closeDrawer
+        );
+
+        $("customerOverlay").addEventListener(
+            "click",
+            event => {
+                if (
+                    event.target ===
+                    $("customerOverlay")
+                ) {
+                    closeDrawer();
+                }
+            }
+        );
+
+        $("saveCustomer").addEventListener(
+            "click",
+            saveCustomer
+        );
+
+        await Promise.all([
+            loadGlobalStats(),
+            loadCustomers()
+        ]);
+    }
+
+    async function loadCustomers() {
+
+        const requestToken = ++state.loadToken;
+        renderLoading();
+
+        const search =
+            $("customerSearch").value.trim();
+
+        const role =
+            $("customerRole").value;
+
+        const status =
+            $("customerStatus").value;
+
+        const cart =
+            $("customerCart").value;
+
+        const sortBy =
+            $("customerSort").value;
+
+        const direction =
+            $("customerDirection").value;
+
+        const {
+            data,
+            error
+        } = await supabase.rpc(
+            "admin_get_customers",
+            {
+                p_search: search || null,
+                p_role: role || null,
+                p_status: status || null,
+                p_cart_filter: cart || null,
+                p_sort_by: sortBy,
+                p_sort_direction: direction,
+                p_page: state.page,
+                p_page_size: state.pageSize
+            }
+        );
+
+        if (error) {
+            console.error(
+                "Customer loading error:",
+                error
+            );
+
+            renderError(
+                "Unable to load customers. Check the customer RPC and database permissions."
+            );
+
+            return;
+        }
+
+        state.rows = data || [];
+
+        await loadOrderSummaries();
+
+        if (requestToken !== state.loadToken) return;
+
+        state.total =
+            Number(
+                state.rows[0]?.total_count || 0
+            );
+
+        renderCustomers();
+        updateStats();
+        updatePager();
+    }
+
+    async function loadOrderSummaries() {
+
+        const customerIds =
+            state.rows
+                .map(row => row.id)
+                .filter(Boolean);
+
+        state.rows.forEach(row => {
+            row.order_count = 0;
+            row.order_value = 0;
+        });
+
+        if (!customerIds.length) {
+            return;
+        }
+
+        const {
+            data: orders,
+            error
+        } = await supabase
+            .from("orders")
+            .select("user_id,total_amount")
+            .in("user_id", customerIds);
+
+        if (error) {
+            console.warn(
+                "Order summary loading error:",
+                error
+            );
+            return;
+        }
+
+        const summary = {};
+
+        (orders || []).forEach(order => {
+            const userId = order.user_id;
+
+            if (!summary[userId]) {
+                summary[userId] = {
+                    count: 0,
+                    value: 0
+                };
+            }
+
+            summary[userId].count += 1;
+            summary[userId].value +=
+                Number(order.total_amount || 0);
+        });
+
+        state.rows.forEach(row => {
+            const item = summary[row.id] || {
+                count: 0,
+                value: 0
+            };
+
+            row.order_count = item.count;
+            row.order_value = item.value;
+        });
+    }
+
+    async function loadGlobalStats() {
+        if (state.statsLoading) return;
+        state.statsLoading = true;
+
+        try {
+            const [customersResult, activeResult, ordersResult, cartsResult] =
+                await Promise.all([
+                    supabase.from("profiles").select("id", { count: "exact", head: true }),
+                    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("is_active", true),
+                    supabase.from("orders").select("id,total_amount"),
+                    supabase.from("carts").select("user_id,cart_items(quantity,products(price))")
+                ]);
+
+            if (customersResult.error) throw customersResult.error;
+            if (activeResult.error) throw activeResult.error;
+            if (ordersResult.error) throw ordersResult.error;
+            if (cartsResult.error) throw cartsResult.error;
+
+            let withCart = 0;
+            let cartValue = 0;
+
+            (cartsResult.data || []).forEach(cart => {
+                const items = Array.isArray(cart.cart_items) ? cart.cart_items : [];
+                const itemCount = items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+
+                if (itemCount > 0) withCart++;
+
+                cartValue += items.reduce(
+                    (sum, item) =>
+                        sum +
+                        Number(item.quantity || 0) *
+                        Number(item.products?.price || 0),
+                    0
+                );
+            });
+
+            globalStats = {
+                customers: Number(customersResult.count || 0),
+                active: Number(activeResult.count || 0),
+                withCart,
+                cartValue,
+                totalOrders: (ordersResult.data || []).length,
+                orderValue: (ordersResult.data || []).reduce(
+                    (sum, order) => sum + Number(order.total_amount || 0),
+                    0
+                )
+            };
+        } catch (error) {
+            console.warn("Global customer statistics unavailable:", error);
+        } finally {
+            state.statsLoading = false;
+            updateStats();
+        }
+    }
+
+    function renderLoading() {
+
+        $("customersTableBody").innerHTML = `
+            <tr>
+                <td colspan="10">
+                    <div class="loading-row">
+                        Loading customers…
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    function renderError(message) {
+
+        $("customersTableBody").innerHTML = `
+            <tr>
+                <td colspan="10">
+                    <div class="empty-row">
+                        ${escapeHtml(message)}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    function renderCustomers() {
+
+        if (!state.rows.length) {
+
+            $("customersTableBody").innerHTML = `
+                <tr>
+                    <td colspan="10">
+                        <div class="empty-row">
+                            No customers match the current filters.
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        $("customersTableBody").innerHTML =
+            state.rows.map(customer => {
+
+                const name =
+                    customer.full_name ||
+                    customer.email ||
+                    "Unnamed";
+
+                const avatar =
+                    customer.avatar_url
+                        ? `
+                            <div class="customer-avatar">
+                                <img
+                                    src="${escapeHtml(customer.avatar_url)}"
+                                    alt=""
+                                    loading="lazy"
+                                >
+                            </div>
+                        `
+                        : `
+                            <div class="customer-avatar">
+                                ${escapeHtml(initials(name))}
+                            </div>
+                        `;
+
+                const roleClass =
+                    customer.role === "admin"
+                        ? "role-admin"
+                        : "role-customer";
+
+                const statusClass =
+                    customer.is_active
+                        ? "status-active"
+                        : "status-inactive";
+
+                const cartClass =
+                    Number(customer.cart_item_count || 0) > 0
+                        ? "cart-has"
+                        : "cart-empty";
+
+                return `
+                    <tr data-customer-id="${escapeHtml(customer.id)}">
+
+                        <td>
+                            <div class="customer-cell">
+                                ${avatar}
+
+                                <div>
+                                    <div class="customer-name">
+                                        ${escapeHtml(name)}
+                                    </div>
+
+                                    <div class="customer-email">
+                                        ${escapeHtml(customer.email || "—")}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(customer.phone || "—")}
+                        </td>
+
+                        <td>
+                            <span class="role-pill ${roleClass}">
+                                ${escapeHtml(customer.role || "customer")}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status-pill ${statusClass}">
+                                ${customer.is_active ? "Active" : "Inactive"}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="cart-pill ${cartClass}">
+                                ${Number(customer.cart_item_count || 0)}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${money(customer.cart_value)}
+                        </td>
+
+                        <td>
+                            <span class="cart-pill order-has">
+                                ${Number(customer.order_count || 0)}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${money(customer.order_value)}
+                        </td>
+
+                        <td>
+                            ${dateTime(customer.cart_updated_at)}
+                        </td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="row-action"
+                            >
+                                View
+                            </button>
+                        </td>
+
+                    </tr>
+                `;
+            }).join("");
+
+        $("mobileCustomerList").innerHTML =
+            state.rows.map(customer => {
+                const name = customer.full_name || customer.email || "Unnamed";
+                const avatar = customer.avatar_url
+                    ? `<div class="customer-avatar"><img src="${escapeHtml(customer.avatar_url)}" alt="" loading="lazy"></div>`
+                    : `<div class="customer-avatar">${escapeHtml(initials(name))}</div>`;
+                const roleClass = customer.role === "admin" ? "role-admin" : "role-customer";
+                const statusClass = customer.is_active ? "status-active" : "status-inactive";
+                const cartClass = Number(customer.cart_item_count || 0) > 0 ? "cart-has" : "cart-empty";
+
+                return `
+                    <article class="mobile-customer-card" data-customer-id="${escapeHtml(customer.id)}">
+                        <div class="mobile-customer-top">
+                            ${avatar}
+                            <div class="mobile-customer-main">
+                                <div class="mobile-customer-name">${escapeHtml(name)}</div>
+                                <div class="mobile-customer-email">${escapeHtml(customer.email || "—")}</div>
+                            </div>
+                        </div>
+                        <div class="mobile-customer-badges">
+                            <span class="role-pill ${roleClass}">${escapeHtml(customer.role || "customer")}</span>
+                            <span class="status-pill ${statusClass}">${customer.is_active ? "Active" : "Inactive"}</span>
+                            <span class="cart-pill ${cartClass}">${Number(customer.cart_item_count || 0)} cart items</span>
+                        </div>
+                        <div class="mobile-customer-metrics">
+                            <div class="mobile-metric"><div class="mobile-metric-label">Cart value</div><div class="mobile-metric-value">${money(customer.cart_value)}</div></div>
+                            <div class="mobile-metric"><div class="mobile-metric-label">Orders</div><div class="mobile-metric-value">${Number(customer.order_count || 0).toLocaleString()}</div></div>
+                            <div class="mobile-metric"><div class="mobile-metric-label">Order value</div><div class="mobile-metric-value">${money(customer.order_value)}</div></div>
+                            <div class="mobile-metric"><div class="mobile-metric-label">Cart updated</div><div class="mobile-metric-value">${dateTime(customer.cart_updated_at)}</div></div>
+                        </div>
+                        <div class="mobile-customer-footer">
+                            <span class="customer-email">${escapeHtml(customer.phone || "No phone")}</span>
+                            <button type="button" class="row-action">View</button>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+    }
+
+    function updateStats() {
+        const values = [
+            ["statCustomers", globalStats.customers],
+            ["statActive", globalStats.active],
+            ["statWithCart", globalStats.withCart],
+            ["statCartValue", globalStats.cartValue],
+            ["statTotalOrders", globalStats.totalOrders],
+            ["statOrderValue", globalStats.orderValue]
+        ];
+
+        values.forEach(([id, value]) => {
+            $(id).textContent =
+                value === null
+                    ? "—"
+                    : (id === "statCartValue" || id === "statOrderValue"
+                        ? money(value)
+                        : Number(value).toLocaleString());
+
+            const card = $(id)?.parentElement;
+            if (card) card.dataset.fullValue = $(id).textContent;
+        });
+    }
+
+    function updatePager() {
+
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    state.total /
+                    state.pageSize
+                )
+            );
+
+        $("pagerInfo").textContent =
+            state.total
+                ? `Page ${state.page} of ${totalPages} · ${state.total.toLocaleString()} customers`
+                : "0 customers";
+
+        $("prevPage").disabled =
+            state.page <= 1;
+
+        $("nextPage").disabled =
+            state.page >= totalPages;
+    }
+
+    async function openCustomer(customerId) {
+
+        state.selectedCustomerId =
+            customerId;
+
+        $("customerOverlay")
+            .classList.add("open");
+
+        $("cartItemsContainer").innerHTML =
+            `<div class="loading-row">Loading customer details…</div>`;
+
+        let {
+            data,
+            error
+        } = await supabase.rpc(
+            "admin_get_customer_details",
+            {
+                p_user_id: customerId
+            }
+        );
+
+        if (state.selectedCustomerId !== customerId) return;
+
+        if (error) {
+
+            console.error(
+                "Customer detail error:",
+                error
+            );
+
+            $("cartItemsContainer").innerHTML =
+                `<div class="empty-row">Unable to load customer details.</div>`;
+
+            return;
+        }
+
+        const {
+            data: customerOrders,
+            error: orderError
+        } = await supabase
+            .from("orders")
+            .select("id,order_number,status,payment_status,total_amount,created_at")
+            .eq("user_id", customerId)
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+        if (orderError) {
+            console.warn(
+                "Customer order loading error:",
+                orderError
+            );
+        }
+
+        data = data || {};
+        data.orders = customerOrders || [];
+
+        renderCustomerDetail(data);
+    }
+
+    function renderCustomerDetail(data) {
+
+        const profile =
+            data?.profile || {};
+
+        const cart =
+            data?.cart || {};
+
+        const items =
+            Array.isArray(data?.items)
+                ? data.items
+                : [];
+
+        const orders =
+            Array.isArray(data?.orders)
+                ? data.orders
+                : [];
+
+        const orderValue =
+            orders.reduce(
+                (sum, order) =>
+                    sum +
+                    Number(order.total_amount || 0),
+                0
+            );
+
+        $("drawerOrderSummary").textContent =
+            `${orders.length} order${orders.length === 1 ? "" : "s"} · ${money(orderValue)}`;
+
+        const name =
+            profile.full_name ||
+            profile.email ||
+            "Unnamed";
+
+        $("drawerName").textContent =
+            name;
+
+        $("drawerEmail").textContent =
+            profile.email || "—";
+
+        $("drawerAvatar").innerHTML =
+            profile.avatar_url
+                ? `<img src="${escapeHtml(profile.avatar_url)}" alt="">`
+                : escapeHtml(initials(name));
+
+        $("detailName").textContent =
+            profile.full_name || "—";
+
+        $("detailEmail").textContent =
+            profile.email || "—";
+
+        $("detailPhone").textContent =
+            profile.phone || "—";
+
+        $("detailId").textContent =
+            profile.id || "—";
+
+        $("detailRole").textContent =
+            profile.role || "—";
+
+        $("detailStatus").textContent =
+            profile.is_active
+                ? "Active"
+                : "Inactive";
+
+        $("detailCreated").textContent =
+            dateTime(profile.created_at);
+
+        $("detailUpdated").textContent =
+            dateTime(profile.updated_at);
+
+        $("detailAvatar").textContent =
+            profile.avatar_url || "—";
+
+        $("drawerRole").value =
+            profile.role || "customer";
+
+        $("drawerActive").value =
+            String(
+                profile.is_active !== false
+            );
+
+        const itemCount =
+            Number(
+                cart.item_count || 0
+            );
+
+        const cartValue =
+            Number(
+                cart.cart_value || 0
+            );
+
+        $("drawerCartSummary").textContent =
+            `${itemCount} item${itemCount === 1 ? "" : "s"} · ${money(cartValue)}`;
+
+        $("orderSummaryContainer").innerHTML =
+            orders.length
+                ? orders.map(order => `
+                    <div class="cart-item">
+                        <div class="cart-item-main">
+                            <div class="cart-product-name">
+                                ${escapeHtml(order.order_number || "Order")}
+                            </div>
+                            <div class="cart-product-meta">
+                                ${escapeHtml(order.status || "—")}
+                                · ${escapeHtml(order.payment_status || "—")}
+                                · ${dateTime(order.created_at)}
+                            </div>
+                        </div>
+                        <div class="cart-item-total">
+                            ${money(order.total_amount)}
+                        </div>
+                    </div>
+                `).join("")
+                : `<div class="empty-row">No orders are currently available.</div>`;
+
+        if (!items.length) {
+
+            $("cartItemsContainer").innerHTML =
+                `<div class="empty-row">No cart items are currently available.</div>`;
+
+            return;
+        }
+
+        $("cartItemsContainer").innerHTML =
+            items.map(item => {
+
+                const product =
+                    item.product || {};
+
+                const image =
+                    product.primary_image_url ||
+                    product.image_url ||
+                    "";
+
+                const quantity =
+                    Number(item.quantity || 0);
+
+                const price =
+                    Number(
+                        product.price || 0
+                    );
+
+                const total =
+                    Number(
+                        item.line_total ??
+                        price * quantity
+                    );
+
+                return `
+                    <div class="cart-item">
+
+                        ${
+                            image
+                                ? `
+                                    <img
+                                        class="cart-image"
+                                        src="${escapeHtml(image)}"
+                                        alt=""
+                                    >
+                                `
+                                : `
+                                    <div class="cart-image"></div>
+                                `
+                        }
+
+                        <div class="cart-item-main">
+
+                            <div class="cart-product-name">
+                                ${escapeHtml(product.name || "Product")}
+                            </div>
+
+                            <div class="cart-product-meta">
+                                Qty ${quantity}
+                                · ${money(price)} each
+                                · Added ${dateTime(item.created_at)}
+                            </div>
+
+                        </div>
+
+                        <div class="cart-item-total">
+                            ${money(total)}
+                        </div>
+
+                    </div>
+                `;
+            }).join("");
+    }
+
+    async function saveCustomer() {
+        if (!state.selectedCustomerId) return;
+
+        const button = $("saveCustomer");
+        const originalText = button.textContent;
+
+        button.disabled = true;
+        button.textContent = "Saving…";
+
+        try {
+            const { error } = await supabase.rpc(
+                "admin_update_customer_account",
+                {
+                    p_user_id: state.selectedCustomerId,
+                    p_role: $("drawerRole").value,
+                    p_is_active: $("drawerActive").value === "true"
+                }
+            );
+
+            if (error) throw error;
+
+            showCustomerAlert(
+                "Customer account updated successfully.",
+                "success",
+                "Saved"
+            );
+
+            await Promise.all([
+                loadGlobalStats(),
+                loadCustomers()
+            ]);
+
+            if (state.selectedCustomerId) {
+                await openCustomer(state.selectedCustomerId);
+            }
+        } catch (error) {
+            console.error("Customer update error:", error);
+            showCustomerAlert(
+                "Unable to update customer account.",
+                "error",
+                "Update failed"
+            );
+        } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+        }
+    }
+
+    function closeDrawer() {
+
+        $("customerOverlay")
+            .classList.remove("open");
+
+        state.selectedCustomerId =
+            null;
+    }
+
+    function debounce(fn, wait) {
+
+        let timeout;
+
+        return (...args) => {
+
+            clearTimeout(timeout);
+
+            timeout =
+                setTimeout(
+                    () => fn(...args),
+                    wait
+                );
+        };
+    }
+</script>
+
+</body>
+</html>

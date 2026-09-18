@@ -1,0 +1,456 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Review Order | SS Spark Collections</title><link rel="stylesheet" href="style.css"><style>
+/* Review page UI + mobile compact polish */
+.review-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.75fr);gap:20px;align-items:start}.review-main{min-width:0}.review-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}.review-head h2{margin:0;font:500 25px Georgia,serif}.review-head p:not(.eyebrow){margin:6px 0 0;color:var(--muted);font:10px/1.5 Arial}.eyebrow.small{font-size:8px;letter-spacing:2px;margin-bottom:6px}.check{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#eef9f3;border:1px solid #c5e6d2;color:var(--green);font:700 15px Arial;flex:none}.review-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.section{padding:16px;border:1px solid #ead7df;border-radius:15px;background:linear-gradient(145deg,#fff,#fff8fb);margin-bottom:12px}.label{display:block;margin-bottom:8px;color:var(--muted);font:700 8px Arial;letter-spacing:1.5px;text-transform:uppercase}.address{font:10px/1.65 Arial}.pay{display:flex;align-items:center;gap:11px;min-height:45px}.icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#fff0f5;color:var(--pink);font:700 11px Arial}.pay strong{font:700 10px Arial}.sub{margin-top:4px;color:var(--muted);font:9px/1.4 Arial}.summary-card{padding:20px;position:sticky;top:18px}.section-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.muted{color:var(--muted);font:8px Arial}.coupon-badge{padding:6px 9px;border-radius:999px;background:#f0fbf5;border:1px solid #d4eddf;color:var(--green);font:700 8px Arial}.items{display:grid;gap:11px}.item{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center}.img{width:52px;height:58px;border-radius:10px;overflow:hidden;border:1px solid #f0dfe5;background:#fff4f7}.img img{width:100%;height:100%;object-fit:cover}.info{min-width:0}.info strong{display:block;font:700 10px Georgia,serif;line-height:1.3}.info span{display:block;margin-top:3px;color:var(--muted);font:8px Arial}.prices{display:flex;align-items:center;gap:6px;margin-top:4px;font:8px Arial}.prices b{color:var(--pink)}.prices s{color:#a9939c}.line-total{font:700 10px Arial;color:var(--pink);white-space:nowrap}.divider{height:1px;background:#f0e1e7;margin:15px 0 7px}.row{display:flex;justify-content:space-between;gap:15px;padding:7px 0;font:10px Arial}.row b{font-weight:700}.discount{color:var(--pink)}.total{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:14px;border-top:1px solid var(--border)}.total span{font:600 16px Georgia,serif}.total b{font:700 20px Arial;color:var(--pink)}.savings{margin-top:9px;padding:8px 10px;border:1px solid #dcefe4;border-radius:10px;background:#f5fcf8;color:#2f7b57;text-align:center;font:8px Arial}.savings strong{font-weight:800}.tax{text-align:right;margin-top:7px;color:var(--muted);font:8px Arial}.primary{width:100%;height:49px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font:700 10px Arial;box-shadow:0 11px 25px rgba(214,51,108,.2)}.primary:disabled{opacity:.55;cursor:not-allowed}.action-wrap{margin-top:16px}.note{margin:10px 0 0;text-align:center;color:var(--muted);font:9px/1.5 Arial}.loading{text-align:center;padding:70px 20px;color:var(--muted);font:11px Arial}.empty{padding:40px 20px}.back-link{display:inline-block;margin-top:15px;color:var(--pink);font:700 10px Arial}.alert-stack{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:9999;width:min(92vw,430px);display:flex;flex-direction:column;gap:9px;pointer-events:none}.review-alert{pointer-events:auto;display:flex;align-items:center;gap:10px;padding:12px 13px;border:1px solid #ead5e1;border-radius:15px;background:#fff;box-shadow:0 14px 35px rgba(63,30,48,.18)}.review-alert-icon{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#fff0f6;color:#b4235a;font-weight:900;flex:none}.review-alert.success .review-alert-icon{background:#eaf8f0;color:#25834a}.review-alert.error .review-alert-icon{background:#fff0f2;color:#b4234f}.review-alert-content{flex:1;min-width:0}.review-alert-content strong{display:block;font-size:11px;color:#4c3042}.review-alert-content span{display:block;margin-top:2px;font-size:10px;line-height:1.4;color:#816b76}.review-alert>button{border:0;background:transparent;color:#a46b7f;font-size:18px;padding:3px;line-height:1}.review-alert>button:focus-visible,.primary:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+@media(hover:none){.primary:hover{filter:none}}
+@media(max-width:850px){.review-layout{grid-template-columns:1fr}.summary-card{position:static}.review-grid{grid-template-columns:1.15fr .85fr}}
+@media(max-width:760px){.wrap{width:calc(100% - 24px);padding-top:17px}.card{padding:18px;border-radius:19px}.line{width:32px;margin:0 5px}.step{font-size:8px}.step .num{width:22px;height:22px}.review-head h2{font-size:22px}.item{grid-template-columns:48px minmax(0,1fr) auto}.img{width:48px;height:54px}.line-total{font-size:9px}}
+@media(max-width:600px){.review-grid{grid-template-columns:1fr}.summary-card{padding:16px}.summary-card .items{max-height:280px;overflow:auto;padding-right:2px}.review-head{gap:10px}.check{width:32px;height:32px}.section{padding:13px;border-radius:13px}.item{grid-template-columns:46px minmax(0,1fr);gap:8px}.img{width:46px;height:52px}.line-total{grid-column:2;font-size:9px;margin-top:-2px}.prices{font-size:7.5px}.total b{font-size:18px}.action-wrap{margin-top:14px}.alert-stack{bottom:12px;width:calc(100vw - 24px)}}
+@media(max-width:360px){.wrap{width:calc(100% - 18px)}.back{font-size:10px;white-space:nowrap}.brand img{width:68px}.secure{font-size:6.5px}.step{font-size:7px;gap:4px}.step .num{width:22px;height:22px}.line{width:24px;margin:0 3px}.review-head h2{font-size:20px}.review-head p:not(.eyebrow){font-size:9px}.section,.summary-card{padding:12px}.address{font-size:9px}.alert-stack{width:calc(100vw - 18px)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+/* Final review layout hardening — UI only */
+:root{
+  --pink:#d6336c;--pink2:#b92357;--rose:#8f294f;--ink:#542238;
+  --muted:#987080;--border:#edd9e2;--soft:#fff7fa;--green:#218a57;
+  --shadow:0 18px 50px rgba(83,35,52,.08)
+}
+html,body{width:100%;min-height:100%;overflow-x:hidden}
+body{background:#fff;color:var(--ink);font-family:Arial,sans-serif}
+.top-bar{min-height:32px;display:flex;align-items:center;justify-content:center;gap:8px;padding:7px 12px;background:#fff7fa;border-bottom:1px solid #f1dfe6;color:#8f6676;font:700 10px Arial;text-align:center}
+.main-header{min-height:72px;display:flex;align-items:center;gap:20px;padding:12px max(18px,4vw);background:#fff;border-bottom:1px solid #f0e1e7;position:relative;z-index:20}
+.brand-logo{display:flex;align-items:center;flex:none}
+.brand-logo img{display:block;width:78px;height:auto;object-fit:contain}
+.main-nav{display:flex;align-items:center;justify-content:center;gap:22px;flex:1}
+.main-nav a{color:var(--ink);font:700 10px Arial;white-space:nowrap}
+.main-nav a:hover{color:var(--pink)}
+.header-actions{display:flex;align-items:center;gap:9px;flex:none}
+.icon-btn,.cart-btn{display:inline-flex;align-items:center;justify-content:center}
+.icon-btn{width:34px;height:34px;border:1px solid #ead7df;border-radius:50%;background:#fff;color:var(--ink)}
+.cart-btn{position:relative;min-width:34px;height:34px;color:var(--ink);font-size:15px}
+.cart-btn span{position:absolute;top:-4px;right:-5px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--pink);color:#fff;display:grid;place-items:center;font:700 8px Arial}
+.auth-area{display:flex;align-items:center}
+.login-btn,.signup-btn{display:inline-flex;align-items:center;height:34px;padding:0 10px;border-radius:9px;font:700 9px Arial}
+.login-btn{color:var(--pink)}
+.signup-btn{background:var(--pink);color:#fff}
+.profile-dropdown{position:relative}
+.profile-trigger{display:flex;align-items:center;gap:7px;height:36px;border:1px solid #ead7df;border-radius:999px;background:#fff;color:var(--ink);padding:0 10px;font:700 9px Arial;max-width:190px}
+.profile-avatar{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;background:#fff0f5;color:var(--pink);flex:none}
+.profile-arrow{width:6px;height:6px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);margin:0 2px 3px 1px}
+.profile-menu{display:none;position:absolute;right:0;top:calc(100% + 8px);width:230px;background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 18px 45px rgba(83,35,52,.16);padding:9px;z-index:50}
+.profile-menu.show{display:block}
+.profile-menu-header{display:flex;gap:9px;align-items:center;padding:8px}
+.profile-menu-avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff0f5;color:var(--pink);font-weight:800}
+.profile-menu-header strong{display:block;font:700 10px Arial;color:var(--ink)}
+.profile-menu-header small{display:block;margin-top:3px;color:var(--muted);font:8px Arial;word-break:break-word}
+.profile-menu-divider{height:1px;background:#f0e1e7;margin:6px 0}
+.profile-menu-item,.profile-menu-logout{width:100%;display:flex;align-items:center;gap:9px;padding:9px;border:0;background:#fff;color:var(--ink);border-radius:9px;font:700 9px Arial;text-align:left}
+.profile-menu-item:hover{background:#fff7fa}
+.profile-menu-logout{color:#b4235a}
+.page{min-height:calc(100vh - 104px);background:linear-gradient(180deg,#fff9fb 0,#fff 42%)}
+.wrap{width:min(1120px,92%);margin:0 auto;padding:24px 0 65px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
+.top .brand{display:flex;justify-content:center;align-items:center;flex:1}
+.top .brand img{display:block;width:78px;height:auto;object-fit:contain}
+.back{color:var(--rose);font:700 10px Arial;text-decoration:none;white-space:nowrap}
+.secure{color:var(--muted);font:700 8px Arial;white-space:nowrap}
+.title{text-align:center;margin:5px 0 23px}
+.title .eyebrow{margin:0 0 7px;color:var(--pink);font:700 8px Arial;letter-spacing:3px}
+.title h1{margin:0;color:var(--ink);font:500 clamp(32px,5vw,44px)/1.05 Georgia,serif}
+.steps{display:flex;align-items:center;justify-content:center;margin:0 auto 27px;max-width:560px}
+.step{display:flex;align-items:center;gap:6px;color:#b49aa6;font:700 8px Arial;white-space:nowrap}
+.step.done{color:var(--green)} .step.active{color:var(--pink)}
+.step .num{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1px solid #dfccd5;background:#fff}
+.step.done .num{background:#eef9f3;border-color:#b9e3cc;color:var(--green)}
+.step.active .num{background:var(--pink);border-color:var(--pink);color:#fff}
+.steps .line{width:58px;height:1px;background:#e7d9df;margin:0 9px}
+.review-layout{grid-template-columns:minmax(0,1.3fr) minmax(320px,.7fr);gap:22px}
+.review-main,.summary-card{min-width:0}
+.summary-card{overflow:hidden}
+.summary-card .items{max-height:330px;overflow:auto;padding-right:3px}
+.item{min-width:0}
+.info strong,.info span{overflow-wrap:anywhere}
+.action-wrap .primary{min-height:48px}
+@media(max-width:900px){
+  .main-nav{gap:13px}
+  .review-layout{grid-template-columns:1fr}
+  .summary-card{position:static}
+}
+@media(max-width:700px){
+  .top-bar{font-size:8px}
+  .main-header{min-height:60px;padding:9px 12px;gap:9px}
+  .brand-logo img{width:68px}
+  .main-nav{display:none}
+  .header-actions{margin-left:auto}
+  .profile-trigger{max-width:145px;padding:0 8px;font-size:8px}
+  .profile-trigger>span:nth-child(2){max-width:76px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wrap{width:calc(100% - 20px);padding:15px 0 50px}
+  .top{margin-bottom:18px;gap:8px}
+  .top .brand img{width:68px}
+  .secure{font-size:7px}
+  .title{margin-bottom:19px}
+  .title h1{font-size:34px}
+  .steps{width:100%;padding:0 2px;margin-bottom:20px}
+  .step{font-size:7px;gap:4px}
+  .step .num{width:22px;height:22px}
+  .steps .line{flex:1;width:auto;max-width:42px;margin:0 5px}
+  .review-head h2{font-size:21px}
+  .review-grid{grid-template-columns:1fr}
+  .section{padding:13px;margin-bottom:9px}
+  .summary-card{padding:15px}
+  .summary-card .items{max-height:none;overflow:visible;padding:0}
+  .item{grid-template-columns:46px minmax(0,1fr);gap:8px}
+  .img{width:46px;height:52px}
+  .line-total{grid-column:2;margin-top:-2px}
+  .action-wrap{margin-top:12px}
+  .primary{height:47px}
+}
+@media(max-width:380px){
+  .top-bar{display:none}
+  .main-header{padding:8px 9px}
+  .brand-logo img{width:62px}
+  .profile-trigger{max-width:130px}
+  .profile-trigger>span:nth-child(2){max-width:78px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wrap{width:calc(100% - 16px)}
+  .top .back{font-size:9px}
+  .top .brand img{width:60px}
+  .secure{font-size:6px}
+  .title h1{font-size:30px}
+  .step{font-size:6.5px}
+  .step .num{width:21px;height:21px}
+  .steps .line{max-width:25px;margin:0 3px}
+  .review-head{gap:7px}
+  .review-head h2{font-size:19px}
+  .review-head p:not(.eyebrow){font-size:8.5px}
+  .review-head .check{width:29px;height:29px}
+  .section,.summary-card{padding:11px}
+  .address{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+@media(max-width:700px){
+  .review-main{
+    display:contents;
+  }
+
+  .review-head{
+    order:1;
+  }
+
+  .review-grid{
+    order:2;
+  }
+
+  .summary-card{
+    order:3;
+  }
+
+  .action-wrap{
+    order:4;
+    margin-top:14px;
+  }
+}
+
+
+/* Mobile: keep the final action after the full Order Summary. Desktop unchanged. */
+@media(max-width:700px){
+  .review-main{display:contents}
+  .review-head{order:1}
+  .review-grid{order:2}
+  .summary-card{order:3}
+  .action-wrap{order:4;margin-top:14px}
+}
+</style></head><body>
+<div class="top-bar">✨ Free Shipping Across India <span>|</span> 💝 Carefully Packed With Love</div>
+<header class="main-header">
+  <a href="index.html" class="brand-logo"><img src="assets/logo.png" alt="SS Spark Collections"></a>
+  <nav class="main-nav">
+  </nav>
+  <div class="header-actions">
+    <button class="icon-btn" id="headerSearchBtn" type="button" aria-label="Search">🔍</button>
+    <a href="cart.html" class="cart-btn" aria-label="Shopping Cart">🛒<span id="cartCount">0</span></a>
+    <div id="authArea" class="auth-area"></div>
+  </div>
+</header>
+<main class="page">
+ <div class="wrap">
+  <div class="top"><a class="back" href="checkout.html">← Back to Checkout</a><div class="brand"><img src="assets/logo.png" alt="SS Spark Collections"></div><div class="secure">🔒 Secure Checkout</div></div>
+  <div class="title"><p class="eyebrow">SS SPARK COLLECTIONS</p><h1>Review Order</h1></div>
+  <div class="steps" aria-label="Checkout progress"><div class="step done"><span class="num">✓</span><span>Address</span></div><div class="line"></div><div class="step active"><span class="num">2</span><span>Review</span></div><div class="line"></div><div class="step"><span class="num">3</span><span>Payment</span></div></div>
+  <div id="root" class="card loading">Loading your review...</div>
+ </div>
+</main>
+<div id="alertStack" class="alert-stack" aria-live="polite"></div>
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+const root=document.getElementById("root");
+const alertStack=document.getElementById("alertStack");
+const cartCount=document.getElementById("cartCount");
+const authArea=document.getElementById("authArea");
+
+let state=null,user=null,items=[],quote=null;
+let shippingMin=1000,shippingCharge=99,codCharge=0,codAvailable=true;
+
+const money=v=>`₹${Number(v||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+
+async function logCheckoutError(error, operation, extra = {}) {
+  try {
+    const { data: { user: logUser } } = await supabase.auth.getUser();
+    if (!logUser) return;
+
+    const payload = {
+      user_id: logUser.id,
+      page_name: "review.html",
+      operation,
+      error_code: error?.code ? String(error.code).slice(0, 100) : null,
+      error_message: String(error?.message || "Unknown checkout error").slice(0, 2000),
+      error_details: error?.details ? String(error.details).slice(0, 4000) : null,
+      error_hint: error?.hint ? String(error.hint).slice(0, 2000) : null,
+      client_request_id: extra.clientRequestId || null,
+      quote_id: extra.quoteId || null,
+      context: {
+        payment_method: state?.paymentMethod || null,
+        coupon_code: state?.couponCode || null,
+        source: "review.html"
+      }
+    };
+
+    // IMPORTANT: this is a separate request/transaction after the failed
+    // operation. Therefore a rollback in the failed RPC cannot remove this log.
+    await supabase.from("checkout_error_logs").insert(payload);
+  } catch (logError) {
+    console.warn("Checkout error logging failed:", logError);
+  }
+}
+
+
+function alertMsg(message,type="info",title=""){
+  const el=document.createElement("div");
+  el.className=`review-alert ${type}`;
+  const icon=type==="error"?"!":type==="success"?"✓":"i";
+  el.innerHTML=`<div class="review-alert-icon">${icon}</div><div class="review-alert-content"><strong>${esc(title||(type==="error"?"Please check":"Please note"))}</strong><span>${esc(message)}</span></div><button type="button" aria-label="Dismiss">×</button>`;
+  alertStack.appendChild(el);
+  el.querySelector("button").onclick=()=>el.remove();
+  setTimeout(()=>el.remove(),3500);
+}
+
+async function getCurrentUser(){
+  const {data,error}=await supabase.auth.getUser();
+  if(error) throw error;
+  return data?.user||null;
+}
+
+async function authUI(){
+  user=await getCurrentUser();
+  if(!user){
+    authArea.innerHTML='<a href="login.html" class="login-btn">Login</a><a href="create-account.html" class="signup-btn">Create Account</a>';
+    cartCount.textContent="0";
+    return false;
+  }
+  const {data:p,error}=await supabase.from("profiles").select("full_name,role").eq("id",user.id).maybeSingle();
+  if(error) throw error;
+  const name=esc(p?.full_name||user.user_metadata?.full_name||user.email||"");
+  authArea.innerHTML=`<div class="profile-dropdown">
+    <button class="profile-trigger" id="profileTrigger" type="button"><span class="profile-avatar">✦</span><span>Hi, ${name}</span><span class="profile-arrow">⌄</span></button>
+    <div class="profile-menu" id="profileMenu">
+      <div class="profile-menu-header"><div class="profile-menu-avatar">✦</div><div><strong>${name}</strong><small>${esc(user.email||"")}</small></div></div>
+      <div class="profile-menu-divider"></div>
+      <a href="wishlist.html" class="profile-menu-item"><span>♡</span><span>Wishlist</span></a>
+      <a href="order-lists.html" class="profile-menu-item"><span>♧</span><span>My Orders</span></a>
+      <div class="profile-menu-divider"></div>
+      <button id="logoutBtn" class="profile-menu-logout" type="button"><span>↪</span><span>Logout</span></button>
+    </div>
+  </div>`;
+  const trigger=document.getElementById("profileTrigger"),menu=document.getElementById("profileMenu");
+  trigger?.addEventListener("click",e=>{e.stopPropagation();menu?.classList.toggle("show")});
+  document.addEventListener("click",e=>{if(menu&&!menu.contains(e.target)&&!trigger?.contains(e.target))menu.classList.remove("show")});
+  document.getElementById("logoutBtn")?.addEventListener("click",async()=>{await supabase.auth.signOut();location.href="login.html"});
+  const {data:c}=await supabase.from("carts").select("id").eq("user_id",user.id).maybeSingle();
+  if(c){
+    const {data:ci}=await supabase.from("cart_items").select("quantity").eq("cart_id",c.id);
+    cartCount.textContent=String((ci||[]).reduce((s,x)=>s+Number(x.quantity||0),0));
+  }
+  return true;
+}
+
+async function loadParameters(){
+  const {data,error}=await supabase.from("parameter_values")
+    .select("parameter_group,parameter_code,parameter_value,description")
+    .eq("is_active",true).in("parameter_group",["SHIPPING","PAYMENT"]);
+  if(error) throw error;
+  for(const p of data||[]){
+    const n=Number(p.parameter_value);
+    if(p.parameter_group==="SHIPPING"&&p.parameter_code==="MINIMUM_ORDER_AMOUNT"&&Number.isFinite(n)) shippingMin=Math.max(0,n);
+    if(p.parameter_group==="SHIPPING"&&p.parameter_code==="SHIPPING_CHARGE"&&Number.isFinite(n)) shippingCharge=Math.max(0,n);
+    if(p.parameter_group==="PAYMENT"&&p.parameter_code==="COD_CHARGE"&&Number.isFinite(n)) codCharge=Math.max(0,n);
+    if(p.parameter_group==="PAYMENT"&&p.parameter_code==="COD_AVAILABLE") codAvailable=String(p.description||"").trim().toUpperCase()==="YES";
+  }
+}
+
+async function loadCart(){
+  const {data:c,error:ce}=await supabase.from("carts").select("id").eq("user_id",user.id).maybeSingle();
+  if(ce) throw ce;
+  if(!c) throw Error("Your cart is empty.");
+  const {data,error}=await supabase.from("cart_items").select(`
+    id,cart_id,product_id,variant_id,quantity,
+    products(id,name,price,compare_at_price,stock_quantity,is_active,product_images(image_url,is_primary,display_order)),
+    product_variants(id,size,color,price,compare_at_price,stock_quantity,is_active)
+  `).eq("cart_id",c.id).order("created_at",{ascending:false});
+  if(error) throw error;
+  items=(data||[]).filter(x=>x.products&&x.products.is_active!==false);
+  if(!items.length) throw Error("Your cart is empty.");
+}
+
+function getPrice(x){return Number(x.product_variants?.price??x.products?.price??0)}
+function getCompare(x){return Number(x.product_variants?.compare_at_price??x.products?.compare_at_price??0)}
+function productSavings(){return items.reduce((s,x)=>{const d=getCompare(x)-getPrice(x);return s+(d>0?d*Number(x.quantity||0):0)},0)}
+
+async function getAuthoritativeQuote(){
+  const {data,error}=await supabase.rpc("get_checkout_quote",{
+    p_payment_method:state.paymentMethod,
+    p_coupon_code:state.couponCode||null,
+    p_address_id:state.addressId||null
+  });
+  if(error) throw error;
+  if(!data?.valid) throw Error(data?.message||"Your checkout details are no longer valid. Please return to checkout.");
+  return data;
+}
+
+async function loadAddress(){
+  if(state.addressId){
+    const {data,error}=await supabase.from("addresses")
+      .select("id,full_name,phone,address_line1,address_line2,city,state,pincode")
+      .eq("id",state.addressId).eq("user_id",user.id).maybeSingle();
+    if(error) throw error;
+    if(!data) throw Error("The selected delivery address is no longer available.");
+    return data;
+  }
+  const a=state.address||{};
+  if(!a.full_name||!a.phone||!a.address_line1||!a.city||!a.state||!a.pincode) throw Error("The delivery address is incomplete.");
+  return a;
+}
+
+function render(address){
+  const cod=state.paymentMethod==="cod";
+  const discount=Number(quote.discount||0), ship=Number(quote.shipping||0), total=Number(quote.total||0);
+  root.className="card";
+  root.innerHTML=`
+    <div class="review-layout">
+      <section class="review-main">
+        <div class="review-head"><div><p class="eyebrow small">FINAL CHECK</p><h2>Everything looks good</h2><p>Review your address and payment method before continuing.</p></div><div class="check">✓</div></div>
+        <div class="review-grid">
+          <section class="section"><span class="label">Delivery Address</span><div class="address"><strong>${esc(address.full_name)}</strong><br>${esc(address.phone)}<br>${esc(address.address_line1)}${address.address_line2?", "+esc(address.address_line2):""}<br>${esc(address.city)}, ${esc(address.state)} - ${esc(address.pincode)}</div></section>
+          <section class="section"><span class="label">Payment Method</span><div class="pay"><div class="icon">${cod?"₹":"UPI"}</div><div><strong>${cod?"Cash on Delivery":"UPI"}</strong><div class="sub">${cod?(Number(quote.cod_charge||0)>0?"COD charge "+money(quote.cod_charge):"No additional COD charge"):"Continue to secure online payment."}</div></div></div></section>
+        </div>
+        <div class="action-wrap">
+          <button class="primary" id="continueBtn" type="button">${cod?"Place Order":"Continue to Payment"} <span>→</span></button>
+          <p class="note">${cod?"Your order will be created securely after you confirm.":"Final validation happens securely before payment. Your order is created only after the final checks pass."}</p>
+        </div>
+      </section>
+      <aside class="card summary-card">
+        <div class="section-top"><div><h2 style="margin:0;font:500 22px Georgia,serif">Order Summary</h2><span class="muted">${items.length} ${items.length===1?"item":"items"}</span></div>${state.couponCode?`<span class="coupon-badge">${esc(state.couponCode)} applied</span>`:""}</div>
+        <div class="items" style="margin-top:15px">${items.map(x=>{const p=x.products||{},v=x.product_variants,im=[...(p.product_images||[])].sort((a,b)=>(a.display_order||0)-(b.display_order||0))[0],price=getPrice(x),compare=getCompare(x),label=[v?.size,v?.color].filter(Boolean).join(" · ");return `<div class="item"><div class="img">${im?`<img src="${esc(im.image_url)}" alt="${esc(p.name)}">`:''}</div><div class="info"><strong>${esc(p.name)}</strong><span>${label?esc(label)+" · ":""}Qty ${Number(x.quantity||0)}</span><div class="prices"><b>${money(price)}</b>${compare>price?`<s>${money(compare)}</s>`:""}</div></div><div class="line-total">${money(price*Number(x.quantity||0))}</div></div>`}).join("")}</div>
+        <div class="divider"></div>
+        <div class="row"><span>Subtotal</span><b>${money(quote.subtotal)}</b></div>
+        ${discount>0?`<div class="row discount"><span>Discount</span><b>− ${money(discount)}</b></div>`:""}
+        <div class="row"><span>Shipping</span><b>${ship>0?money(ship):"Free"}</b></div>
+        ${Number(quote.cod_charge||0)>0?`<div class="row"><span>COD Charge</span><b>${money(quote.cod_charge)}</b></div>`:""}
+        <div class="total"><span>Total</span><b>${money(total)}</b></div>
+        ${productSavings()>0?`<div class="savings">✓ You saved <strong>${money(productSavings())}</strong> on product prices</div>`:""}
+        <div class="tax">Inclusive of all applicable taxes</div>
+      </aside>
+    </div>`;
+  document.getElementById("continueBtn").onclick=continueNext;
+}
+
+async function continueNext(){
+  const btn=document.getElementById("continueBtn");
+  if(!btn)return;
+  btn.disabled=true;
+  const originalText=btn.innerHTML;
+  btn.innerHTML="Checking your order…";
+  const requestId=crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  const nextState={...state,couponCode:state.couponCode||null,clientRequestId:requestId};
+  try{
+    // Review -> Create Order is the hard-stop boundary.
+    // Create a server-side quote snapshot here. Checkout -> Review remains
+    // intentionally non-blocking; Review simply displays the latest quote.
+    quote=await getAuthoritativeQuote();
+
+    const {data:validated,error:validationError}=await supabase.rpc("validate_order_before_payment",{
+      p_payment_method:state.paymentMethod,
+      p_coupon_code:state.couponCode||null,
+      p_address_id:state.addressId||null,
+      p_address:state.addressId?null:(state.address||null),
+      p_client_request_id:requestId
+    });
+    if(validationError)throw validationError;
+    if(!validated?.success||!validated?.quote_id){
+      throw new Error(validated?.message||"Your order could not be locked for final review. Please try again.");
+    }
+
+    // The quote shown on Review and the quote stored for Final Check must
+    // agree before the customer can continue. This prevents a coupon/total
+    // from silently changing between the two RPCs.
+    const displayedQuote=quote||{};
+    const lockedQuote=validated.quote||{};
+    const financialKeys=["subtotal","shipping","discount","cod_charge","total"];
+    const quoteMismatch=financialKeys.some(k=>Number(displayedQuote[k]||0)!==Number(lockedQuote[k]||0))
+      || String(displayedQuote.coupon_code||"")!==String(lockedQuote.coupon_code||"");
+    if(quoteMismatch){
+      throw new Error("The coupon or order total changed during final review. Please return to checkout and review your order again.");
+    }
+
+    nextState.quoteId=validated.quote_id;
+    nextState.reviewQuote=validated.quote;
+    nextState.reviewShippingAddress=validated.shipping_address;
+
+    sessionStorage.setItem("ssSparkCheckout",JSON.stringify(nextState));
+    if(state.paymentMethod==="cod"){
+      sessionStorage.setItem("ssSparkOrderPending",JSON.stringify(nextState));
+      location.href="createorder.html";
+    }else{
+      sessionStorage.setItem("ssSparkPaymentPending",JSON.stringify(nextState));
+      location.href="payment.html";
+    }
+  }catch(e){
+    console.error(e);
+    await logCheckoutError(e, "validate_before_payment", {
+      clientRequestId: requestId,
+      quoteId: state?.quoteId || null
+    });
+    btn.disabled=false;
+    btn.innerHTML=originalText;
+    alertMsg(e.message||"Unable to continue. Please return to checkout.","error","Review check failed");
+  }
+}
+
+async function init(){
+  try{
+    if(!(await authUI())){location.href="login.html";return}
+    const raw=sessionStorage.getItem("ssSparkCheckout");
+    if(!raw) throw Error("Your checkout session has expired. Please return to checkout.");
+    state=JSON.parse(raw);
+    if(!state||!["upi","cod"].includes(state.paymentMethod)) throw Error("Invalid payment method. Please return to checkout.");
+    if(state.paymentMethod==="cod"&&!codAvailable){} // final quote is authoritative
+    await loadParameters();
+    await loadCart();
+    const address=await loadAddress();
+    quote=await getAuthoritativeQuote();
+    render(address);
+  }catch(e){
+    console.error(e);
+    await logCheckoutError(e, "review_load", {
+      clientRequestId: state?.clientRequestId || null,
+      quoteId: state?.quoteId || null
+    });
+    root.className="card empty";
+    root.innerHTML=`<h2>Review unavailable</h2><p>${esc(e.message||"Please return to checkout and try again.")}</p><a class="back-link" href="checkout.html">← Return to Checkout</a>`;
+  }
+}
+document.getElementById("headerSearchBtn")?.addEventListener("click",()=>location.href="search.html");
+init();
+</script>
+</body></html>

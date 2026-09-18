@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | SS Spark Collections</title>
+<link rel="stylesheet" href="admin.css">
+<style>
+:root{
+  --ink:#4d263d;--muted:#987e8d;--line:#ead5e1;--soft:#fbf7f9;
+  --card:rgba(255,255,255,.94);--shadow:0 14px 40px rgba(82,37,64,.07);
+  --green:#287a58;--green-bg:#eaf7f0;--amber:#9a6815;--amber-bg:#fff6df;
+  --blue:#426b9b;--blue-bg:#edf4fc;--red:#a94a4a;--red-bg:#fceeee;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#fffafd 0%,#f8f1f6 100%);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,a{font:inherit}
+.admin-layout{min-height:100vh;display:flex}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.page-label{margin:0 0 4px;color:#b08d9e;font-size:10px;font-weight:900;letter-spacing:.14em}
+.topbar h1{margin:0;font-size:30px;letter-spacing:-.03em}
+.hero{position:relative;overflow:hidden;padding:25px 27px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,#fff 0%,#f8edf4 100%);box-shadow:var(--shadow);margin-bottom:18px}
+.hero small{font-size:10px;font-weight:900;letter-spacing:.13em;color:#a98296}
+.hero h2{margin:7px 0 7px;font-size:25px}.hero p{margin:0;color:#816b77;font-size:13px;max-width:600px;line-height:1.6}
+.hero-mark{position:absolute;right:30px;top:18px;font-size:62px;color:#e8cfde;opacity:.7}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow);min-width:0}
+.stat{padding:17px}.stat-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.stat-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:850;color:var(--muted)}
+.stat-icon{width:34px;height:34px;border-radius:10px;background:#f7edf3;display:grid;place-items:center;font-weight:900}
+.stat-value{margin-top:9px;font-size:25px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-foot{margin-top:6px;font-size:10px;color:var(--muted)}
+.section{padding:18px;margin-bottom:18px}.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
+.section-kicker{font-size:9px;font-weight:900;letter-spacing:.13em;color:#ad8799}.section h2{margin:4px 0 0;font-size:18px}.section-note{font-size:10px;color:var(--muted)}
+.today-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:18px}
+.status-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.status{padding:13px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.status span{display:block;color:var(--muted);font-size:10px;font-weight:750}.status strong{display:block;margin-top:5px;font-size:20px}
+.status .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;background:#b8a4ae}
+.revenue-box{padding:17px;border-radius:15px;background:#faf4f7;border:1px solid var(--line)}
+.revenue-main{font-size:27px;font-weight:900}.compare{margin-top:7px;font-size:11px;color:var(--muted)}
+.compare.up{color:var(--green)}.compare.down{color:var(--red)}
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.action{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:#fff;padding:13px;border-radius:13px;transition:.18s}
+.action:hover{box-shadow:0 10px 25px rgba(82,37,64,.08)}
+.action b{display:block;font-size:12px}.action span{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+.action i{font-style:normal;width:32px;height:32px;border-radius:9px;background:#f7edf3;display:grid;place-items:center;font-weight:900}
+.two{display:grid;grid-template-columns:1.35fr .85fr;gap:18px}
+.chart{height:190px;display:flex;align-items:flex-end;gap:8px;padding:15px 4px 4px}
+.bar-wrap{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px}
+.bar{width:100%;max-width:34px;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#9c6a88,#dcbccc);min-height:5px}
+.bar-label{font-size:9px;color:var(--muted)}
+.order-list{display:grid;gap:8px}
+.order{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0e6eb}
+.order:last-child{border-bottom:0}.order b{font-size:11px}.order small{display:block;color:var(--muted);margin-top:2px;font-size:9px}
+.badge{padding:5px 8px;border-radius:999px;font-size:9px;font-weight:850;background:#f5edf2;color:var(--ink);white-space:nowrap}
+.empty{padding:28px;text-align:center;color:var(--muted);font-size:11px}
+.loading{color:#a98b9b}
+
+/* =========================================================
+   PREMIUM ANALYTICS POLISH
+   Visual-only enhancements; no data/API changes.
+   ========================================================= */
+.hero{
+  background:
+    radial-gradient(circle at 92% 18%,rgba(214,62,119,.10),transparent 24%),
+    linear-gradient(135deg,#fff 0%,#fbf0f6 58%,#f8e8f1 100%);
+}
+.hero::after{
+  content:"";
+  position:absolute;right:-70px;bottom:-90px;width:230px;height:230px;
+  border:1px solid rgba(196,58,112,.10);border-radius:50%;
+}
+.stat{
+  position:relative;overflow:hidden;
+  transition:box-shadow .18s ease,border-color .18s ease;
+}
+.stat::before{
+  content:"";position:absolute;left:0;top:0;right:0;height:3px;
+  background:linear-gradient(90deg,#b4235a,#e8a6c2);opacity:.65;
+}
+.stat:hover{box-shadow:0 16px 38px rgba(82,37,64,.10);border-color:#e4c4d4}
+.stat-value{letter-spacing:-.025em}
+.stat-icon{color:#a72c61}
+.analytics-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:18px;margin-bottom:18px}
+.health-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.health-item{padding:13px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.health-label{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:10px;font-weight:750}
+.health-value{margin-top:6px;font-size:18px;font-weight:850}
+.health-sub{margin-top:3px;font-size:9px;color:var(--muted)}
+.progress{height:5px;margin-top:8px;border-radius:999px;background:#f1e7ed;overflow:hidden}
+.progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#b4235a,#e6a0bd)}
+.orders-section{padding-bottom:15px}
+.orders-table-wrap{overflow:auto;border:1px solid #eee1e8;border-radius:14px}
+.orders-table{width:100%;border-collapse:collapse;min-width:650px}
+.orders-table th{
+  padding:11px 13px;text-align:left;background:#fcf7fa;color:#967486;
+  font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:850;
+  border-bottom:1px solid #eee1e8;
+}
+.orders-table td{padding:12px 13px;border-bottom:1px solid #f2e9ee;font-size:11px;vertical-align:middle}
+.orders-table tbody tr:last-child td{border-bottom:0}
+.orders-table tbody tr:hover{background:#fffbfd}
+.order-number{font-weight:850;color:#7f214e}
+.order-customer{font-weight:700}.order-date{color:var(--muted);font-size:9px;margin-top:3px}
+.order-total{font-weight:850;white-space:nowrap}
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:850;text-transform:capitalize;background:#f5edf2;color:var(--ink)}
+.status-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:#b8a4ae}
+.status-badge.pending{background:var(--amber-bg);color:var(--amber)} .status-badge.pending::before{background:#c58a24}
+.status-badge.processing{background:var(--blue-bg);color:var(--blue)} .status-badge.processing::before{background:#5a86b9}
+.status-badge.shipped{background:#f2eefb;color:#7359a5} .status-badge.shipped::before{background:#8064b5}
+.status-badge.delivered{background:var(--green-bg);color:var(--green)} .status-badge.delivered::before{background:#3b966e}
+.status-badge.cancelled{background:var(--red-bg);color:var(--red)} .status-badge.cancelled::before{background:#bf6666}
+.orders-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px}
+.orders-meta{font-size:10px;color:var(--muted)}
+.pagination{display:flex;align-items:center;gap:6px}
+.page-btn{
+  min-width:31px;height:31px;padding:0 9px;border:1px solid var(--line);border-radius:9px;
+  background:#fff;color:var(--ink);font-size:10px;font-weight:800;cursor:pointer;
+}
+.page-btn:hover:not(:disabled){border-color:#d99ab6;background:#fff7fa}
+.page-btn.active{background:#b4235a;border-color:#b4235a;color:#fff}
+.page-btn:disabled{opacity:.45;cursor:not-allowed}
+.page-dots{font-size:11px;color:var(--muted);padding:0 2px}
+.orders-loading{padding:25px;text-align:center;color:var(--muted);font-size:10px}
+@media(max-width:760px){
+  .analytics-grid{grid-template-columns:1fr}
+  .health-grid{gap:8px}
+  .orders-footer{align-items:flex-start;flex-direction:column}
+  .pagination{width:100%;justify-content:flex-end;flex-wrap:wrap}
+}
+
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}.today-grid,.two{grid-template-columns:1fr}.actions{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){
+
+  .topbar{
+    align-items:flex-start;
+    min-width:0;
+  }
+
+  .topbar > div:first-child{
+    min-width:0;
+  }
+
+  .topbar h1{
+    font-size:24px;
+  }
+
+  /* Keep the Admin dropdown available on mobile. */
+  .admin-profile{
+    display:block !important;
+    position:relative;
+    flex:0 0 auto;
+    margin-left:10px !important;
+  }
+
+  .admin-profile-trigger{
+    max-width:46px;
+    padding:7px;
+    gap:0;
+  }
+
+  .admin-profile-trigger .profile-details{
+    display:none;
+  }
+
+  .admin-profile-trigger .profile-chevron{
+    display:none;
+  }
+
+  .admin-profile-menu{
+    right:0;
+    left:auto;
+    min-width:150px;
+    z-index:1000;
+  }
+
+  .hero{
+    padding:20px;
+  }
+
+  .hero-mark{
+    display:none;
+  }
+
+  .hero h2{
+    font-size:21px;
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+
+  .stat{
+    padding:13px;
+    min-width:0;
+  }
+
+  .stat-value{
+    font-size:20px;
+  }
+
+  .status-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .actions{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .action{
+    min-width:0;
+  }
+
+  .section{
+    padding:14px;
+    min-width:0;
+  }
+
+  .chart{
+    gap:4px;
+  }
+}
+/* Dashboard-specific mobile corrections must override admin.css. */
+@media (max-width:700px){
+  .admin-profile{
+    display:block !important;
+    position:relative;
+  }
+
+  .admin-profile-trigger{
+    display:flex !important;
+  }
+
+  .admin-profile-menu{
+    position:absolute;
+    right:0;
+    left:auto;
+    z-index:1000;
+  }
+}
+</style>
+</head>
+<body data-admin-page="dashboard">
+<div class="admin-layout">
+<div id="admin-navigation"></div>
+
+<main class="main-content">
+<header class="topbar">
+    <div>
+        <p class="page-label">ADMIN PANEL</p>
+        <h1>Dashboard</h1>
+    </div>
+
+    <div
+    class="admin-profile"
+    id="adminProfile"
+    style="margin-left: auto;"
+>
+
+    <button
+        type="button"
+        class="admin-profile-trigger"
+        id="adminProfileTrigger"
+        aria-expanded="false"
+        aria-haspopup="true"
+    >
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div class="profile-details">
+
+            <strong id="adminName">
+                Admin
+            </strong>
+
+            <span>
+                Administrator
+            </span>
+
+        </div>
+
+        <span class="profile-chevron">
+            ⌄
+        </span>
+
+    </button>
+
+
+    <div
+        class="admin-profile-menu"
+        id="adminProfileMenu"
+    >
+
+        <button
+            type="button"
+            id="logoutBtn"
+            class="profile-menu-item logout-item"
+        >
+
+            <span>
+                ↪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+</header>
+
+<section class="hero">
+  <small>STORE OVERVIEW</small>
+  <h2>Good to see you, <span id="heroName">Admin</span> ✨</h2>
+  <p>Track your store performance, orders, customers and revenue from one place.</p>
+  <div class="hero-mark">✦</div>
+</section>
+
+<section class="grid">
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Total Products</span><span class="stat-icon">✦</span></div><div class="stat-value loading" id="totalProducts">—</div><div class="stat-foot" id="productFoot">Store catalogue</div></div>
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Total Customers</span><span class="stat-icon">♙</span></div><div class="stat-value loading" id="totalCustomers">—</div><div class="stat-foot">Registered customers</div></div>
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Total Orders</span><span class="stat-icon">▣</span></div><div class="stat-value loading" id="totalOrders">—</div><div class="stat-foot">All-time orders</div></div>
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Total Revenue</span><span class="stat-icon">₹</span></div><div class="stat-value loading" id="totalRevenue">—</div><div class="stat-foot">Generated revenue</div></div>
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Active Coupons</span><span class="stat-icon">%</span></div><div class="stat-value loading" id="activeCoupons">—</div><div class="stat-foot">Currently available</div></div>
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Active Banners</span><span class="stat-icon">◇</span></div><div class="stat-value loading" id="activeBanners">—</div><div class="stat-foot">Homepage banners</div></div>
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Low Stock</span><span class="stat-icon">!</span></div><div class="stat-value loading" id="lowStock">—</div><div class="stat-foot">Needs attention</div></div>
+  <div class="card stat"><div class="stat-top"><span class="stat-label">Pending Orders</span><span class="stat-icon">◷</span></div><div class="stat-value loading" id="pendingOrders">—</div><div class="stat-foot">Awaiting processing</div></div>
+</section>
+
+<section class="card section">
+ <div class="section-head"><div><div class="section-kicker">TODAY</div><h2>Today's performance</h2></div><span class="section-note" id="todayDate">—</span></div>
+ <div class="today-grid">
+   <div class="status-grid">
+    <div class="status"><span>● Total Orders</span><strong id="todayOrders">—</strong></div>
+    <div class="status"><span>● Processing</span><strong id="todayProcessing">—</strong></div>
+    <div class="status"><span>● Shipped</span><strong id="todayShipped">—</strong></div>
+    <div class="status"><span>● Delivered</span><strong id="todayDelivered">—</strong></div>
+    <div class="status"><span>● Cancelled</span><strong id="todayCancelled">—</strong></div>
+   </div>
+   <div class="revenue-box"><span class="stat-label">TODAY'S REVENUE</span><div class="revenue-main" id="todayRevenue">—</div><div class="compare" id="todayCompare">Compared with yesterday</div></div>
+ </div>
+</section>
+
+<section class="card section">
+ <div class="section-head"><div><div class="section-kicker">QUICK ACTIONS</div><h2>Manage your store</h2></div></div>
+ <div class="actions">
+  <a class="action" href="products.html"><i>✦</i><div><b>Products</b><span>Add & manage catalogue</span></div></a>
+  <a class="action" href="orders.html"><i>▣</i><div><b>Orders</b><span>Review customer orders</span></div></a>
+  <a class="action" href="customers.html"><i>♙</i><div><b>Customers</b><span>View customer accounts</span></div></a>
+  <a class="action" href="coupons.html"><i>%</i><div><b>Coupons</b><span>Manage offers</span></div></a>
+ </div>
+</section>
+
+<div class="analytics-grid">
+ <section class="card section">
+  <div class="section-head"><div><div class="section-kicker">REVENUE TREND</div><h2>Last 7 days</h2></div><span class="section-note">Daily revenue</span></div>
+  <div class="chart" id="revenueChart"></div>
+ </section>
+ <section class="card section">
+  <div class="section-head"><div><div class="section-kicker">STORE HEALTH</div><h2>At a glance</h2></div><span class="section-note">Live summary</span></div>
+  <div class="health-grid">
+    <div class="health-item"><div class="health-label"><span>Active catalogue</span><span id="activeProductRate">—</span></div><div class="health-value" id="healthProducts">—</div><div class="health-sub">active products</div><div class="progress"><span id="productProgress" style="width:0%"></span></div></div>
+    <div class="health-item"><div class="health-label"><span>Pending share</span><span id="pendingRate">—</span></div><div class="health-value" id="healthPending">—</div><div class="health-sub">orders awaiting processing</div><div class="progress"><span id="pendingProgress" style="width:0%"></span></div></div>
+    <div class="health-item"><div class="health-label"><span>Average order value</span></div><div class="health-value" id="healthAov">—</div><div class="health-sub">all-time revenue ÷ orders</div></div>
+    <div class="health-item"><div class="health-label"><span>Stock attention</span></div><div class="health-value" id="healthLowStock">—</div><div class="health-sub">active products at ≤ 5 units</div></div>
+  </div>
+ </section>
+</div>
+
+<section class="card section orders-section">
+ <div class="section-head">
+  <div><div class="section-kicker">ORDER MANAGEMENT</div><h2>Last 20 Orders</h2></div>
+  <a class="section-note" href="orders.html">Open full orders →</a>
+ </div>
+ <div class="orders-table-wrap">
+  <table class="orders-table">
+   <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Status</th><th>Total</th></tr></thead>
+   <tbody id="ordersTableBody"><tr><td colspan="5"><div class="orders-loading">Loading orders…</div></td></tr></tbody>
+  </table>
+ </div>
+ <div class="orders-footer">
+   <div class="orders-meta" id="ordersMeta">—</div>
+   <div class="pagination" id="ordersPagination"></div>
+ </div>
+</section>
+</main>
+</div>
+
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+/* =========================================================
+   COMMON ADMIN NAVIGATION / PROFILE / LOGOUT
+   Same working pattern as Categories / Customers.
+   ========================================================= */
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const navigationContainer =
+        document.getElementById("admin-navigation");
+
+    if (navigationContainer) {
+        try {
+            const response =
+                await fetch("admin-navigation.html");
+
+            if (!response.ok) {
+                throw new Error(
+                    "Navigation could not be loaded."
+                );
+            }
+
+            navigationContainer.innerHTML =
+                await response.text();
+
+            const currentPage =
+                document.body.dataset.adminPage;
+
+            const activeItem =
+                navigationContainer.querySelector(
+                    `.nav-item[data-page="${currentPage}"]`
+                );
+
+            if (activeItem) {
+                activeItem.classList.add("active");
+
+                /*
+                  The shared navigation still points Dashboard
+                  to admin.html. Only on this dashboard page,
+                  route Dashboard to the new dashboard.html.
+                */
+                activeItem.setAttribute(
+                    "href",
+                    "dashboard.html"
+                );
+            }
+
+        } catch (error) {
+            console.error(
+                "Failed to load admin navigation:",
+                error
+            );
+        }
+    }
+
+
+    /* =====================================================
+       ADMIN DROPDOWN
+       ===================================================== */
+
+    const adminProfile =
+        document.getElementById("adminProfile");
+
+    const adminProfileTrigger =
+        document.getElementById(
+            "adminProfileTrigger"
+        );
+
+    const adminProfileMenu =
+        document.getElementById(
+            "adminProfileMenu"
+        );
+
+    if (
+        adminProfile &&
+        adminProfileTrigger &&
+        adminProfileMenu
+    ) {
+
+        adminProfileTrigger.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                const isOpen =
+                    adminProfile.classList.toggle(
+                        "open"
+                    );
+
+                adminProfileTrigger.setAttribute(
+                    "aria-expanded",
+                    isOpen ? "true" : "false"
+                );
+            }
+        );
+
+        adminProfileMenu.addEventListener(
+            "click",
+            event => event.stopPropagation()
+        );
+
+        document.addEventListener(
+            "click",
+            () => {
+
+                adminProfile.classList.remove(
+                    "open"
+                );
+
+                adminProfileTrigger.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            }
+        );
+    }
+
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    const logoutBtn =
+        document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            async () => {
+
+                logoutBtn.disabled = true;
+
+                try {
+
+                    const { error } =
+                        await supabase.auth.signOut();
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    window.location.href =
+                        "index.html";
+
+                } catch (error) {
+
+                    console.error(
+                        "Logout failed:",
+                        error
+                    );
+
+                    logoutBtn.disabled = false;
+
+                    showDashboardNotice(
+                        "Unable to logout. Please try again."
+                    );
+                }
+            }
+        );
+    }
+
+
+    await Promise.all([
+        loadAdminProfile(),
+        loadDashboard(),
+        loadOrdersPage(1)
+    ]);
+});
+
+
+/* =========================================================
+   ADMIN PROFILE
+   ========================================================= */
+
+async function loadAdminProfile() {
+
+    try {
+
+        const {
+            data: { user }
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+            return;
+        }
+
+        const { data, error } =
+            await supabase
+                .from("profiles")
+                .select("full_name")
+                .eq("id", user.id)
+                .maybeSingle();
+
+        if (error) {
+            throw error;
+        }
+
+        const name =
+            data?.full_name ||
+            "Admin";
+
+        const adminName =
+            document.getElementById(
+                "adminName"
+            );
+
+        if (adminName) {
+            adminName.textContent = name;
+        }
+
+        const heroName =
+            document.getElementById(
+                "heroName"
+            );
+
+        if (heroName) {
+            heroName.textContent = name;
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to load admin profile:",
+            error
+        );
+    }
+}
+
+
+function showDashboardNotice(message) {
+    let notice = document.getElementById("dashboardNotice");
+    if (!notice) {
+        notice = document.createElement("div");
+        notice.id = "dashboardNotice";
+        notice.style.cssText = "position:fixed;right:22px;bottom:22px;z-index:2000;max-width:360px;padding:13px 16px;border:1px solid #ecc8d9;border-radius:13px;background:#fff7fa;color:#7f214e;box-shadow:0 16px 35px rgba(82,37,64,.14);font-size:11px;font-weight:750;";
+        document.body.appendChild(notice);
+    }
+    notice.textContent = message;
+    clearTimeout(window.__dashboardNoticeTimer);
+    window.__dashboardNoticeTimer = setTimeout(() => notice.remove(), 3000);
+}
+
+/* =========================================================
+   DASHBOARD HELPERS
+   ========================================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
+const money = value =>
+    new Intl.NumberFormat(
+        "en-IN",
+        {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0
+        }
+    ).format(Number(value || 0));
+
+const num = value =>
+    Number(value || 0)
+        .toLocaleString("en-IN");
+
+const safe = value =>
+    String(value ?? "")
+        .replace(
+            /[&<>"']/g,
+            char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[char])
+        );
+
+
+/* =========================================================
+   LOAD DASHBOARD
+   ONE RPC CALL
+   ========================================================= */
+
+const ORDERS_PAGE_SIZE = 8;
+const ORDERS_LIMIT = 20;
+let ordersPage = 1;
+let ordersTotal = 0;
+let ordersLoading = false;
+let latestOrders = [];
+let latestOrderNames = {};
+
+async function loadOrdersPage(page = 1) {
+    if (ordersLoading) return;
+    ordersLoading = true;
+
+    const tbody = $("ordersTableBody");
+    const meta = $("ordersMeta");
+    const pagination = $("ordersPagination");
+
+    if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="5"><div class="orders-loading">Loading orders…</div></td></tr>';
+    }
+
+    try {
+        // Only ever load the latest 20 orders. Pagination works within those 20.
+        if (!latestOrders.length || page === 1 && !latestOrders.length) {
+            const { data, error } = await supabase
+                .from("orders")
+                .select("id,order_number,total_amount,status,created_at,user_id")
+                .order("created_at", { ascending: false })
+                .limit(ORDERS_LIMIT);
+
+            if (error) throw error;
+
+            latestOrders = data || [];
+            latestOrderNames = {};
+
+            const userIds = [...new Set(latestOrders.map(o => o.user_id).filter(Boolean))];
+            if (userIds.length) {
+                const { data: profiles, error: profileError } = await supabase
+                    .from("profiles")
+                    .select("id,full_name")
+                    .in("id", userIds);
+
+                if (profileError) throw profileError;
+
+                latestOrderNames = Object.fromEntries(
+                    (profiles || []).map(profile => [profile.id, profile.full_name || "Customer"])
+                );
+            }
+        }
+
+        ordersTotal = Math.min(latestOrders.length, ORDERS_LIMIT);
+        const totalPages = Math.max(1, Math.ceil(ordersTotal / ORDERS_PAGE_SIZE));
+        ordersPage = Math.min(Math.max(1, page), totalPages);
+
+        const from = (ordersPage - 1) * ORDERS_PAGE_SIZE;
+        const rows = latestOrders.slice(from, from + ORDERS_PAGE_SIZE);
+
+        renderOrdersTable(rows, latestOrderNames);
+        renderOrdersPagination();
+    } catch (error) {
+        console.error("Orders load failed:", error);
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="5"><div class="orders-loading">Unable to load orders.</div></td></tr>';
+        }
+        if (meta) meta.textContent = "Orders unavailable";
+        if (pagination) pagination.innerHTML = "";
+    } finally {
+        ordersLoading = false;
+    }
+}
+
+function renderOrdersTable(orders, names) {
+    const tbody = $("ordersTableBody");
+    if (!tbody) return;
+
+    if (!orders.length) {
+        tbody.innerHTML = '<tr><td colspan="5"><div class="orders-loading">No orders found.</div></td></tr>';
+        $("ordersMeta").textContent = "0 orders";
+        return;
+    }
+
+    tbody.innerHTML = orders.map(order => {
+        const status = String(order.status || "pending").toLowerCase();
+        const date = order.created_at
+            ? new Intl.DateTimeFormat("en-IN", { day:"2-digit", month:"short", year:"numeric" }).format(new Date(order.created_at))
+            : "—";
+
+        return `
+            <tr>
+                <td><div class="order-number">${safe(order.order_number || "—")}</div></td>
+                <td><div class="order-customer">${safe(names[order.user_id] || "Customer")}</div></td>
+                <td><div class="order-date">${safe(date)}</div></td>
+                <td><span class="status-badge ${safe(status)}">${safe(status)}</span></td>
+                <td><div class="order-total">${safe(money(order.total_amount))}</div></td>
+            </tr>
+        `;
+    }).join("");
+
+    const start = (ordersPage - 1) * ORDERS_PAGE_SIZE + 1;
+    const end = Math.min(ordersPage * ORDERS_PAGE_SIZE, ordersTotal);
+    $("ordersMeta").textContent = `Showing ${num(start)}–${num(end)} of ${num(ordersTotal)} orders`;
+}
+
+function renderOrdersPagination() {
+    const container = $("ordersPagination");
+    if (!container) return;
+
+    const totalPages = Math.ceil(ordersTotal / ORDERS_PAGE_SIZE);
+    if (totalPages <= 1) {
+        container.innerHTML = "";
+        return;
+    }
+
+    const pages = [];
+    const add = n => { if (!pages.includes(n)) pages.push(n); };
+
+    add(1);
+    if (ordersPage > 3) pages.push("…");
+    for (let n = Math.max(2, ordersPage - 1); n <= Math.min(totalPages - 1, ordersPage + 1); n++) add(n);
+    if (ordersPage < totalPages - 2) pages.push("…");
+    if (totalPages > 1) add(totalPages);
+
+    container.innerHTML = `
+        <button class="page-btn" type="button" data-page="${ordersPage - 1}" ${ordersPage === 1 ? "disabled" : ""}>‹</button>
+        ${pages.map(page => page === "…"
+            ? '<span class="page-dots">…</span>'
+            : `<button class="page-btn ${page === ordersPage ? "active" : ""}" type="button" data-page="${page}">${page}</button>`
+        ).join("")}
+        <button class="page-btn" type="button" data-page="${ordersPage + 1}" ${ordersPage === totalPages ? "disabled" : ""}>›</button>
+    `;
+
+    container.querySelectorAll("[data-page]").forEach(button => {
+        button.addEventListener("click", () => {
+            const page = Number(button.dataset.page);
+            if (page >= 1 && page <= totalPages && page !== ordersPage) {
+                loadOrdersPage(page);
+            }
+        });
+    });
+}
+
+async function loadDashboard() {
+
+    try {
+
+        /*
+         * Prefer the database function when it exists.
+         * This keeps the dashboard fast in production.
+         */
+        const {
+            data: rpcData,
+            error: rpcError
+        } = await supabase.rpc(
+            "get_admin_dashboard_summary"
+        );
+
+        if (!rpcError && rpcData) {
+            renderDashboard(
+                Array.isArray(rpcData)
+                    ? (rpcData[0] || {})
+                    : rpcData
+            );
+            return;
+        }
+
+        /*
+         * If the RPC has not been created yet (or its name differs),
+         * load the same dashboard metrics directly.
+         * This prevents the UI from staying blank.
+         */
+        console.warn(
+            "Dashboard RPC unavailable. Using direct queries:",
+            rpcError?.message || "No RPC data"
+        );
+
+        const dashboardData =
+            await loadDashboardDirect();
+
+        renderDashboard(
+            dashboardData
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard load failed:",
+            error
+        );
+
+        showDashboardError(
+            error.message
+        );
+    }
+}
+
+
+async function loadDashboardDirect() {
+
+    const todayStart =
+        new Date();
+
+    todayStart.setHours(
+        0, 0, 0, 0
+    );
+
+    const tomorrowStart =
+        new Date(
+            todayStart
+        );
+
+    tomorrowStart.setDate(
+        tomorrowStart.getDate() + 1
+    );
+
+    const yesterdayStart =
+        new Date(
+            todayStart
+        );
+
+    yesterdayStart.setDate(
+        yesterdayStart.getDate() - 1
+    );
+
+    const sevenDaysStart =
+        new Date(
+            todayStart
+        );
+
+    sevenDaysStart.setDate(
+        sevenDaysStart.getDate() - 6
+    );
+
+
+    const [
+        productsResult,
+        customersResult,
+        ordersResult,
+        couponsResult,
+        bannersResult
+    ] = await Promise.all([
+
+        supabase
+            .from("products")
+            .select(
+                "id,is_active,stock_quantity",
+                { count: "exact" }
+            ),
+
+        supabase
+            .from("profiles")
+            .select(
+                "id",
+                { count: "exact" }
+            )
+            .eq(
+                "role",
+                "customer"
+            ),
+
+        supabase
+            .from("orders")
+            .select(
+                "id,status,total_amount,created_at",
+                { count: "exact" }
+            ),
+
+        supabase
+            .from("coupons")
+            .select(
+                "id",
+                { count: "exact" }
+            )
+            .eq(
+                "is_active",
+                true
+            ),
+
+        supabase
+            .from("banners")
+            .select(
+                "id",
+                { count: "exact" }
+            )
+            .eq(
+                "is_active",
+                true
+            ),
+
+    ]);
+
+
+    const results = [
+        productsResult,
+        customersResult,
+        ordersResult,
+        couponsResult,
+        bannersResult
+    ];
+
+    for (const result of results) {
+
+        if (result.error) {
+            throw result.error;
+        }
+    }
+
+
+    const products =
+        productsResult.data || [];
+
+    const customersCount =
+        customersResult.count || 0;
+
+    const orders =
+        ordersResult.data || [];
+
+    const couponsCount =
+        couponsResult.count || 0;
+
+    const bannersCount =
+        bannersResult.count || 0;
+
+
+    const activeProducts =
+        products.filter(
+            product =>
+                product.is_active
+        ).length;
+
+    const lowStockProducts =
+        products.filter(
+            product =>
+                product.is_active &&
+                Number(
+                    product.stock_quantity || 0
+                ) <= 5
+        ).length;
+
+
+    const todayOrders =
+        orders.filter(
+            order =>
+                new Date(order.created_at) >=
+                todayStart &&
+                new Date(order.created_at) <
+                tomorrowStart
+        );
+
+    const yesterdayOrders =
+        orders.filter(
+            order =>
+                new Date(order.created_at) >=
+                yesterdayStart &&
+                new Date(order.created_at) <
+                todayStart
+        );
+
+
+    const revenue =
+        list =>
+            list.reduce(
+                (sum, order) =>
+                    sum +
+                    Number(
+                        order.total_amount || 0
+                    ),
+                0
+            );
+
+
+    const totalRevenue =
+        revenue(orders);
+
+    const todayRevenue =
+        revenue(todayOrders);
+
+    const yesterdayRevenue =
+        revenue(yesterdayOrders);
+
+
+    const statusCount =
+        (list, status) =>
+            list.filter(
+                order =>
+                    String(
+                        order.status || ""
+                    ).toLowerCase() === status
+            ).length;
+
+
+    const pendingOrders =
+        statusCount(
+            orders,
+            "pending"
+        );
+
+
+    const revenue7d =
+        [];
+
+    for (
+        let i = 0;
+        i < 7;
+        i++
+    ) {
+
+        const day =
+            new Date(
+                sevenDaysStart
+            );
+
+        day.setDate(
+            sevenDaysStart.getDate() + i
+        );
+
+        const nextDay =
+            new Date(day);
+
+        nextDay.setDate(
+            day.getDate() + 1
+        );
+
+        const dayOrders =
+            orders.filter(
+                order => {
+
+                    const created =
+                        new Date(
+                            order.created_at
+                        );
+
+                    return (
+                        created >= day &&
+                        created < nextDay
+                    );
+                }
+            );
+
+        revenue7d.push({
+
+            label:
+                new Intl.DateTimeFormat(
+                    "en-IN",
+                    {
+                        weekday: "short"
+                    }
+                ).format(day),
+
+            revenue:
+                revenue(dayOrders)
+        });
+    }
+
+
+    return {
+
+        summary: {
+
+            total_products:
+                productsResult.count || 0,
+
+            active_products:
+                activeProducts,
+
+            total_customers:
+                customersCount,
+
+            total_orders:
+                ordersResult.count || 0,
+
+            total_revenue:
+                totalRevenue,
+
+            active_coupons:
+                couponsCount,
+
+            active_banners:
+                bannersCount,
+
+            low_stock_products:
+                lowStockProducts,
+
+            pending_orders:
+                pendingOrders
+        },
+
+        today_orders:
+            todayOrders.length,
+
+        today_processing:
+            statusCount(
+                todayOrders,
+                "processing"
+            ),
+
+        today_shipped:
+            statusCount(
+                todayOrders,
+                "shipped"
+            ),
+
+        today_delivered:
+            statusCount(
+                todayOrders,
+                "delivered"
+            ),
+
+        today_cancelled:
+            statusCount(
+                todayOrders,
+                "cancelled"
+            ),
+
+        today_revenue:
+            todayRevenue,
+
+        yesterday_revenue:
+            yesterdayRevenue,
+
+        revenue_7d:
+            revenue7d,
+
+    };
+}
+
+
+/* =========================================================
+   RENDER DASHBOARD
+   ========================================================= */
+
+function renderDashboard(data) {
+
+    const summary =
+        data.summary || data;
+
+    setValue(
+        "totalProducts",
+        num(summary.total_products)
+    );
+
+    setValue(
+        "totalCustomers",
+        num(summary.total_customers)
+    );
+
+    setValue(
+        "totalOrders",
+        num(summary.total_orders)
+    );
+
+    setValue(
+        "totalRevenue",
+        money(summary.total_revenue)
+    );
+
+    setValue(
+        "activeCoupons",
+        num(summary.active_coupons)
+    );
+
+    setValue(
+        "activeBanners",
+        num(summary.active_banners)
+    );
+
+    setValue(
+        "lowStock",
+        num(summary.low_stock_products)
+    );
+
+    setValue(
+        "pendingOrders",
+        num(summary.pending_orders)
+    );
+
+
+    setValue(
+        "todayOrders",
+        num(
+            data.today_orders ??
+            summary.today_orders
+        )
+    );
+
+    setValue(
+        "todayProcessing",
+        num(
+            data.today_processing ??
+            summary.today_processing
+        )
+    );
+
+    setValue(
+        "todayShipped",
+        num(
+            data.today_shipped ??
+            summary.today_shipped
+        )
+    );
+
+    setValue(
+        "todayDelivered",
+        num(
+            data.today_delivered ??
+            summary.today_delivered
+        )
+    );
+
+    setValue(
+        "todayCancelled",
+        num(
+            data.today_cancelled ??
+            summary.today_cancelled
+        )
+    );
+
+    setValue(
+        "todayRevenue",
+        money(
+            data.today_revenue ??
+            summary.today_revenue
+        )
+    );
+
+
+    const todayRevenue =
+        Number(data.today_revenue || 0);
+
+    const yesterdayRevenue =
+        Number(data.yesterday_revenue || 0);
+
+    const difference =
+        todayRevenue - yesterdayRevenue;
+
+    const comparison =
+        $("todayCompare");
+
+    if (comparison) {
+
+        if (difference === 0) {
+
+            comparison.textContent =
+                "Same as yesterday";
+
+            comparison.className =
+                "compare";
+
+        } else {
+
+            const percentage =
+                yesterdayRevenue > 0
+                    ? Math.abs(
+                        difference /
+                        yesterdayRevenue *
+                        100
+                    )
+                    : 0;
+
+            comparison.textContent =
+                `${difference > 0 ? "↑" : "↓"} ${
+                    percentage.toFixed(1)
+                }% vs yesterday`;
+
+            comparison.className =
+                "compare " +
+                (
+                    difference > 0
+                        ? "up"
+                        : "down"
+                );
+        }
+    }
+
+
+    const productFoot =
+        $("productFoot");
+
+    if (productFoot) {
+
+        productFoot.textContent =
+            `${num(summary.active_products)} active products`;
+    }
+
+
+    renderRevenueChart(
+        data.revenue_7d || []
+    );
+
+    const totalProducts = Number(summary.total_products || 0);
+    const activeProducts = Number(summary.active_products || 0);
+    const totalOrders = Number(summary.total_orders || 0);
+    const pendingOrders = Number(summary.pending_orders || 0);
+    const totalRevenue = Number(summary.total_revenue || 0);
+
+    const productRate = totalProducts > 0 ? Math.min(100, (activeProducts / totalProducts) * 100) : 0;
+    const pendingRateValue = totalOrders > 0 ? Math.min(100, (pendingOrders / totalOrders) * 100) : 0;
+    const aov = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+    setValue("healthProducts", `${num(activeProducts)} / ${num(totalProducts)}`);
+    setValue("activeProductRate", `${productRate.toFixed(0)}%`);
+    setValue("healthPending", num(pendingOrders));
+    setValue("pendingRate", `${pendingRateValue.toFixed(1)}%`);
+    setValue("healthAov", money(aov));
+    setValue("healthLowStock", num(summary.low_stock_products));
+
+    const productProgress = $("productProgress");
+    const pendingProgress = $("pendingProgress");
+    if (productProgress) productProgress.style.width = `${productRate}%`;
+    if (pendingProgress) pendingProgress.style.width = `${pendingRateValue}%`;
+
+
+    const todayDate =
+        $("todayDate");
+
+    if (todayDate) {
+
+        todayDate.textContent =
+            new Intl.DateTimeFormat(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            ).format(new Date());
+    }
+}
+
+
+function setValue(
+    id,
+    value
+) {
+
+    const element = $(id);
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent = value;
+    element.classList.remove("loading");
+}
+
+
+/* =========================================================
+   REVENUE CHART
+   ========================================================= */
+
+function renderRevenueChart(days) {
+
+    const chart =
+        $("revenueChart");
+
+    if (!chart) {
+        return;
+    }
+
+    if (!days.length) {
+
+        chart.innerHTML =
+            '<div class="empty">No revenue data available</div>';
+
+        return;
+    }
+
+    const maxRevenue =
+        Math.max(
+            ...days.map(
+                item =>
+                    Number(
+                        item.revenue || 0
+                    )
+            ),
+            1
+        );
+
+    chart.innerHTML =
+        days.map(
+            item => {
+
+                const revenue =
+                    Number(
+                        item.revenue || 0
+                    );
+
+                const height =
+                    Math.max(
+                        4,
+                        revenue /
+                        maxRevenue *
+                        100
+                    );
+
+                return `
+                    <div class="bar-wrap">
+                        <div
+                            class="bar"
+                            title="${safe(
+                                money(revenue)
+                            )}"
+                            style="height:${height}%"
+                        ></div>
+
+                        <div class="bar-label">
+                            ${safe(item.label)}
+                        </div>
+                    </div>
+                `;
+            }
+        ).join("");
+}
+
+
+/* =========================================================
+   ERROR STATE
+   ========================================================= */
+
+function showDashboardError(
+    message
+) {
+
+    console.error(
+        "Dashboard error:",
+        message
+    );
+
+    document
+        .querySelectorAll(".loading")
+        .forEach(
+            element => {
+
+                element.textContent =
+                    "—";
+
+                element.classList.remove(
+                    "loading"
+                );
+            }
+        );
+
+    const chart =
+        $("revenueChart");
+
+    if (chart) {
+
+        chart.innerHTML =
+            '<div class="empty">Unable to load dashboard data</div>';
+    }
+
+    const ordersTableBody = $("ordersTableBody");
+    if (ordersTableBody) {
+        ordersTableBody.innerHTML =
+            '<tr><td colspan="5"><div class="orders-loading">Unable to load orders.</div></td></tr>';
+    }
+
+    const ordersMeta = $("ordersMeta");
+    if (ordersMeta) ordersMeta.textContent = "Orders unavailable";
+}
+</script>
+</body>
+</html>

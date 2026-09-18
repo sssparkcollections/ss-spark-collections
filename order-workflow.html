@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Workflow | SS Spark Collections</title>
+<link rel="stylesheet" href="admin.css">
+
+<style>
+/* ============================================================
+   ORDER WORKFLOW
+   Premium configuration UI — aligned with Orders page
+   ============================================================ */
+
+.workflow-page {
+    padding: 28px;
+}
+
+.workflow-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:18px;
+    margin-bottom:22px;
+}
+
+.workflow-header h2 {
+    margin:0 0 6px;
+    font-size:26px;
+    color:#2f1d28;
+}
+
+.workflow-header p {
+    margin:0;
+    color:#6f5a65;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.workflow-actions {
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+}
+
+.workflow-btn {
+    min-height:40px;
+    padding:0 14px;
+    border-radius:10px;
+    border:1px solid #e2c3d4;
+    background:#fff8fc;
+    color:#b04f83;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.workflow-btn.primary {
+    background:#b04f83;
+    border-color:#b04f83;
+    color:#fff;
+}
+
+.workflow-btn:hover:not(:disabled) {
+    border-color:#d78bb5;
+    background:#fdf0f7;
+}
+
+.workflow-btn.primary:hover:not(:disabled) {
+    background:#9e3f73;
+}
+
+.workflow-btn:disabled {
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+.workflow-layout {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 360px;
+    gap:18px;
+    align-items:start;
+}
+
+.workflow-card {
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:16px;
+    box-shadow:0 4px 18px rgba(0,0,0,.04);
+    overflow:hidden;
+}
+
+.workflow-card-head {
+    padding:17px 19px;
+    border-bottom:1px solid #eee;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.workflow-card-head h3 {
+    margin:0;
+    font-size:16px;
+    color:#3f2734;
+}
+
+.workflow-card-head span {
+    font-size:11px;
+    color:#8a7781;
+}
+
+.status-list {
+    padding:12px;
+    display:grid;
+    gap:9px;
+}
+
+.status-row {
+    border:1px solid #ead5e1;
+    border-radius:13px;
+    padding:12px;
+    background:#fffafd;
+}
+
+.status-row-top {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.status-name {
+    font-weight:800;
+    color:#4c3042;
+}
+
+.status-code {
+    display:inline-flex;
+    margin-top:4px;
+    padding:3px 7px;
+    border-radius:6px;
+    background:#f8edf4;
+    color:#95617c;
+    font:600 10px ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+
+.status-actions {
+    margin-top:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.transition-chip {
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:6px 8px;
+    border-radius:999px;
+    background:#fff;
+    border:1px solid #ead5e1;
+    color:#6d4559;
+    font-size:10px;
+    font-weight:750;
+}
+
+.transition-chip::after {
+    content:"→";
+    color:#c16a97;
+}
+
+.transition-chip.off {
+    opacity:.5;
+    text-decoration:line-through;
+}
+
+.empty-mini {
+    padding:18px;
+    text-align:center;
+    color:#8a7781;
+    font-size:12px;
+}
+
+.editor {
+    padding:17px;
+}
+
+.editor-grid {
+    display:grid;
+    gap:12px;
+}
+
+.field {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.field label {
+    font-size:11px;
+    font-weight:800;
+    color:#65515d;
+}
+
+.field input,
+.field select {
+    width:100%;
+    height:40px;
+    padding:0 11px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+    color:#2f2630;
+    outline:none;
+    font-size:13px;
+    box-sizing:border-box;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color:#d78bb5;
+    box-shadow:0 0 0 3px rgba(215,139,181,.10);
+}
+
+.two-fields {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.check-row {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-height:38px;
+    padding:8px 10px;
+    border:1px solid #ead5e1;
+    border-radius:10px;
+    background:#fffafd;
+}
+
+.check-row input {
+    accent-color:#cf2f79;
+}
+
+.check-row label {
+    margin:0;
+    font-size:12px;
+    font-weight:700;
+    color:#4c3042;
+}
+
+.editor-actions {
+    display:flex;
+    gap:8px;
+    margin-top:4px;
+}
+
+.editor-actions .workflow-btn {
+    flex:1;
+}
+
+.flow-card {
+    grid-column:1 / -1;
+}
+
+.flow-wrap {
+    padding:15px;
+    overflow:auto;
+}
+
+.flow-canvas {
+    min-width:760px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0;
+    padding:8px 8px 18px;
+}
+
+.flow-node {
+    width:min(290px, 100%);
+    background:linear-gradient(180deg,#fff,#fff8fc);
+    border:1px solid #e5c8d7;
+    border-radius:14px;
+    padding:11px 13px;
+    box-shadow:0 5px 16px rgba(63,30,48,.06);
+}
+
+.flow-node strong {
+    display:block;
+    font-size:13px;
+    color:#4c3042;
+}
+
+.flow-node code {
+    display:block;
+    margin-top:3px;
+    color:#a15c7d;
+    font-size:9px;
+}
+
+.flow-node-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin-top:8px;
+}
+
+.flow-action {
+    font-size:9px;
+    padding:4px 6px;
+    border-radius:6px;
+    background:#fff;
+    border:1px solid #ead5e1;
+    color:#7b5368;
+}
+
+.flow-arrow {
+    height:30px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    color:#c16a97;
+    font-size:18px;
+    line-height:1;
+}
+
+.flow-arrow small {
+    font-size:8px;
+    color:#9a7a8a;
+    margin-top:-1px;
+}
+
+.flow-note {
+    margin:0 15px 15px;
+    padding:10px 12px;
+    border-radius:10px;
+    background:#fff8fc;
+    border:1px solid #f0dfe8;
+    color:#76596a;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.hidden { display:none !important; }
+
+.loading-state {
+    padding:35px 20px;
+    text-align:center;
+    color:#8a7781;
+    font-size:13px;
+}
+
+@media (max-width:1050px) {
+    .workflow-layout {
+        grid-template-columns:1fr;
+    }
+    .flow-card {
+        grid-column:auto;
+    }
+}
+
+@media (max-width:700px) {
+    .workflow-page {
+        padding:15px;
+    }
+    .workflow-header {
+        flex-direction:column;
+        margin-bottom:15px;
+    }
+    .workflow-header h2 {
+        font-size:22px;
+    }
+    .workflow-actions {
+        width:100%;
+    }
+    .workflow-actions .workflow-btn {
+        flex:1;
+    }
+    .workflow-card-head {
+        padding:14px;
+    }
+    .status-list {
+        padding:10px;
+    }
+    .status-row {
+        padding:11px;
+    }
+    .two-fields {
+        grid-template-columns:1fr;
+    }
+    .flow-wrap {
+        padding:9px;
+    }
+    .flow-canvas {
+        min-width:650px;
+        transform-origin:top left;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    *,*::before,*::after {
+        animation:none !important;
+        transition:none !important;
+    }
+}
+</style>
+</head>
+
+<body data-admin-page="order-workflow">
+
+<div class="admin-layout">
+    <div id="admin-navigation"></div>
+
+    <main class="main-content">
+        <header class="topbar">
+
+    <div>
+
+                <p class="page-label">
+                    ADMIN PANEL
+                </p>
+
+                <h1>
+                    Order Management
+                </h1>
+
+            </div>
+
+    <div
+    class="admin-profile"
+    id="adminProfile"
+    style="margin-left: auto;"
+>
+
+    <button
+        type="button"
+        class="admin-profile-trigger"
+        id="adminProfileTrigger"
+        aria-expanded="false"
+        aria-haspopup="true"
+    >
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div class="profile-details">
+
+            <strong>
+                Admin
+            </strong>
+
+            <span>
+                Administrator
+            </span>
+
+        </div>
+
+        <span class="profile-chevron">
+            ⌄
+        </span>
+
+    </button>
+
+
+    <div
+        class="admin-profile-menu"
+        id="adminProfileMenu"
+    >
+
+        <button
+            type="button"
+            id="logoutBtn"
+            class="profile-menu-item logout-item"
+        >
+
+            <span>
+                ↪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+</header>
+
+        <div class="workflow-page">
+            <div class="workflow-header">
+                <div>
+                    <p class="page-label">SALES</p>
+                    <h2>Order Workflow</h2>
+                    <p>Configure which order-status changes are allowed. Statuses come only from active <strong>ORDER_STATUS</strong> parameters.</p>
+                </div>
+                <div class="workflow-actions">
+                    <button type="button" class="workflow-btn" id="refreshBtn">↻ Refresh</button>
+                    <button type="button" class="workflow-btn primary" id="flowToggleBtn">⌁ View Flow Chart</button>
+                </div>
+            </div>
+
+            <div class="workflow-layout">
+                <section class="workflow-card">
+                    <div class="workflow-card-head">
+                        <h3>Workflow Configuration</h3>
+                        <span id="statusCount">0 statuses</span>
+                    </div>
+                    <div id="statusList" class="status-list">
+                        <div class="loading-state">Loading workflow...</div>
+                    </div>
+                </section>
+
+                <aside class="workflow-card">
+                    <div class="workflow-card-head">
+                        <h3 id="editorTitle">Add Transition</h3>
+                        <span id="editorMode">New</span>
+                    </div>
+                    <div class="editor">
+                        <form id="transitionForm" class="editor-grid" novalidate>
+                            <input type="hidden" id="transitionId">
+
+                            <div class="field">
+                                <label for="fromStatus">From Status</label>
+                                <select id="fromStatus" required></select>
+                            </div>
+
+                            <div class="field">
+                                <label for="toStatus">To Status</label>
+                                <select id="toStatus" required></select>
+                            </div>
+
+                            <div class="field">
+                                <label for="actionName">Action Name</label>
+                                <input id="actionName" maxlength="120" placeholder="e.g. Mark as Packed" required>
+                            </div>
+
+                            <div class="field">
+                                <label for="actionCode">Action Code</label>
+                                <input id="actionCode" maxlength="80" placeholder="e.g. PACK" required>
+                            </div>
+
+                            <div class="two-fields">
+                                <div class="field">
+                                    <label for="displayOrder">Display Order</label>
+                                    <input id="displayOrder" type="number" min="0" step="1" value="10">
+                                </div>
+                                <div class="check-row">
+                                    <input id="isActive" type="checkbox" checked>
+                                    <label for="isActive">Active transition</label>
+                                </div>
+                            </div>
+
+                            <div class="editor-actions">
+                                <button type="button" class="workflow-btn" id="cancelEditBtn">Clear</button>
+                                <button type="submit" class="workflow-btn primary" id="saveTransitionBtn">Save Transition</button>
+                            </div>
+                        </form>
+                    </div>
+                </aside>
+
+                <section class="workflow-card flow-card hidden" id="flowCard">
+                    <div class="workflow-card-head">
+                        <h3>Order Flow Chart</h3>
+                        <span>Active configured transitions</span>
+                    </div>
+                    <div class="flow-wrap">
+                        <div id="flowCanvas" class="flow-canvas"></div>
+                    </div>
+                    <div class="flow-note">
+                        The chart is generated from the same workflow configuration used by Admin Order Details. It is a visual view only; editing is done from the configuration panel.
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="orderAlertStack" class="order-alert-stack" aria-live="polite"></div>
+
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+const $ = (id) => document.getElementById(id);
+
+let statuses = [];
+let transitions = [];
+let editingId = null;
+
+const statusList = $("statusList");
+const flowCard = $("flowCard");
+const flowCanvas = $("flowCanvas");
+const form = $("transitionForm");
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function showOrderAlert(message, type="error", title="") {
+    const stack = $("orderAlertStack");
+    if (!stack) return;
+
+    const alertEl = document.createElement("div");
+    alertEl.className = `order-alert ${type === "error" ? "error" : "success"}`;
+
+    const isError = type === "error";
+    alertEl.innerHTML = `
+        <div class="order-alert-icon">${isError ? "!" : "✓"}</div>
+        <div class="order-alert-content">
+            <div class="order-alert-title">${escapeHtml(title || (isError ? "Something went wrong" : "Done"))}</div>
+            <div class="order-alert-message">${escapeHtml(message || (isError ? "Something went wrong." : "Completed successfully."))}</div>
+        </div>
+    `;
+
+    stack.appendChild(alertEl);
+    setTimeout(() => {
+        alertEl.classList.add("hide");
+        setTimeout(() => alertEl.remove(), 200);
+    }, 2800);
+}
+
+function statusByCode(code) {
+    return statuses.find(s => String(s.parameter_code).toLowerCase() === String(code).toLowerCase());
+}
+
+function statusName(code) {
+    return statusByCode(code)?.parameter_name || code || "-";
+}
+
+async function loadWorkflow() {
+    statusList.innerHTML = '<div class="loading-state">Loading workflow...</div>';
+
+    try {
+        const { data, error } = await supabase.rpc("admin_get_order_workflow_config");
+        if (error) throw error;
+
+        statuses = Array.isArray(data?.statuses) ? data.statuses : [];
+        transitions = Array.isArray(data?.transitions) ? data.transitions : [];
+
+        populateStatusSelects();
+        renderStatusList();
+        renderFlowChart();
+
+        $("statusCount").textContent = `${statuses.length} ${statuses.length === 1 ? "status" : "statuses"}`;
+    } catch (error) {
+        console.error("Workflow loading error:", error);
+        statusList.innerHTML = `
+            <div class="empty-mini">
+                <strong>Unable to load workflow</strong><br>
+                ${escapeHtml(error.message || "Please try again.")}
+            </div>
+        `;
+        showOrderAlert(error.message || "Unable to load workflow.", "error", "Workflow unavailable");
+    }
+}
+
+function populateStatusSelects() {
+    const options = statuses.map(s =>
+        `<option value="${escapeHtml(s.parameter_code)}">${escapeHtml(s.parameter_name)} (${escapeHtml(s.parameter_code)})</option>`
+    ).join("");
+
+    $("fromStatus").innerHTML = options || '<option value="">No active ORDER_STATUS parameters</option>';
+    $("toStatus").innerHTML = options || '<option value="">No active ORDER_STATUS parameters</option>';
+}
+
+function renderStatusList() {
+    if (!statuses.length) {
+        statusList.innerHTML = `
+            <div class="empty-mini">
+                <strong>No active ORDER_STATUS parameters</strong><br>
+                Add/activate statuses from Parameters. This screen never creates statuses.
+            </div>
+        `;
+        return;
+    }
+
+    statusList.innerHTML = statuses.map(status => {
+        const code = String(status.parameter_code);
+        const outgoing = transitions
+            .filter(t => t.is_active && String(t.from_status_code).toLowerCase() === code.toLowerCase())
+            .sort((a,b) => Number(a.display_order||0)-Number(b.display_order||0));
+
+        const chips = outgoing.length
+            ? outgoing.map(t => `
+                <span class="transition-chip">
+                    ${escapeHtml(statusName(t.to_status_code))}
+                </span>
+            `).join("")
+            : '<span class="transition-chip off">No configured next status</span>';
+
+        return `
+            <div class="status-row">
+                <div class="status-row-top">
+                    <div>
+                        <div class="status-name">${escapeHtml(status.parameter_name)}</div>
+                        <span class="status-code">${escapeHtml(code)}</span>
+                    </div>
+                    <button type="button" class="workflow-btn edit-transition-btn" data-from="${escapeHtml(code)}">+ Transition</button>
+                </div>
+                <div class="status-actions">${chips}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;">
+                    ${outgoing.map(t => `
+                        <button type="button" class="workflow-btn edit-existing-btn" data-id="${escapeHtml(t.id)}">
+                            Edit ${escapeHtml(t.action_name)}
+                        </button>
+                    `).join("")}
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    statusList.querySelectorAll(".edit-transition-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            clearForm();
+            $("fromStatus").value = btn.dataset.from;
+            const available = statuses.find(s => String(s.parameter_code).toLowerCase() !== String(btn.dataset.from).toLowerCase());
+            if (available) $("toStatus").value = available.parameter_code;
+            $("actionName").focus();
+        });
+    });
+
+    statusList.querySelectorAll(".edit-existing-btn").forEach(btn => {
+        btn.addEventListener("click", () => editTransition(btn.dataset.id));
+    });
+}
+
+function editTransition(id) {
+    const t = transitions.find(x => String(x.id) === String(id));
+    if (!t) return;
+
+    editingId = t.id;
+    $("transitionId").value = t.id;
+    $("fromStatus").value = t.from_status_code;
+    $("toStatus").value = t.to_status_code;
+    $("actionName").value = t.action_name || "";
+    $("actionCode").value = t.action_code || "";
+    $("displayOrder").value = Number(t.display_order || 0);
+    $("isActive").checked = Boolean(t.is_active);
+
+    $("editorTitle").textContent = "Edit Transition";
+    $("editorMode").textContent = "Editing";
+    $("saveTransitionBtn").textContent = "Update Transition";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function clearForm() {
+    editingId = null;
+    form.reset();
+    $("transitionId").value = "";
+    $("displayOrder").value = 10;
+    $("isActive").checked = true;
+    $("editorTitle").textContent = "Add Transition";
+    $("editorMode").textContent = "New";
+    $("saveTransitionBtn").textContent = "Save Transition";
+}
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const from = $("fromStatus").value;
+    const to = $("toStatus").value;
+    const actionName = $("actionName").value.trim();
+    const actionCode = $("actionCode").value.trim().toUpperCase();
+    const displayOrder = Math.max(0, Number($("displayOrder").value || 0));
+    const isActive = $("isActive").checked;
+
+    if (!from || !to) {
+        showOrderAlert("Please select both From Status and To Status.", "error", "Missing status");
+        return;
+    }
+
+    if (from.toLowerCase() === to.toLowerCase()) {
+        showOrderAlert("From Status and To Status must be different.", "error", "Invalid transition");
+        return;
+    }
+
+    if (!actionName || !actionCode) {
+        showOrderAlert("Action Name and Action Code are required.", "error", "Missing action details");
+        return;
+    }
+
+    const duplicate = transitions.find(t =>
+        String(t.id) !== String(editingId || "") &&
+        String(t.from_status_code).toLowerCase() === from.toLowerCase() &&
+        String(t.to_status_code).toLowerCase() === to.toLowerCase() &&
+        String(t.action_code).toUpperCase() === actionCode
+    );
+
+    if (duplicate) {
+        showOrderAlert("This transition already exists.", "error", "Duplicate transition");
+        return;
+    }
+
+    const button = $("saveTransitionBtn");
+    button.disabled = true;
+    button.textContent = editingId ? "Updating..." : "Saving...";
+
+    try {
+        const { data, error } = await supabase.rpc("admin_upsert_order_workflow_transition", {
+            p_transition_id: editingId || null,
+            p_from_status_code: from,
+            p_to_status_code: to,
+            p_action_code: actionCode,
+            p_action_name: actionName,
+            p_display_order: displayOrder,
+            p_is_active: isActive
+        });
+
+        if (error) throw error;
+
+        showOrderAlert(
+            editingId ? "Workflow transition updated successfully." : "Workflow transition created successfully.",
+            "success",
+            editingId ? "Transition updated" : "Transition saved"
+        );
+
+        clearForm();
+        await loadWorkflow();
+    } catch (error) {
+        console.error("Workflow save error:", error);
+        showOrderAlert(error.message || "Unable to save workflow transition.", "error", "Save failed");
+    } finally {
+        button.disabled = false;
+        button.textContent = editingId ? "Update Transition" : "Save Transition";
+    }
+});
+
+$("cancelEditBtn").addEventListener("click", clearForm);
+$("refreshBtn").addEventListener("click", loadWorkflow);
+
+$("flowToggleBtn").addEventListener("click", () => {
+    const hidden = flowCard.classList.toggle("hidden");
+    $("flowToggleBtn").textContent = hidden ? "⌁ View Flow Chart" : "⌁ Hide Flow Chart";
+    if (!hidden) renderFlowChart();
+});
+
+function renderFlowChart() {
+    if (!flowCanvas) return;
+
+    const activeTransitions = transitions
+        .filter(t => t.is_active)
+        .sort((a,b) => Number(a.display_order||0)-Number(b.display_order||0));
+
+    if (!activeTransitions.length) {
+        flowCanvas.innerHTML = '<div class="empty-mini">No active transitions configured.</div>';
+        return;
+    }
+
+    // Build a readable primary chain from configured transitions.
+    // Branches are shown as additional action chips instead of inventing
+    // statuses or forcing a graph library.
+    const incoming = new Set(activeTransitions.map(t => String(t.to_status_code).toLowerCase()));
+    const outgoingMap = new Map();
+
+    activeTransitions.forEach(t => {
+        const key = String(t.from_status_code).toLowerCase();
+        if (!outgoingMap.has(key)) outgoingMap.set(key, []);
+        outgoingMap.get(key).push(t);
+    });
+
+    const roots = statuses
+        .filter(s => outgoingMap.has(String(s.parameter_code).toLowerCase()) &&
+                     !incoming.has(String(s.parameter_code).toLowerCase()))
+        .sort((a,b) => Number(a.display_order||0)-Number(b.display_order||0));
+
+    const start = roots[0] || statuses.find(s => outgoingMap.has(String(s.parameter_code).toLowerCase()));
+
+    const visited = new Set();
+    const nodes = [];
+    let current = start;
+
+    while (current && nodes.length < statuses.length + 2) {
+        const key = String(current.parameter_code).toLowerCase();
+        if (visited.has(key)) break;
+        visited.add(key);
+        nodes.push(current);
+
+        const outs = (outgoingMap.get(key) || []).sort((a,b) => Number(a.display_order||0)-Number(b.display_order||0));
+        const next = outs.find(t => !visited.has(String(t.to_status_code).toLowerCase()));
+        current = next ? statusByCode(next.to_status_code) : null;
+    }
+
+    // Include disconnected statuses as compact terminal cards.
+    const remaining = statuses.filter(s => !visited.has(String(s.parameter_code).toLowerCase()));
+
+    const pieces = [];
+    nodes.forEach((node, index) => {
+        const key = String(node.parameter_code).toLowerCase();
+        const outs = outgoingMap.get(key) || [];
+        pieces.push(`
+            <div class="flow-node">
+                <strong>${escapeHtml(node.parameter_name)}</strong>
+                <code>${escapeHtml(node.parameter_code)}</code>
+                <div class="flow-node-actions">
+                    ${outs.map(t => `<span class="flow-action">${escapeHtml(t.action_name)} → ${escapeHtml(statusName(t.to_status_code))}</span>`).join("")}
+                </div>
+            </div>
+        `);
+        if (index < nodes.length - 1) pieces.push('<div class="flow-arrow">↓<small>next status</small></div>');
+    });
+
+    if (remaining.length) {
+        if (nodes.length) pieces.push('<div class="flow-arrow">⋮<small>other configured statuses</small></div>');
+        remaining.forEach((node, idx) => {
+            const outs = outgoingMap.get(String(node.parameter_code).toLowerCase()) || [];
+            pieces.push(`
+                <div class="flow-node">
+                    <strong>${escapeHtml(node.parameter_name)}</strong>
+                    <code>${escapeHtml(node.parameter_code)}</code>
+                    <div class="flow-node-actions">
+                        ${outs.map(t => `<span class="flow-action">${escapeHtml(t.action_name)} → ${escapeHtml(statusName(t.to_status_code))}</span>`).join("") || '<span class="flow-action">No outgoing transition</span>'}
+                    </div>
+                </div>
+            `);
+            if (idx < remaining.length - 1) pieces.push('<div class="flow-arrow">↓<small>status</small></div>');
+        });
+    }
+
+    flowCanvas.innerHTML = pieces.join("");
+}
+
+document.addEventListener("DOMContentLoaded", loadWorkflow);
+</script>
+
+<script type="module">
+
+    import { supabase }
+        from "./supabase-client.js";
+
+
+    /* =====================================================
+       LOAD NAVIGATION
+       ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+            const navigationContainer =
+                document.getElementById(
+                    "admin-navigation"
+                );
+
+            if (!navigationContainer) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "admin-navigation.html"
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Navigation could not be loaded."
+                    );
+                }
+
+
+                const navigationHTML =
+                    await response.text();
+
+
+                navigationContainer.innerHTML =
+                    navigationHTML;
+
+
+                /* =================================================
+                   ACTIVE NAVIGATION
+                   ================================================= */
+
+                const currentPage =
+                    document.body.dataset.adminPage;
+
+
+                if (currentPage) {
+
+                    const activeItem =
+                        navigationContainer.querySelector(
+                            `.nav-item[data-page="${currentPage}"]`
+                        );
+
+
+                    if (activeItem) {
+
+                        activeItem.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   ADMIN DROPDOWN
+                   ================================================= */
+
+                const adminProfile =
+                    document.getElementById(
+                        "adminProfile"
+                    );
+
+                const adminProfileTrigger =
+                    document.getElementById(
+                        "adminProfileTrigger"
+                    );
+
+                const adminProfileMenu =
+                    document.getElementById(
+                        "adminProfileMenu"
+                    );
+
+
+                if (
+                    adminProfile &&
+                    adminProfileTrigger &&
+                    adminProfileMenu
+                ) {
+
+                    adminProfileTrigger.addEventListener(
+                        "click",
+                        (event) => {
+
+                            event.stopPropagation();
+
+
+                            const isOpen =
+                                adminProfile.classList.toggle(
+                                    "open"
+                                );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                isOpen
+                                    ? "true"
+                                    : "false"
+                            );
+
+                        }
+                    );
+
+
+                    adminProfileMenu.addEventListener(
+                        "click",
+                        (event) => {
+                            event.stopPropagation();
+                        }
+                    );
+
+
+                    document.addEventListener(
+                        "click",
+                        () => {
+
+                            adminProfile.classList.remove(
+                                "open"
+                            );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   LOGOUT
+                   ================================================= */
+
+                const logoutBtn =
+                    document.getElementById(
+                        "logoutBtn"
+                    );
+
+
+                if (logoutBtn) {
+
+                    logoutBtn.addEventListener(
+                        "click",
+                        async () => {
+
+                            logoutBtn.disabled =
+                                true;
+
+
+                            logoutBtn.innerHTML = `
+                                <span>↪</span>
+                                <span>Logging out...</span>
+                            `;
+
+
+                            try {
+
+                                const {
+                                    error
+                                } =
+                                    await supabase
+                                        .auth
+                                        .signOut();
+
+
+                                if (error) {
+                                    throw error;
+                                }
+
+
+                                window.location.href =
+                                    "index.html";
+
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Logout failed:",
+                                    error
+                                );
+
+
+                                logoutBtn.disabled =
+                                    false;
+
+
+                                logoutBtn.innerHTML = `
+                                    <span>↪</span>
+                                    <span>Logout</span>
+                                `;
+
+
+                                showOrderAlert(
+                                    error.message ||
+                                    "Unable to logout. Please try again.",
+                                    "error",
+                                    "Logout failed"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to load admin navigation:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+</script>
+</body>
+</html>
+

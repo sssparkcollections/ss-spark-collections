@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings | SS Spark</title>
+<link rel="stylesheet" href="admin.css">
+
+<style>
+.settings-page{
+    max-width:1180px;
+    margin:0 auto;
+    padding:4px 0 40px;
+}
+.page-intro{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    align-items:flex-end;
+    margin-bottom:20px;
+}
+.page-intro .eyebrow,.section-kicker{
+    color:#987e8d;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.page-intro h2{
+    margin:6px 0 5px;
+    color:#4d263d;
+    font-size:27px;
+}
+.page-intro p{
+    margin:0;
+    color:#8c7482;
+    font-size:13px;
+}
+.settings-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);
+    gap:16px;
+}
+.panel{
+    background:rgba(255,255,255,.94);
+    border:1px solid #ead5e1;
+    border-radius:17px;
+    box-shadow:0 8px 24px rgba(82,37,64,.05);
+    padding:20px;
+    min-width:0;
+}
+.panel-head{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+    margin-bottom:18px;
+}
+.panel-head h3{
+    margin:4px 0 0;
+    color:#4d263d;
+    font-size:18px;
+}
+.panel-head p{
+    margin:6px 0 0;
+    color:#987e8d;
+    font-size:12px;
+    line-height:1.5;
+}
+.setting-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 150px;
+    gap:15px;
+    align-items:end;
+}
+.setting-label{
+    color:#5b3a4c;
+    font-weight:800;
+    font-size:13px;
+}
+.setting-help{
+    margin-top:5px;
+    color:#9b8792;
+    font-size:12px;
+    line-height:1.45;
+}
+.setting-input{
+    width:100%;
+    box-sizing:border-box;
+    border:1px solid #dfcbd7;
+    border-radius:10px;
+    padding:11px 12px;
+    background:#fff;
+    color:#4d263d;
+    font-weight:700;
+    outline:none;
+}
+.setting-input:focus{
+    border-color:#b8849f;
+    box-shadow:0 0 0 3px rgba(184,132,159,.12);
+}
+.actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+    margin-top:18px;
+}
+.primary-btn,.secondary-btn,.danger-btn{
+    border:0;
+    border-radius:10px;
+    padding:10px 14px;
+    font-weight:800;
+    cursor:pointer;
+}
+.primary-btn{
+    background:#6e3656;
+    color:#fff;
+}
+.secondary-btn{
+    background:#f5edf2;
+    color:#5c3048;
+    border:1px solid #e5d3dd;
+}
+.danger-btn{
+    background:#fff0f0;
+    color:#a43e45;
+    border:1px solid #efc9cc;
+}
+.primary-btn:disabled,.secondary-btn:disabled,.danger-btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+.warning{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:#fff8ed;
+    border:1px solid #f0dcc0;
+    border-radius:13px;
+    padding:13px;
+    color:#765638;
+    font-size:12px;
+    line-height:1.5;
+    margin-top:16px;
+}
+.warning strong{display:block;margin-bottom:2px}
+.metric-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+}
+.metric{
+    background:#faf6f8;
+    border:1px solid #eadde4;
+    border-radius:12px;
+    padding:13px;
+    min-width:0;
+}
+.metric span{
+    display:block;
+    color:#987e8d;
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+}
+.metric strong{
+    display:block;
+    color:#4d263d;
+    margin-top:6px;
+    font-size:20px;
+}
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:12px;
+    font-weight:800;
+    color:#4e765c;
+}
+.status-dot{
+    width:8px;height:8px;border-radius:50%;
+    background:#62a978;
+}
+.table-wrap{
+    overflow:auto;
+    border:1px solid #eadde4;
+    border-radius:12px;
+}
+.history-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:680px;
+}
+.history-table th{
+    background:#faf6f8;
+    color:#8e7785;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    text-align:left;
+    padding:11px 12px;
+}
+.history-table td{
+    padding:12px;
+    border-top:1px solid #eee3e8;
+    color:#5e4553;
+    font-size:12px;
+}
+.history-table td strong{color:#4d263d}
+.empty{
+    padding:25px;
+    text-align:center;
+    color:#9b8792;
+    font-size:12px;
+}
+.message{
+    margin-top:12px;
+    font-size:12px;
+    font-weight:700;
+}
+.message.success{color:#4e765c}
+.message.error{color:#a43e45}
+.full{grid-column:1 / -1}
+.modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(47,25,39,.42);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    z-index:3000;
+}
+.modal-backdrop.open{display:flex}
+.modal{
+    width:min(460px,100%);
+    background:#fff;
+    border-radius:17px;
+    border:1px solid #ead5e1;
+    box-shadow:0 24px 70px rgba(40,20,32,.22);
+    padding:22px;
+}
+.modal h3{margin:0;color:#4d263d;font-size:19px}
+.modal p{color:#7f6976;font-size:13px;line-height:1.55}
+.modal-summary{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+    margin:15px 0;
+}
+.modal-summary div{
+    background:#faf6f8;
+    border:1px solid #eadde4;
+    border-radius:10px;
+    padding:10px;
+}
+.modal-summary span{
+    display:block;color:#987e8d;font-size:10px;font-weight:800;
+    text-transform:uppercase;
+}
+.modal-summary strong{display:block;margin-top:4px;color:#4d263d}
+
+/* =========================================================
+   PREMIUM ADMIN ALERTS
+   ========================================================= */
+.alert-stack{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    width:min(390px,calc(100vw - 32px));
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:6000;
+    pointer-events:none;
+}
+.admin-alert{
+    display:grid;
+    grid-template-columns:34px minmax(0,1fr) 28px;
+    gap:11px;
+    align-items:start;
+    padding:13px 13px 13px 12px;
+    background:rgba(255,255,255,.98);
+    border:1px solid #ead5e1;
+    border-left:4px solid #8f3f67;
+    border-radius:14px;
+    box-shadow:0 18px 45px rgba(67,33,49,.16);
+    pointer-events:auto;
+    animation:settingsAlertIn .22s ease both;
+}
+.admin-alert.success{border-left-color:#4e8a68}
+.admin-alert.error{border-left-color:#b34d69}
+.admin-alert.warning{border-left-color:#b78331}
+.admin-alert.info{border-left-color:#8a6280}
+.alert-icon{
+    width:34px;height:34px;border-radius:10px;
+    display:grid;place-items:center;
+    background:#fff1f7;color:#8f3f67;
+    font-weight:900;font-size:15px;
+}
+.admin-alert.success .alert-icon{background:#eef8f1;color:#4e8a68}
+.admin-alert.error .alert-icon{background:#fff0f2;color:#b34d69}
+.admin-alert.warning .alert-icon{background:#fff7e8;color:#b78331}
+.admin-alert.info .alert-icon{background:#f4eef5;color:#8a6280}
+.alert-title{color:#4d263d;font-size:12px;font-weight:850;line-height:1.25}
+.alert-message{margin-top:3px;color:#8b7481;font-size:10.5px;line-height:1.45}
+.alert-close{
+    width:28px;height:28px;border:0;background:transparent;
+    color:#a18493;border-radius:8px;font-size:16px;cursor:pointer;
+}
+.alert-close:hover{background:#fff4f8;color:#7b3157}
+@keyframes settingsAlertIn{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+/* Better system-status treatment */
+.status{
+    padding:8px 11px;
+    border:1px solid #e7d9e1;
+    border-radius:999px;
+    background:#fff;
+    box-shadow:0 5px 16px rgba(82,37,64,.04);
+}
+.status-dot{box-shadow:0 0 0 4px rgba(98,169,120,.12)}
+
+/* Premium interaction polish without movement */
+.primary-btn,.secondary-btn,.danger-btn{transition:background .16s ease,border-color .16s ease,box-shadow .16s ease,opacity .16s ease}
+.primary-btn:hover:not(:disabled){background:#5e2b49;box-shadow:0 7px 18px rgba(110,54,86,.16)}
+.secondary-btn:hover:not(:disabled){background:#fff4f8;border-color:#d9b9c9}
+.danger-btn:hover:not(:disabled){background:#ffe9eb;border-color:#e7b7bb}
+
+
+/* =========================================================
+   MAINTENANCE WINDOW SETTING
+   ========================================================= */
+.maintenance-window-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:14px;
+    border:1px solid #eadde4;
+    border-radius:14px;
+    background:linear-gradient(135deg,#fff,#fbf6f9);
+}
+.maintenance-window-copy{min-width:0}
+.maintenance-window-copy .setting-label{display:flex;align-items:center;gap:8px}
+.maintenance-window-icon{
+    width:30px;height:30px;border-radius:9px;
+    display:grid;place-items:center;
+    background:#f7edf3;color:#6e3656;
+    flex:0 0 auto;
+}
+.maintenance-window-control{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    flex:0 0 auto;
+}
+.maintenance-window-value{
+    min-width:31px;
+    text-align:center;
+    color:#6e3656;
+    font-size:11px;
+    font-weight:850;
+}
+.maintenance-switch{
+    position:relative;
+    width:50px;height:28px;
+    flex:0 0 auto;
+}
+.maintenance-switch input{
+    position:absolute;
+    opacity:0;
+    width:1px;height:1px;
+}
+.maintenance-switch-track{
+    position:absolute;
+    inset:0;
+    border-radius:999px;
+    background:#ddd2d9;
+    border:1px solid #d1c0ca;
+    cursor:pointer;
+    transition:.18s ease;
+}
+.maintenance-switch-track::after{
+    content:"";
+    position:absolute;
+    width:22px;height:22px;
+    top:2px;left:2px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 2px 7px rgba(47,25,39,.18);
+    transition:.18s ease;
+}
+.maintenance-switch input:checked + .maintenance-switch-track{
+    background:#6e3656;
+    border-color:#6e3656;
+}
+.maintenance-switch input:checked + .maintenance-switch-track::after{
+    transform:translateX(22px);
+}
+.maintenance-switch input:focus-visible + .maintenance-switch-track{
+    box-shadow:0 0 0 3px rgba(184,132,159,.18);
+}
+.maintenance-switch input:disabled + .maintenance-switch-track{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+@media(max-width:700px){
+    .alert-stack{right:12px;bottom:12px;width:calc(100vw - 24px)}
+    .page-intro{gap:12px}
+    .status{align-self:flex-start}
+    .panel{box-shadow:0 6px 20px rgba(82,37,64,.05)}
+    .table-wrap{border-radius:11px}
+}
+
+@media(max-width:900px){
+    .settings-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+    .settings-page{padding-bottom:90px}
+    .page-intro{align-items:flex-start;flex-direction:column}
+    .setting-row{grid-template-columns:1fr}
+    .metric-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+    .panel{padding:15px}
+    .metric-grid{grid-template-columns:1fr}
+    .page-intro h2{font-size:23px}
+    .actions{flex-direction:column}
+    .actions button{width:100%}
+}
+</style>
+</head>
+
+<body data-admin-page="settings">
+
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div id="admin-navigation"></div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="page-label">ADMIN PANEL</p>
+                <h1>Settings</h1>
+            </div>
+
+            <div class="admin-profile" id="adminProfile" style="margin-left:auto;">
+                <button type="button" class="admin-profile-trigger" id="adminProfileTrigger"
+                        aria-expanded="false" aria-haspopup="true">
+                    <div class="profile-icon">👤</div>
+                    <div class="profile-details">
+                        <strong>Admin</strong>
+                        <span>Administrator</span>
+                    </div>
+                    <span class="profile-chevron">⌄</span>
+                </button>
+
+                <div class="admin-profile-menu" id="adminProfileMenu">
+                    <button type="button" id="logoutBtn" class="profile-menu-item logout-item">
+                        <span>↪</span>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="settings-page">
+
+            <div class="page-intro">
+                <div>
+                    <div class="eyebrow">SYSTEM MAINTENANCE</div>
+                    <h2>Store Settings</h2>
+                    <p>Manage data retention, cleanup operations and maintenance history.</p>
+                </div>
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span id="systemStatus">Checking system...</span>
+                </div>
+            </div>
+
+            <div class="settings-grid">
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="section-kicker">DATA RETENTION</div>
+                            <h3>Transaction Data Purge</h3>
+                            <p>Keep historical transaction data for the configured retention period.</p>
+                        </div>
+                    </div>
+
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">Retention period</div>
+                            <div class="setting-help" id="retentionHelp">
+                                Loading retention parameter...
+                            </div>
+                        </div>
+
+                        <div>
+                            <input id="retentionDays" class="setting-input"
+                                   type="number" min="1" step="1" disabled>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="secondary-btn" id="saveRetentionBtn" disabled>
+                            Save Retention
+                        </button>
+                        <button type="button" class="danger-btn" id="previewPurgeBtn" disabled>
+                            Preview Purge
+                        </button>
+                    </div>
+
+                    <div class="warning">
+                        <div>⚠️</div>
+                        <div>
+                            <strong>Permanent deletion</strong>
+                            Purging permanently removes eligible transaction records.
+                            Always review the preview before confirming.
+                        </div>
+                    </div>
+
+                    <div id="retentionMessage" class="message"></div>
+                </section>
+
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="section-kicker">STORE AVAILABILITY</div>
+                            <h3>Maintenance Window</h3>
+                            <p>Control whether the store maintenance window is enabled.</p>
+                        </div>
+                    </div>
+
+                    <div class="maintenance-window-card">
+                        <div class="maintenance-window-copy">
+                            <div class="setting-label">
+                                <span class="maintenance-window-icon">⚙</span>
+                                <span>Maintenance mode</span>
+                            </div>
+                            <div class="setting-help" id="maintenanceWindowHelp">
+                                When enabled, the store can use this setting to activate its maintenance flow.
+                            </div>
+                        </div>
+
+                        <div class="maintenance-window-control">
+                            <span class="maintenance-window-value" id="maintenanceWindowValue">No</span>
+                            <label class="maintenance-switch" aria-label="Maintenance Window">
+                                <input type="checkbox" id="maintenanceWindowToggle" disabled>
+                                <span class="maintenance-switch-track" aria-hidden="true"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="secondary-btn" id="saveMaintenanceWindowBtn" disabled>
+                            Save Setting
+                        </button>
+                    </div>
+
+                    <div id="maintenanceWindowMessage" class="message"></div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="section-kicker">ABANDONED CARTS</div>
+                            <h3>Cart Cleanup</h3>
+                            <p>Remove carts that have been inactive beyond the configured cleanup period.</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-grid">
+                        <div class="metric">
+                            <span>Eligible carts</span>
+                            <strong id="eligibleCarts">—</strong>
+                        </div>
+                        <div class="metric">
+                            <span>Last cleanup</span>
+                            <strong id="lastCartCleanup">—</strong>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="danger-btn" id="cleanupCartsBtn" disabled>
+                            Clean Abandoned Carts
+                        </button>
+                    </div>
+
+                    <div id="cartMessage" class="message"></div>
+                </section>
+
+                <section class="panel full">
+                    <div class="panel-head">
+                        <div>
+                            <div class="section-kicker">MAINTENANCE</div>
+                            <h3>Cleanup History</h3>
+                            <p>Audit trail for purge and abandoned-cart cleanup operations.</p>
+                        </div>
+                        <button type="button" class="secondary-btn" id="refreshHistoryBtn">Refresh</button>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Data Type</th>
+                                    <th>Retention</th>
+                                    <th>Deleted</th>
+                                    <th>Executed By</th>
+                                    <th>Executed At</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody">
+                                <tr><td colspan="5"><div class="empty">Loading cleanup history...</div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="section-kicker">SYSTEM STATUS</div>
+                            <h3>Maintenance Overview</h3>
+                        </div>
+                    </div>
+
+                    <div class="metric-grid">
+                        <div class="metric">
+                            <span>Eligible orders</span>
+                            <strong id="eligibleOrders">—</strong>
+                        </div>
+                        <div class="metric">
+                            <span>Eligible coupon usage</span>
+                            <strong id="eligibleCouponUsage">—</strong>
+                        </div>
+                        <div class="metric">
+                            <span>Last purge</span>
+                            <strong id="lastPurge">—</strong>
+                        </div>
+                        <div class="metric">
+                            <span>Records deleted</span>
+                            <strong id="lastDeleted">—</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="section-kicker">PURGE SCOPE</div>
+                            <h3>Protected Data</h3>
+                            <p>Accounts, products and cleanup history are not included in transaction purge.</p>
+                        </div>
+                    </div>
+
+                    <div class="setting-help" style="font-size:13px;line-height:1.7;">
+                        <strong>Purged:</strong> old orders, order items through cascade,
+                        and related coupon usage.<br>
+                        <strong>Separate cleanup:</strong> abandoned carts and their cart items.<br>
+                        <strong>Protected:</strong> profiles, products, categories and cleanup logs.
+                    </div>
+                </section>
+
+            </div>
+        </section>
+    </main>
+</div>
+
+<div id="alertStack" class="alert-stack" aria-live="polite" aria-atomic="true"></div>
+
+<div class="modal-backdrop" id="purgeModal">
+    <div class="modal">
+        <h3>Confirm transaction purge</h3>
+        <p id="purgeModalText">Review the records that are eligible for permanent deletion.</p>
+
+        <div class="modal-summary">
+            <div><span>Retention</span><strong id="modalRetention">—</strong></div>
+            <div><span>Orders</span><strong id="modalOrders">—</strong></div>
+            <div><span>Coupon usage</span><strong id="modalCouponUsage">—</strong></div>
+            <div><span>Total</span><strong id="modalTotal">—</strong></div>
+        </div>
+
+        <div class="warning">
+            <div>⚠️</div>
+            <div><strong>This cannot be undone.</strong> Confirm only after reviewing the purge scope.</div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="secondary-btn" id="cancelPurgeBtn">Cancel</button>
+            <button type="button" class="danger-btn" id="confirmPurgeBtn">Confirm Purge</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const $ = id => document.getElementById(id);
+
+    const retentionDays = $("retentionDays");
+    const saveRetentionBtn = $("saveRetentionBtn");
+    const previewPurgeBtn = $("previewPurgeBtn");
+    const cleanupCartsBtn = $("cleanupCartsBtn");
+    const purgeModal = $("purgeModal");
+    const confirmPurgeBtn = $("confirmPurgeBtn");
+    const maintenanceWindowToggle = $("maintenanceWindowToggle");
+    const saveMaintenanceWindowBtn = $("saveMaintenanceWindowBtn");
+
+    let currentRetentionParameter = null;
+    let purgePreview = null;
+    let currentMaintenanceWindowParameter = null;
+    let maintenanceWindowDirty = false;
+
+    async function loadNavigation() {
+        const container = $("admin-navigation");
+        if (!container) return;
+
+        try {
+            const response = await fetch("admin-navigation.html");
+            if (!response.ok) throw new Error("Navigation could not be loaded.");
+
+            container.innerHTML = await response.text();
+
+            const currentPage = document.body.dataset.adminPage;
+            const activeItem = container.querySelector(
+                `.nav-item[data-page="${currentPage}"]`
+            );
+
+            if (activeItem) activeItem.classList.add("active");
+
+        } catch (error) {
+            console.error("Navigation error:", error);
+        }
+    }
+
+    function setupAdminProfile() {
+        const profile = $("adminProfile");
+        const trigger = $("adminProfileTrigger");
+        const menu = $("adminProfileMenu");
+        const logoutBtn = $("logoutBtn");
+
+        if (!profile || !trigger || !menu) return;
+
+        const closeMenu = () => {
+            profile.classList.remove("open");
+            trigger.setAttribute("aria-expanded", "false");
+        };
+
+        const toggleMenu = event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const open = !profile.classList.contains("open");
+            profile.classList.toggle("open", open);
+            trigger.setAttribute("aria-expanded", String(open));
+        };
+
+        trigger.addEventListener("click", toggleMenu);
+
+        menu.addEventListener("click", event => {
+            event.stopPropagation();
+        });
+
+        document.addEventListener("click", event => {
+            if (!profile.contains(event.target)) closeMenu();
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") closeMenu();
+        });
+
+        logoutBtn?.addEventListener("click", async () => {
+            closeMenu();
+            logoutBtn.disabled = true;
+            logoutBtn.setAttribute("aria-busy", "true");
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                window.location.href = "index.html";
+            } catch (error) {
+                console.error("Logout error:", error);
+                showAlert(
+                    "We could not sign you out. Please try again.",
+                    "error",
+                    "Logout failed"
+                );
+            } finally {
+                logoutBtn.disabled = false;
+                logoutBtn.removeAttribute("aria-busy");
+            }
+        });
+    }
+
+    function showAlert(message, type = "success", title = "") {
+        const stack = $("alertStack");
+        if (!stack) return;
+
+        const titles = {
+            success: "Done",
+            error: "Something went wrong",
+            warning: "Attention",
+            info: "Information"
+        };
+        const icons = {
+            success: "✓",
+            error: "!",
+            warning: "!",
+            info: "i"
+        };
+
+        const alertEl = document.createElement("div");
+        alertEl.className = `admin-alert ${type}`;
+        alertEl.innerHTML = `
+            <div class="alert-icon">${icons[type] || "i"}</div>
+            <div>
+                <div class="alert-title">${escapeHtml(title || titles[type] || "Notice")}</div>
+                <div class="alert-message">${escapeHtml(message)}</div>
+            </div>
+            <button type="button" class="alert-close" aria-label="Close">×</button>
+        `;
+
+        const remove = () => {
+            if (!alertEl.isConnected) return;
+            alertEl.style.opacity = "0";
+            alertEl.style.transform = "translateY(6px)";
+            alertEl.style.transition = "opacity .16s ease, transform .16s ease";
+            setTimeout(() => alertEl.remove(), 170);
+        };
+
+        alertEl.querySelector(".alert-close")?.addEventListener("click", remove);
+        stack.appendChild(alertEl);
+        setTimeout(remove, 3200);
+    }
+
+    function formatDate(value) {
+        if (!value) return "—";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "—";
+        return new Intl.DateTimeFormat("en-IN", {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }).format(date);
+    }
+
+    function setMessage(element, text, type = "") {
+        element.textContent = text;
+        element.className = `message ${type}`;
+    }
+
+    async function loadSettings() {
+        try {
+            const { data, error } = await supabase.rpc(
+                "get_admin_settings_summary"
+            );
+
+            if (error) throw error;
+
+            const result = Array.isArray(data) ? data[0] : data;
+
+            currentRetentionParameter =
+                result.retention_parameter || null;
+
+            currentMaintenanceWindowParameter =
+    result.maintenance_window_parameter || null;
+
+if (!currentMaintenanceWindowParameter) {
+    throw new Error(
+        "MAINTENANCE_WINDOW parameter is missing or inactive."
+    );
+}
+
+const maintenanceValue =
+    String(
+        currentMaintenanceWindowParameter.parameter_value || "No"
+    ).trim().toLowerCase();
+
+maintenanceWindowToggle.checked = maintenanceValue === "yes";
+maintenanceWindowToggle.disabled = false;
+saveMaintenanceWindowBtn.disabled = false;
+maintenanceWindowDirty = false;
+
+$("maintenanceWindowValue").textContent =
+    maintenanceWindowToggle.checked ? "Yes" : "No";
+
+            $("maintenanceWindowHelp").textContent =
+                currentMaintenanceWindowParameter?.description ||
+                "Enable or disable the store maintenance window.";
+
+            const retention = Number(
+                currentRetentionParameter?.parameter_value
+            );
+
+            if (!Number.isFinite(retention) || retention < 1) {
+                throw new Error(
+                    "PURGE_RETENTION_DAYS parameter is missing or invalid."
+                );
+            }
+
+            retentionDays.value = retention;
+            retentionDays.disabled = false;
+            saveRetentionBtn.disabled = false;
+            previewPurgeBtn.disabled = false;
+            cleanupCartsBtn.disabled = false;
+
+            $("retentionHelp").textContent =
+                currentRetentionParameter.description ||
+                "Transaction records older than this period are eligible for purge.";
+
+            $("eligibleOrders").textContent =
+                Number(result.eligible_orders || 0).toLocaleString("en-IN");
+
+            $("eligibleCouponUsage").textContent =
+                Number(result.eligible_coupon_usage || 0).toLocaleString("en-IN");
+
+            $("eligibleCarts").textContent =
+                Number(result.eligible_carts || 0).toLocaleString("en-IN");
+
+            $("lastPurge").textContent =
+                formatDate(result.last_purge?.executed_at);
+
+            $("lastDeleted").textContent =
+                Number(
+                    result.last_purge?.records_deleted || 0
+                ).toLocaleString("en-IN");
+
+            $("lastCartCleanup").textContent =
+                formatDate(result.last_cart_cleanup?.executed_at);
+
+            $("systemStatus").textContent = "Operational";
+
+        } catch (error) {
+            console.error("Settings load error:", error);
+            $("systemStatus").textContent = "Configuration error";
+            setMessage(
+                $("retentionMessage"),
+                error.message,
+                "error"
+            );
+            showAlert("Store settings could not be loaded. Please verify the configuration and try again.", "error", "Settings unavailable");
+        }
+    }
+
+    async function loadHistory() {
+        const body = $("historyBody");
+
+        try {
+            const { data, error } = await supabase.rpc(
+                "get_admin_cleanup_history"
+            );
+
+            if (error) throw error;
+
+            if (!data?.length) {
+                body.innerHTML =
+                    `<tr><td colspan="5"><div class="empty">No cleanup history found.</div></td></tr>`;
+                return;
+            }
+
+            body.innerHTML = data.map(row => `
+                <tr>
+                    <td><strong>${escapeHtml(row.data_type)}</strong></td>
+                    <td>${Number(row.retention_days).toLocaleString("en-IN")} days</td>
+                    <td>${Number(row.records_deleted).toLocaleString("en-IN")}</td>
+                    <td>${escapeHtml(row.executed_by_name || "System")}</td>
+                    <td>${formatDate(row.executed_at)}</td>
+                </tr>
+            `).join("");
+
+        } catch (error) {
+            console.error("History load error:", error);
+            body.innerHTML =
+                `<tr><td colspan="5"><div class="empty">Cleanup history is currently unavailable.<br><small>Please verify the cleanup-history RPC and try Refresh again.</small></div></td></tr>`;
+            showAlert(
+                "Cleanup history could not be loaded.",
+                "error",
+                "History unavailable"
+            );
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    maintenanceWindowToggle.addEventListener("change", () => {
+        maintenanceWindowDirty = true;
+        $("maintenanceWindowValue").textContent =
+            maintenanceWindowToggle.checked ? "Yes" : "No";
+        saveMaintenanceWindowBtn.disabled = false;
+        setMessage($("maintenanceWindowMessage"), "", "");
+    });
+
+    saveMaintenanceWindowBtn.addEventListener("click", async () => {
+        if (!maintenanceWindowDirty) return;
+
+        saveMaintenanceWindowBtn.disabled = true;
+        maintenanceWindowToggle.disabled = true;
+
+        try {
+            const { error } = await supabase.rpc(
+                "update_admin_maintenance_window",
+                {
+                    p_maintenance_window:
+                        maintenanceWindowToggle.checked ? "Yes" : "No"
+                }
+            );
+
+            if (error) throw error;
+
+            maintenanceWindowDirty = false;
+            setMessage(
+                $("maintenanceWindowMessage"),
+                `Maintenance Window saved as ${maintenanceWindowToggle.checked ? "Yes" : "No"}.`,
+                "success"
+            );
+            showAlert(
+                `Maintenance Window is now ${maintenanceWindowToggle.checked ? "Yes" : "No"}.`,
+                "success",
+                "Setting updated"
+            );
+
+            await loadSettings();
+        } catch (error) {
+            console.error("Maintenance window save error:", error);
+            saveMaintenanceWindowBtn.disabled = false;
+            maintenanceWindowToggle.disabled = false;
+            setMessage(
+                $("maintenanceWindowMessage"),
+                error.message,
+                "error"
+            );
+            showAlert(
+                "We could not save the Maintenance Window setting.",
+                "error",
+                "Save failed"
+            );
+        }
+    });
+
+    $("saveRetentionBtn").addEventListener("click", async () => {
+        const value = Number(retentionDays.value);
+
+        if (!Number.isInteger(value) || value < 1) {
+            setMessage(
+                $("retentionMessage"),
+                "Enter a valid retention period.",
+                "error"
+            );
+            return;
+        }
+
+        saveRetentionBtn.disabled = true;
+
+        try {
+            const { error } = await supabase.rpc(
+                "update_admin_retention_parameter",
+                { p_retention_days: value }
+            );
+
+            if (error) throw error;
+
+            setMessage(
+                $("retentionMessage"),
+                "Retention period saved.",
+                "success"
+            );
+            showAlert("Retention period saved successfully.", "success", "Settings updated");
+
+            await loadSettings();
+
+        } catch (error) {
+            console.error("Retention save error:", error);
+            setMessage(
+                $("retentionMessage"),
+                error.message,
+                "error"
+            );
+            showAlert("We could not save the retention period. Please try again.", "error", "Save failed");
+        } finally {
+            saveRetentionBtn.disabled = false;
+        }
+    });
+
+    $("previewPurgeBtn").addEventListener("click", async () => {
+        previewPurgeBtn.disabled = true;
+
+        try {
+            const { data, error } = await supabase.rpc(
+                "preview_admin_purge"
+            );
+
+            if (error) throw error;
+
+            purgePreview = Array.isArray(data) ? data[0] : data;
+
+            const orders = Number(purgePreview.eligible_orders || 0);
+            const usage = Number(purgePreview.eligible_coupon_usage || 0);
+
+            $("modalRetention").textContent =
+                `${Number(purgePreview.retention_days).toLocaleString("en-IN")} days`;
+
+            $("modalOrders").textContent =
+                orders.toLocaleString("en-IN");
+
+            $("modalCouponUsage").textContent =
+                usage.toLocaleString("en-IN");
+
+            $("modalTotal").textContent =
+                (orders + usage).toLocaleString("en-IN");
+
+            $("purgeModalText").textContent =
+                `Records older than the configured retention period are eligible for permanent deletion. Order items will be removed automatically by the existing foreign-key cascade.`;
+
+            purgeModal.classList.add("open");
+
+        } catch (error) {
+            console.error("Purge preview error:", error);
+            setMessage(
+                $("retentionMessage"),
+                error.message,
+                "error"
+            );
+            showAlert("We could not generate the purge preview. Please try again.", "error", "Preview unavailable");
+        } finally {
+            previewPurgeBtn.disabled = false;
+        }
+    });
+
+    $("cancelPurgeBtn").addEventListener("click", () => {
+        purgeModal.classList.remove("open");
+    });
+
+    purgeModal.addEventListener("click", event => {
+        if (event.target === purgeModal) {
+            purgeModal.classList.remove("open");
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && purgeModal.classList.contains("open")) {
+            purgeModal.classList.remove("open");
+            confirmPurgeBtn.disabled = false;
+        }
+    });
+
+    confirmPurgeBtn.addEventListener("click", async () => {
+        confirmPurgeBtn.disabled = true;
+
+        try {
+            const { data, error } = await supabase.rpc(
+                "run_admin_transaction_purge"
+            );
+
+            if (error) throw error;
+
+            const result = Array.isArray(data) ? data[0] : data;
+
+            purgeModal.classList.remove("open");
+
+            setMessage(
+                $("retentionMessage"),
+                `${Number(result.records_deleted || 0).toLocaleString("en-IN")} records deleted successfully.`,
+                "success"
+            );
+            showAlert(
+                `${Number(result.records_deleted || 0).toLocaleString("en-IN")} records deleted successfully.`,
+                "success",
+                "Purge completed"
+            );
+
+            await Promise.all([
+                loadSettings(),
+                loadHistory()
+            ]);
+
+        } catch (error) {
+            console.error("Purge error:", error);
+            setMessage(
+                $("retentionMessage"),
+                error.message,
+                "error"
+            );
+            showAlert("The purge could not be completed. Please review the configuration and try again.", "error", "Purge failed");
+        } finally {
+            confirmPurgeBtn.disabled = false;
+        }
+    });
+
+    cleanupCartsBtn.addEventListener("click", async () => {
+        cleanupCartsBtn.disabled = true;
+
+        try {
+            const { data, error } = await supabase.rpc(
+                "run_admin_abandoned_cart_cleanup"
+            );
+
+            if (error) throw error;
+
+            const result = Array.isArray(data) ? data[0] : data;
+
+            setMessage(
+                $("cartMessage"),
+                `${Number(result.records_deleted || 0).toLocaleString("en-IN")} abandoned carts deleted.`,
+                "success"
+            );
+            showAlert(
+                `${Number(result.records_deleted || 0).toLocaleString("en-IN")} abandoned carts deleted successfully.`,
+                "success",
+                "Cart cleanup completed"
+            );
+
+            await Promise.all([
+                loadSettings(),
+                loadHistory()
+            ]);
+
+        } catch (error) {
+            console.error("Cart cleanup error:", error);
+            setMessage(
+                $("cartMessage"),
+                error.message,
+                "error"
+            );
+            showAlert("Abandoned-cart cleanup could not be completed. Please try again.", "error", "Cleanup failed");
+        } finally {
+            cleanupCartsBtn.disabled = false;
+        }
+    });
+
+    $("refreshHistoryBtn").addEventListener("click", async () => {
+        const button = $("refreshHistoryBtn");
+        if (button.disabled) return;
+        button.disabled = true;
+        const originalText = button.textContent;
+        button.textContent = "Refreshing…";
+        try {
+            await loadHistory();
+        } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+        }
+    });
+
+    await loadNavigation();
+    setupAdminProfile();
+
+    await Promise.all([
+        loadSettings(),
+        loadHistory()
+    ]);
+});
+</script>
+</body>
+</html>

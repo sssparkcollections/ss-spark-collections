@@ -1,0 +1,5803 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Order Details | SS Spark Collections
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .order-details-page {
+            padding: 28px;
+            max-width: 1480px;
+            margin: 0 auto;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 25px;
+            margin-bottom: 24px;
+        }
+
+        .header-left {
+            min-width: 0;
+        }
+
+        .back-btn {
+            border: 1px solid #e2e2e2;
+            background: #fff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .back-btn:hover {
+            background: #fafafa;
+        }
+
+        .details-title {
+            margin: 20px 0 6px;
+            font-size: 28px;
+            color: #182235;
+        }
+
+        .details-subtitle {
+            margin: 0;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .order-highlight {
+            color: #c82c78;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           STATUS CARDS
+        ===================================================== */
+
+        .status-cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(240px, 1fr));
+            gap: 14px;
+            min-width: 520px;
+        }
+
+        .status-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            padding: 17px 18px;
+
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            box-shadow:
+                0 4px 18px rgba(0,0,0,.04);
+        }
+
+        .status-card.order-status-card {
+            border-color: #f2cde1;
+        }
+
+        .status-card.payment-status-card {
+            border-color: #d4ebdc;
+        }
+
+        .status-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .order-status-card .status-icon {
+            background: #fff0f7;
+        }
+
+        .payment-status-card .status-icon {
+            background: #eefaf2;
+        }
+
+        .status-card-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .status-card-label {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .status-card-value {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .order-status-card .status-card-value {
+            color: #c82c78;
+        }
+
+        .payment-status-card .status-card-value {
+            color: #23834a;
+        }
+
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+            gap: 20px;
+        }
+
+        .details-left,
+        .details-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .details-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            overflow: hidden;
+
+            box-shadow:
+                0 4px 18px rgba(0,0,0,.04);
+        }
+
+        .card-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #eee;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+
+            background: #fff0f7;
+            color: #d52c7d;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 17px;
+            color: #182235;
+        }
+
+        .card-header-count {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+
+        /* =====================================================
+           ORDER ITEMS
+        ===================================================== */
+
+        .items-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .items-table th {
+            text-align: left;
+            padding: 12px;
+
+            background: #fafbfd;
+
+            color: #667085;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .items-table td {
+            padding: 15px 12px;
+
+            border-top: 1px solid #f0f0f0;
+
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-image {
+            width: 58px;
+            height: 58px;
+
+            border-radius: 10px;
+
+            object-fit: cover;
+
+            border: 1px solid #eee;
+
+            background: #fafafa;
+
+            flex-shrink: 0;
+        }
+
+        .product-placeholder {
+            width: 58px;
+            height: 58px;
+
+            border-radius: 10px;
+
+            background: #fff0f7;
+
+            color: #d52c7d;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+
+            border: 1px solid #f5d7e7;
+
+            flex-shrink: 0;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #252b37;
+        }
+
+        .product-id {
+            margin-top: 4px;
+            font-size: 11px;
+            color: #999;
+        }
+
+        .item-price,
+        .item-subtotal {
+            white-space: nowrap;
+        }
+
+        .item-subtotal {
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           TOTALS
+        ===================================================== */
+
+        .totals {
+            margin-top: 20px;
+            padding-top: 18px;
+
+            border-top: 1px solid #eee;
+
+            max-width: 430px;
+            margin-left: auto;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+
+            padding: 7px 0;
+
+            font-size: 14px;
+            color: #667085;
+        }
+
+        .total-row strong {
+            color: #333;
+        }
+
+        .total-row.discount {
+            color: #23904d;
+        }
+
+        .total-row.discount strong {
+            color: #23904d;
+        }
+
+        .total-row.grand-total {
+            margin-top: 9px;
+            padding: 14px 14px;
+
+            border-radius: 10px;
+
+            background: #fff0f7;
+
+            font-size: 18px;
+            font-weight: 700;
+
+            color: #c82c78;
+        }
+
+        .total-row.grand-total strong {
+            color: #c82c78;
+        }
+
+
+        /* =====================================================
+           CUSTOMER
+        ===================================================== */
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 11px 0;
+
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .info-value {
+            text-align: right;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            color: #333;
+
+            word-break: break-word;
+        }
+
+
+        /* =====================================================
+           ADDRESS
+        ===================================================== */
+
+        .address-box {
+            background: #fafafa;
+
+            border-radius: 12px;
+
+            padding: 17px;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+
+            color: #555;
+        }
+
+        .address-name {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+
+        /* =====================================================
+           UPDATE ORDER
+        ===================================================== */
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+
+            gap: 7px;
+
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667085;
+        }
+
+        .form-group select {
+            width: 100%;
+            height: 44px;
+
+            padding: 0 12px;
+
+            border: 1px solid #ddd;
+            border-radius: 10px;
+
+            background: #fff;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .form-group select:focus {
+            border-color: #d78bb5;
+
+            box-shadow:
+                0 0 0 3px rgba(215,139,181,.10);
+        }
+
+        .save-btn {
+            width: 100%;
+            height: 45px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #d52c7d;
+
+            color: #fff;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                background .15s ease,
+                transform .15s ease;
+        }
+
+        .save-btn:hover {
+            background: #bc236d;
+        }
+
+        .save-btn:active {
+            transform: translateY(1px);
+        }
+
+        .save-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+
+        /* =====================================================
+           STATUS BADGES
+        ===================================================== */
+
+        .status-badge,
+        .payment-badge {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 7px 12px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fff5d6;
+            color: #9a7100;
+        }
+
+        .status-confirmed {
+            background: #e9f1ff;
+            color: #3b68b8;
+        }
+
+        .status-processing {
+            background: #eee9ff;
+            color: #6b4fc4;
+        }
+
+        .status-shipped {
+            background: #e6f5ff;
+            color: #1973a5;
+        }
+
+        .status-delivered {
+            background: #e8f7ed;
+            color: #2c8a4b;
+        }
+
+        .status-cancelled {
+            background: #ffe9e9;
+            color: #c14b4b;
+        }
+
+        .status-returned {
+            background: #f2eaea;
+            color: #805858;
+        }
+
+        .payment-pending {
+            background: #fff5d6;
+            color: #9a7100;
+        }
+
+        .payment-paid {
+            background: #e8f7ed;
+            color: #2c8a4b;
+        }
+
+        .payment-failed {
+            background: #ffe9e9;
+            color: #c14b4b;
+        }
+
+        .payment-refunded {
+            background: #eee9ff;
+            color: #6b4fc4;
+        }
+
+        .payment-partially_refunded {
+            background: #e9f1ff;
+            color: #3b68b8;
+        }
+
+
+        /* =====================================================
+           ORDER INFORMATION
+        ===================================================== */
+
+        .info-card-value {
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           PAGE MESSAGE
+        ===================================================== */
+
+        .page-message {
+            background: #fff;
+
+            border: 1px solid #eee;
+
+            border-radius: 16px;
+
+            padding: 60px 20px;
+
+            text-align: center;
+
+            color: #777;
+        }
+
+        .page-message strong {
+            display: block;
+
+            color: #444;
+
+            margin-bottom: 8px;
+
+            font-size: 17px;
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .toast-container {
+            position: fixed;
+
+            right: 24px;
+            bottom: 24px;
+
+            z-index: 9999;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 12px;
+
+            pointer-events: none;
+        }
+
+        .toast {
+            width: min(390px, calc(100vw - 40px));
+
+            background: #fff;
+
+            border-radius: 14px;
+
+            padding: 15px 16px;
+
+            display: flex;
+            align-items: flex-start;
+
+            gap: 12px;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,.14);
+
+            border: 1px solid #eee;
+
+            pointer-events: auto;
+
+            animation:
+                toastIn .25s ease forwards;
+        }
+
+        .toast.success {
+            border-left: 4px solid #2b9b59;
+        }
+
+        .toast.error {
+            border-left: 4px solid #d44747;
+        }
+
+        .toast-icon {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            font-weight: 700;
+        }
+
+        .toast.success .toast-icon {
+            background: #e8f7ed;
+            color: #25834a;
+        }
+
+        .toast.error .toast-icon {
+            background: #ffe9e9;
+            color: #c14b4b;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #222;
+
+            margin-bottom: 3px;
+        }
+
+        .toast-message {
+            font-size: 12px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        .toast-close {
+            border: none;
+            background: transparent;
+
+            color: #999;
+
+            cursor: pointer;
+
+            font-size: 17px;
+
+            line-height: 1;
+        }
+
+        @keyframes toastIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 650px) {
+
+            .details-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .status-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        min-width: 0;
+        gap: 10px;
+    }
+
+    .status-card {
+        padding: 13px 12px;
+        gap: 9px;
+    }
+
+    .status-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .status-card-label {
+        font-size: 10px;
+    }
+
+    .status-card-value {
+        font-size: 14px;
+    }
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .order-details-page {
+                padding: 18px;
+            }
+
+            .status-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .details-title {
+                margin: 14px 0 5px;
+        font-size: 22px;
+            }
+
+            .details-subtitle {
+        font-size: 11px;
+    }
+
+            .card-header,
+            .card-body {
+                padding: 16px;
+            }
+
+            .info-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .info-value {
+                text-align: left;
+            }
+
+            .totals {
+                max-width: none;
+            }
+
+            .toast-container {
+                right: 12px;
+                bottom: 12px;
+                left: 12px;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+    .topbar {
+        gap: 14px;
+        padding-bottom: 14px;
+    }
+
+    .topbar > div:first-child {
+        min-width: 0;
+    }
+
+    .topbar h1 {
+        margin-bottom: 0;
+    }
+
+    .admin-profile {
+        flex-shrink: 0;
+    }
+
+}
+
+/* =========================================
+   SHIPMENT & TRACKING
+========================================= */
+
+.shipment-card {
+    margin-top: 24px;
+}
+
+
+/* =========================================
+   SHIPMENT SUMMARY
+========================================= */
+
+.shipment-summary {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 20px 22px;
+
+    margin-top: 20px;
+
+    border: 1px solid #f0dfe7;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff8fb 0%,
+            #ffffff 100%
+        );
+
+}
+
+
+.shipment-summary-main {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+}
+
+
+.shipment-courier-icon {
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background: #fff0f5;
+
+    font-size: 23px;
+}
+
+
+.shipment-summary-label,
+.shipment-package-label {
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .08em;
+
+    color: #9b7889;
+
+}
+
+
+.shipment-summary-courier {
+
+    margin-top: 3px;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #24161d;
+}
+
+
+.shipment-summary-method {
+
+    margin-top: 3px;
+
+    font-size: 12px;
+
+    color: #8c7180;
+}
+
+
+.shipment-package {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 8px 13px;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #eee1e7;
+
+}
+
+
+.shipment-package-icon {
+
+    font-size: 18px;
+}
+
+
+.shipment-package strong {
+
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 15px;
+
+    color: #24161d;
+}
+
+
+/* =========================================
+   JOURNEY
+========================================= */
+
+.shipment-journey {
+
+    margin-top: 20px;
+
+    padding: 20px 22px;
+
+    border: 1px solid #eee4e9;
+
+    border-radius: 14px;
+
+    background: #ffffff;
+}
+
+
+.shipment-section-title {
+
+    margin-bottom: 15px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+
+    color: #9b7889;
+}
+
+
+.shipment-step {
+
+    position: relative;
+
+    display: flex;
+
+    gap: 13px;
+
+    min-height: 56px;
+}
+
+
+.shipment-step:not(.shipment-step-last)::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 10px;
+
+    top: 25px;
+
+    bottom: -5px;
+
+    width: 1px;
+
+    background: #eadde4;
+}
+
+
+.shipment-step-marker {
+
+    position: relative;
+
+    z-index: 1;
+
+    width: 21px;
+    height: 21px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    border: 1px solid #dfcbd5;
+
+    background: #ffffff;
+
+    color: #9b7889;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.shipment-step.completed .shipment-step-marker {
+
+    border-color: #d6336c;
+
+    background: #d6336c;
+
+    color: #ffffff;
+}
+
+
+.shipment-step.current
+.shipment-step-marker {
+
+    border-color: #d6336c;
+
+    background: #fff0f5;
+
+    color: #d6336c;
+}
+
+
+.shipment-step-content {
+
+    padding-bottom: 14px;
+}
+
+
+.shipment-step-title {
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #34242c;
+}
+
+
+.shipment-step-date {
+
+    margin-top: 3px;
+
+    font-size: 12px;
+
+    color: #927b86;
+}
+
+
+/* =========================================
+   TRACKING
+========================================= */
+
+.shipment-tracking-box {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-top: 20px;
+
+    padding: 17px 20px;
+
+    border: 1px solid #eee4e9;
+
+    border-radius: 14px;
+
+    background: #fcfafb;
+}
+
+
+.shipment-tracking-box
+.shipment-section-title {
+
+    margin-bottom: 5px;
+}
+
+
+.shipment-tracking-number {
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #24161d;
+
+    word-break: break-all;
+}
+
+
+.shipment-track-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    padding: 9px 14px;
+
+    border-radius: 9px;
+
+    background: #d6336c;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition: all .2s ease;
+}
+
+
+.shipment-track-btn:hover {
+
+    background: #c52d61;
+
+    transform: translateY(-1px);
+}
+
+
+.shipment-track-btn span {
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   NOTES
+========================================= */
+
+.shipment-notes-box {
+
+    margin-top: 14px;
+
+    padding: 16px 20px;
+
+    border-left: 3px solid #d6336c;
+
+    border-radius: 0 10px 10px 0;
+
+    background: #fff8fb;
+}
+
+
+.shipment-notes-box
+.shipment-section-title {
+
+    margin-bottom: 6px;
+}
+
+
+.shipment-notes-text {
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    color: #5d4752;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.shipment-empty {
+
+    text-align: center;
+
+    padding: 42px 20px;
+}
+
+
+.shipment-empty-icon {
+
+    margin-bottom: 10px;
+
+    font-size: 34px;
+}
+
+
+.shipment-empty h3 {
+
+    margin: 0 0 6px;
+
+    font-size: 17px;
+
+    color: #34242c;
+}
+
+
+.shipment-empty p {
+
+    margin: 0;
+
+    color: #8b7680;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   SHIPMENT STATUS BADGES
+========================================= */
+
+.shipment-status-badge {
+
+    border: 1px solid transparent;
+}
+
+
+.shipment-status-pending {
+
+    background: #fff5df;
+
+    color: #9a6800;
+}
+
+
+.shipment-status-transit {
+
+    background: #eef5ff;
+
+    color: #2764a5;
+}
+
+
+.shipment-status-out {
+
+    background: #fff0e6;
+
+    color: #b45b16;
+}
+
+
+.shipment-status-delivered {
+
+    background: #eaf8f0;
+
+    color: #23784b;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .shipment-card .card-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .shipment-summary {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .shipment-package {
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+
+    .shipment-tracking-box {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .shipment-track-btn {
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+}
+
+/* =====================================================
+   SHIPMENT MODAL
+===================================================== */
+
+.shipment-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 22px;
+    width: 100%;
+}
+
+
+.edit-shipment-btn {
+    border: none;
+    border-radius: 10px;
+
+    background: #d6336c;
+    color: #ffffff;
+
+    padding: 11px 18px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+.edit-shipment-btn:hover {
+    background: #c52d61;
+    transform: translateY(-1px);
+    box-shadow:
+        0 6px 16px rgba(214, 51, 108, 0.20);
+}
+
+
+/* ================= MODAL ================= */
+
+.shipment-modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 9999;
+}
+
+
+.shipment-modal.active {
+    display: flex;
+}
+
+
+.shipment-modal-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(40, 20, 30, 0.48);
+
+    backdrop-filter: blur(3px);
+}
+
+
+.shipment-modal-box {
+    position: relative;
+
+    width: min(680px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 70px rgba(40, 20, 30, 0.25);
+
+    z-index: 1;
+}
+
+
+/* ================= HEADER ================= */
+
+.shipment-modal-header {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 24px 26px;
+
+    border-bottom: 1px solid #f0e3e9;
+}
+
+
+.shipment-modal-eyebrow {
+    margin-bottom: 5px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    color: #c52d61;
+}
+
+
+.shipment-modal-header h2 {
+    margin: 0;
+
+    font-size: 22px;
+
+    color: #3f3035;
+}
+
+
+.shipment-modal-header p {
+    margin: 5px 0 0;
+
+    font-size: 13px;
+
+    color: #9a7d8d;
+}
+
+
+.shipment-modal-close {
+    width: 36px;
+    height: 36px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #fff1f6;
+
+    color: #c52d61;
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+/* ================= BODY ================= */
+
+.shipment-modal-body {
+    padding: 25px 26px;
+}
+
+
+.shipment-form-group {
+    margin-bottom: 18px;
+}
+
+
+.shipment-form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #4c3042;
+}
+
+
+.shipment-form-group input,
+.shipment-form-group select,
+.shipment-form-group textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ead9e2;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #3f3035;
+
+    padding: 11px 12px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+
+.shipment-form-group input:focus,
+.shipment-form-group select:focus,
+.shipment-form-group textarea:focus {
+    border-color: #d6336c;
+
+    box-shadow:
+        0 0 0 3px rgba(214, 51, 108, 0.10);
+}
+
+
+.shipment-form-group textarea {
+    resize: vertical;
+
+    min-height: 90px;
+}
+
+
+.shipment-form-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 0 16px;
+}
+
+
+/* ================= FOOTER ================= */
+
+.shipment-modal-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 18px 26px;
+
+    border-top: 1px solid #f0e3e9;
+
+    background: #fffafd;
+
+    border-radius: 0 0 18px 18px;
+}
+
+
+.shipment-cancel-btn,
+.shipment-save-btn {
+    border-radius: 10px;
+
+    padding: 11px 18px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.shipment-cancel-btn {
+    border: 1px solid #ead9e2;
+
+    background: #ffffff;
+
+    color: #6d5361;
+}
+
+
+.shipment-save-btn {
+    border: none;
+
+    background: #d6336c;
+
+    color: #ffffff;
+}
+
+
+.shipment-save-btn:hover {
+    background: #c52d61;
+}
+
+
+.shipment-save-btn:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 700px) {
+
+    .shipment-modal {
+        padding: 10px;
+    }
+
+
+    .shipment-modal-box {
+        max-height: 94vh;
+
+        border-radius: 15px;
+    }
+
+
+    .shipment-modal-header {
+        padding: 20px;
+    }
+
+
+    .shipment-modal-body {
+        padding: 20px;
+    }
+
+
+    .shipment-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .shipment-modal-footer {
+        padding: 15px 20px;
+    }
+
+
+    .shipment-cancel-btn,
+    .shipment-save-btn {
+        flex: 1;
+    }
+
+
+    .shipment-actions {
+        justify-content: stretch;
+    }
+
+
+    .edit-shipment-btn {
+        width: 100%;
+    }
+
+}
+
+/* =====================================================
+   SUCCESS TOAST
+===================================================== */
+
+.success-toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    background: #e8f8ef;
+    color: #18794e;
+
+    border: 1px solid #bce8ce;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+
+    animation: toastIn 0.25s ease;
+}
+
+.toast-icon {
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #27ae60;
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.toast-hide {
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+@keyframes toastIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+/* =========================================
+   DOWNLOAD INVOICE BUTTON
+========================================= */
+
+.invoice-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 15px;
+
+    border: 1px solid #d6336c;
+
+    border-radius: 9px;
+
+    background: #d6336c;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.invoice-btn:hover {
+
+    background: #c52d61;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 14px
+        rgba(214, 51, 108, .18);
+}
+
+
+.invoice-btn:active {
+
+    transform: translateY(0);
+
+}
+
+
+.invoice-btn-icon {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 16px;
+
+    line-height: 1;
+}
+
+/* Standalone Order Details - no admin sidebar */
+.admin-layout {
+    grid-template-columns: 1fr !important;
+}
+
+.main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+.order-details-page {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+}
+
+    
+/* =====================================================
+   STATUS-SPECIFIC ORDER FIELDS
+===================================================== */
+.status-specific-fields{margin-top:2px}
+.status-context-card{padding:14px 15px;border:1px solid #eee1e7;border-radius:12px;background:#fffafd;margin-bottom:16px}
+.status-context-card.status-context-danger{background:#fff8f8;border-color:#f2d8d8}
+.status-context-card.status-context-success{background:#f8fffb;border-color:#d9eee0}
+.status-context-card.status-context-warning{background:#fffaf3;border-color:#f1e1c8}
+.status-context-card.status-context-info{background:#faf8ff;border-color:#e5ddf2}
+.status-context-title{font-size:12px;font-weight:800;color:#4a303b;margin-bottom:10px}
+.status-context-card label{display:block;font-size:11px;font-weight:700;color:#6d5361;margin-bottom:6px}
+.status-context-card input,.status-context-card textarea{width:100%;box-sizing:border-box;border:1px solid #ead9e2;border-radius:9px;background:#fff;color:#3f3035;padding:10px 11px;font:inherit;font-size:12px;outline:none}
+.status-context-card textarea{min-height:76px;resize:vertical}
+.status-context-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.status-context-field{min-width:0}.status-context-field label{display:block;margin:0 0 6px;color:#6f5964;font-size:10px;font-weight:750}.status-context-field textarea,.status-context-field input{width:100%;box-sizing:border-box}.status-context-field textarea{min-height:76px;resize:vertical}
+.status-context-card input:focus,.status-context-card textarea:focus{border-color:#d6336c;box-shadow:0 0 0 3px rgba(214,51,108,.08)}
+.status-context-card p{margin:0;color:#765f6a;font-size:11.5px;line-height:1.55}
+.status-context-hint{margin-top:6px;font-size:10.5px;color:#927b86}
+
+/* =====================================================
+   SS SPARK PREMIUM UI POLISH
+===================================================== */
+.order-details-page{padding:30px 32px 42px;max-width:1480px}
+.details-header{margin-bottom:28px;align-items:flex-end}
+.details-title{font-size:30px;letter-spacing:-.45px}
+.details-subtitle{font-size:13px;color:#8b7480}
+.order-highlight{color:#b4235a}
+.status-cards{gap:12px}
+.status-card{border-radius:18px;padding:16px 18px;box-shadow:0 8px 24px rgba(83,35,52,.055);border-color:#f0e5ea}
+.status-card.order-status-card{border-color:#f2d5e2;background:linear-gradient(135deg,#fff,#fff8fb)}
+.status-card.payment-status-card{border-color:#dcece2;background:linear-gradient(135deg,#fff,#fafffc)}
+.status-icon{width:42px;height:42px}
+.details-card{border-radius:18px!important;border-color:#f0e5ea!important;box-shadow:0 8px 28px rgba(83,35,52,.055)!important}
+.card-header{padding:18px 20px!important;border-bottom-color:#f4e8ed!important}
+.card-title{font-weight:750!important;color:#3b2730!important}
+.shipment-tracking-box{border-color:#f0dce5;background:linear-gradient(135deg,#fff8fb,#fff);box-shadow:0 5px 18px rgba(83,35,52,.035)}
+.shipment-track-btn,.edit-shipment-btn,.invoice-btn{transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease!important}
+.shipment-track-btn:hover,.edit-shipment-btn:hover,.invoice-btn:hover{transform:none!important}
+.invoice-btn{border-radius:10px;background:linear-gradient(135deg,#d6336c,#b4235a);box-shadow:0 7px 18px rgba(180,35,90,.14)}
+.invoice-btn:hover{background:linear-gradient(135deg,#cf2f66,#a91f52);box-shadow:0 9px 22px rgba(180,35,90,.18)}
+.edit-shipment-btn{background:linear-gradient(135deg,#d6336c,#b4235a);box-shadow:0 6px 16px rgba(180,35,90,.12)}
+.edit-shipment-btn:hover{background:linear-gradient(135deg,#cf2f66,#a91f52);box-shadow:0 8px 20px rgba(180,35,90,.16)}
+.order-alert-stack{position:fixed;right:24px;bottom:24px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.order-alert{width:min(390px,calc(100vw - 32px));display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#fff;border:1px solid #f0e2e8;border-radius:15px;box-shadow:0 16px 42px rgba(72,30,48,.16);pointer-events:auto;animation:orderAlertIn .22s ease forwards}
+.order-alert.success{border-left:4px solid #2b9b59}.order-alert.error{border-left:4px solid #d44747}
+.order-alert-icon{width:31px;height:31px;flex:0 0 31px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;background:#fff0f6;color:#b4235a}.order-alert.success .order-alert-icon{background:#edf9f1;color:#23844a}.order-alert.error .order-alert-icon{background:#fff0f0;color:#c83d3d}
+.order-alert-title{font-size:13px;font-weight:750;color:#38252e;margin-bottom:3px}.order-alert-message{font-size:12.5px;line-height:1.45;color:#806d76}
+@keyframes orderAlertIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){.order-details-page{padding:18px 14px 30px}.details-header{gap:16px;align-items:stretch;flex-direction:column}.details-title{font-size:24px;margin-top:16px}.status-cards{min-width:0;grid-template-columns:1fr;gap:10px}.status-card{padding:14px 15px}.details-card{border-radius:15px!important}.card-header{padding:15px 16px!important}.shipment-tracking-box{padding:15px;gap:13px;align-items:stretch;flex-direction:column}.shipment-track-btn{width:100%;box-sizing:border-box}.shipment-actions{margin-top:16px}.edit-shipment-btn,.invoice-btn{min-height:42px}.order-alert-stack{right:12px;bottom:12px;left:12px}.order-alert{width:auto}}
+
+/* ORDER STATUS HISTORY */
+.order-history-link{display:inline-flex;align-items:center;gap:7px;border:1px solid #ead7e1;background:linear-gradient(135deg,#fffafd,#fff5f9);color:#b4235a;padding:8px 11px;border-radius:10px;font-size:11px;font-weight:750;cursor:pointer;white-space:nowrap;transition:all .18s ease}.order-history-link:hover{border-color:#d9b2c5;background:#fff1f6;box-shadow:0 5px 15px rgba(180,35,90,.1)}.order-history-link .history-link-icon{font-size:13px;line-height:1}
+.order-history-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;z-index:10050}.order-history-modal.active{display:flex}.order-history-overlay{position:absolute;inset:0;background:rgba(38,18,29,.56);backdrop-filter:blur(6px)}.order-history-box{position:relative;z-index:1;width:min(760px,100%);max-height:min(88vh,820px);display:flex;flex-direction:column;overflow:hidden;background:radial-gradient(circle at 100% 0%,rgba(214,51,108,.07),transparent 30%),#fff;border:1px solid #f0dfe7;border-radius:22px;box-shadow:0 30px 90px rgba(45,18,32,.28);animation:orderHistoryIn .2s ease-out}@keyframes orderHistoryIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.order-history-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:20px 22px 17px;border-bottom:1px solid #f2e5ea;background:linear-gradient(135deg,#fff,#fff9fb)}.order-history-eyebrow{margin-bottom:4px;color:#c52d61;font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.order-history-header h2{margin:0;color:#38252e;font-size:20px;letter-spacing:-.25px}.order-history-header p{margin:5px 0 0;color:#927b86;font-size:11.5px}.order-history-close{width:34px;height:34px;flex:0 0 34px;border:1px solid #efdde5;border-radius:10px;background:#fff4f8;color:#b4235a;font-size:21px;line-height:1;cursor:pointer}.order-history-summary{display:flex;align-items:center;gap:10px;padding:12px 22px;border-bottom:1px solid #f4e9ed;background:#fff}.order-history-summary-label{color:#8e7681;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}.order-history-current{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#fff0f5;color:#b4235a;border:1px solid #f1d2df;font-size:10.5px;font-weight:800}.order-history-count{margin-left:auto;color:#9a818c;font-size:10.5px}.order-history-body{padding:19px 22px 22px;overflow-y:auto;overscroll-behavior:contain}.order-history-timeline{position:relative;padding-left:28px}.order-history-timeline:before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:linear-gradient(#d9aabd,#eee2e7)}.order-history-event{position:relative;padding-bottom:17px}.order-history-event:last-child{padding-bottom:0}.order-history-dot{position:absolute;left:-28px;top:5px;width:17px;height:17px;display:grid;place-items:center;border-radius:50%;border:3px solid #fff;background:#e9d2dc;box-shadow:0 0 0 1px #dec1cd;color:#fff;font-size:8px;font-weight:800}.order-history-event.latest .order-history-dot{background:#d6336c;box-shadow:0 0 0 1px #d6336c,0 0 0 5px rgba(214,51,108,.08)}.order-history-event-card{border:1px solid #f0e2e8;border-radius:14px;padding:13px 14px;background:linear-gradient(135deg,#fff,#fffafb);box-shadow:0 5px 18px rgba(72,30,48,.045)}.order-history-event.latest .order-history-event-card{border-color:#ead0dc;box-shadow:0 8px 24px rgba(180,35,90,.075)}.order-history-event-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.order-history-transition{display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:0}.order-history-status{display:inline-flex;align-items:center;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:800;line-height:1.1;white-space:nowrap}.order-history-status.from{background:#f5f2f4;color:#75636c}.order-history-status.to{background:#fff0f5;color:#b4235a;border:1px solid #f3d4e0}.order-history-arrow{color:#c9a6b4;font-size:12px;font-weight:800}.order-history-time{flex:0 0 auto;color:#9a818c;font-size:9.5px;line-height:1.35;text-align:right}.order-history-action{margin-top:8px;color:#4b3540;font-size:11px;font-weight:750}.order-history-remarks{margin-top:8px;padding:8px 10px;border-left:2px solid #e3b4c6;border-radius:0 8px 8px 0;background:#fff8fb;color:#735c67;font-size:10.5px;line-height:1.5}.order-history-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px}.order-history-detail{padding:8px 9px;border:1px solid #f0e4e8;border-radius:8px;background:#fcfafb;min-width:0}.order-history-detail-label{color:#9a818c;font-size:8.5px;font-weight:750;text-transform:uppercase;letter-spacing:.04em}.order-history-detail-value{margin-top:3px;color:#51404a;font-size:10px;line-height:1.4;word-break:break-word}.order-history-empty,.order-history-loading,.order-history-error{min-height:210px;display:grid;place-items:center;text-align:center;color:#8d7882;font-size:12px}.order-history-empty-icon{width:46px;height:46px;margin:0 auto 10px;display:grid;place-items:center;border-radius:14px;background:#fff1f6;color:#c52d61;font-size:20px}.order-history-footer{display:flex;justify-content:flex-end;padding:12px 22px;border-top:1px solid #f2e5ea;background:#fffafd}.order-history-close-action{min-width:92px;border:1px solid #e6d3dc;border-radius:9px;background:#fff;color:#654c58;padding:8px 13px;font-size:11px;font-weight:750;cursor:pointer}.order-history-close-action:hover{background:#fff5f8;border-color:#d8b8c6}
+@media(max-width:700px){.order-history-link{padding:7px 9px;font-size:10px}.order-history-modal{padding:8px}.order-history-box{width:100%;max-height:94vh;border-radius:17px}.order-history-header{padding:16px 15px 13px}.order-history-header h2{font-size:17px}.order-history-header p{font-size:10.5px}.order-history-close{width:32px;height:32px;flex-basis:32px}.order-history-summary{padding:10px 15px;gap:7px}.order-history-body{padding:14px 13px 17px}.order-history-timeline{padding-left:24px}.order-history-timeline:before{left:7px}.order-history-dot{left:-24px;width:15px;height:15px}.order-history-event-card{padding:11px;border-radius:12px}.order-history-event-top{flex-direction:column;gap:5px}.order-history-time{text-align:left}.order-history-details{grid-template-columns:1fr}.order-history-footer{padding:10px 13px}.order-history-close-action{width:100%}}
+
+
+@media (max-width: 640px){.status-context-grid{grid-template-columns:1fr}.status-context-field textarea{min-height:68px}}
+</style>
+
+</head>
+
+
+<body data-admin-page="order-details">
+
+
+<div class="admin-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main-content">
+
+        <div class="order-details-page">
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <div class="details-header">
+
+
+                <div class="header-left">
+
+                    <button
+                        type="button"
+                        id="backBtn"
+                        class="back-btn"
+                    >
+                        ← Back to Orders
+                    </button>
+
+                                    <button
+    type="button"
+    id="downloadInvoiceBtn"
+    class="invoice-btn"
+>
+    <span class="invoice-btn-icon">↓</span>
+    Download Invoice
+</button>
+
+
+                    <h1
+                        class="details-title"
+                        id="orderTitle"
+                    >
+                        Order Details
+                    </h1>
+
+
+                    <p
+                        class="details-subtitle"
+                        id="orderDate"
+                    >
+                        Loading...
+                    </p>
+
+                </div>
+
+                <!-- STATUS CARDS -->
+
+                <div
+                    class="status-cards"
+                    id="statusCards"
+                >
+
+                    <div
+                        class="
+                            status-card
+                            order-status-card
+                        "
+                    >
+
+                        <div class="status-icon">
+                            🛍
+                        </div>
+
+                        <div class="status-card-content">
+
+                            <div class="status-card-label">
+                                Order Status
+                            </div>
+
+                            <div
+                                class="status-card-value"
+                                id="headerOrderStatus"
+                            >
+                                Loading...
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            status-card
+                            payment-status-card
+                        "
+                    >
+
+                        <div class="status-icon">
+                            💳
+                        </div>
+
+                        <div class="status-card-content">
+
+                            <div class="status-card-label">
+                                Payment Status
+                            </div>
+
+                            <div
+                                class="status-card-value"
+                                id="headerPaymentStatus"
+                            >
+                                Loading...
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONTENT
+            ================================================== -->
+
+            <div id="pageContent">
+
+                <div class="page-message">
+
+                    <strong>
+                        Loading order...
+                    </strong>
+
+                    Please wait.
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    id="orderAlertStack"
+    class="order-alert-stack"
+></div>
+
+<!-- =====================================================
+     ORDER STATUS HISTORY MODAL
+===================================================== -->
+<div id="orderHistoryModal" class="order-history-modal" aria-hidden="true">
+    <div class="order-history-overlay" id="orderHistoryOverlay"></div>
+    <div class="order-history-box" role="dialog" aria-modal="true" aria-labelledby="orderHistoryModalTitle">
+        <div class="order-history-header">
+            <div><div class="order-history-eyebrow">ORDER JOURNEY</div><h2 id="orderHistoryModalTitle">Status History</h2><p id="orderHistoryModalSubtitle">Complete status transition timeline</p></div>
+            <button type="button" id="closeOrderHistoryBtn" class="order-history-close" aria-label="Close status history">×</button>
+        </div>
+        <div class="order-history-summary"><span class="order-history-summary-label">Current</span><span class="order-history-current" id="orderHistoryCurrentStatus">Loading...</span><span class="order-history-count" id="orderHistoryCount"></span></div>
+        <div class="order-history-body" id="orderHistoryBody"><div class="order-history-loading">Loading status history...</div></div>
+        <div class="order-history-footer"><button type="button" class="order-history-close-action" id="closeOrderHistoryAction">Close</button></div>
+    </div>
+</div>
+
+<!-- =====================================================
+     SHIPMENT MODAL
+===================================================== -->
+
+<div
+    id="shipmentModal"
+    class="shipment-modal"
+    aria-hidden="true"
+>
+
+    <div class="shipment-modal-overlay"></div>
+
+
+    <div
+        class="shipment-modal-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="shipmentModalTitle"
+    >
+
+        <div class="shipment-modal-header">
+
+            <div>
+
+                <div class="shipment-modal-eyebrow">
+                    ORDER SHIPMENT
+                </div>
+
+                <h2 id="shipmentModalTitle">
+                    Shipment & Tracking
+                </h2>
+
+                <p>
+                    Update courier and delivery details
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeShipmentModalBtn"
+                class="shipment-modal-close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="shipment-modal-body">
+
+
+            <!-- COURIER -->
+
+            <div class="shipment-form-group">
+
+                <label for="shipmentCourier">
+                    Courier / Shipping Partner
+                </label>
+
+                <select id="shipmentCourier">
+
+                    <option value="">
+                        Select courier
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="shipment-form-group">
+
+                <label for="shipmentStatus">
+                    Shipment Status
+                </label>
+
+                <select id="shipmentStatus">
+
+                    <option value="">
+                        Select shipment status
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SHIPPING METHOD -->
+
+            <div class="shipment-form-group">
+
+                <label for="shippingMethod">
+                    Shipping Method
+                </label>
+
+                <select id="shippingMethod">
+
+                    <option value="">
+                        Select shipping method
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="shipment-form-grid">
+
+
+                <!-- TRACKING NUMBER -->
+
+                <div class="shipment-form-group">
+
+                    <label for="trackingNumber">
+                        Tracking Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="trackingNumber"
+                        placeholder="Enter tracking number"
+                    >
+
+                </div>
+
+
+                <!-- TRACKING URL -->
+
+                <div class="shipment-form-group">
+
+                    <label for="trackingUrl">
+                        Tracking URL
+                    </label>
+
+                    <input
+                        type="url"
+                        id="trackingUrl"
+                        placeholder="https://..."
+                    >
+
+                </div>
+
+
+                <!-- SHIPPED DATE -->
+
+                <div class="shipment-form-group">
+
+                    <label for="shippedDate">
+                        Shipped Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="shippedDate"
+                    >
+
+                </div>
+
+
+                <!-- EXPECTED DATE -->
+
+                <div class="shipment-form-group">
+
+                    <label for="expectedDeliveryDate">
+                        Expected Delivery
+                    </label>
+
+                    <input
+                        type="date"
+                        id="expectedDeliveryDate"
+                    >
+
+                </div>
+
+
+                <!-- DELIVERED DATE -->
+
+                <div class="shipment-form-group">
+
+                    <label for="deliveredDate">
+                        Delivered Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="deliveredDate"
+                    >
+
+                </div>
+
+
+                <!-- PACKAGE COUNT -->
+
+                <div class="shipment-form-group">
+
+                    <label for="packageCount">
+                        Package Count
+                    </label>
+
+                    <input
+                        type="number"
+                        id="packageCount"
+                        min="1"
+                        step="1"
+                        value="1"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            <div class="shipment-form-group">
+
+                <label for="shipmentNotes">
+                    Shipment Notes
+                </label>
+
+                <textarea
+                    id="shipmentNotes"
+                    rows="4"
+                    placeholder="Add any shipment notes..."
+                ></textarea>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="shipment-modal-footer">
+
+            <button
+                type="button"
+                id="cancelShipmentBtn"
+                class="shipment-cancel-btn"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                id="saveShipmentBtn"
+                class="shipment-save-btn"
+            >
+                <span id="saveShipmentText">
+                    Save Shipment
+                </span>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="module">
+
+import { supabase } from "./supabase-client.js";
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let order = null;
+
+let orderItems = [];
+
+let orderStatuses = [];
+
+let workflowOptions = [];
+
+let paymentStatuses = [];
+
+let shipment = null;
+
+let shipmentCouriers = [];
+
+let shipmentStatuses = [];
+
+let shippingMethods = [];
+
+
+/* =====================================================
+   ORDER ID
+===================================================== */
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const orderId =
+    urlParams.get("id");
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+const pageContent =
+    document.getElementById(
+        "pageContent"
+    );
+
+const orderTitle =
+    document.getElementById(
+        "orderTitle"
+    );
+
+const orderDate =
+    document.getElementById(
+        "orderDate"
+    );
+
+const headerOrderStatus =
+    document.getElementById(
+        "headerOrderStatus"
+    );
+
+const headerPaymentStatus =
+    document.getElementById(
+        "headerPaymentStatus"
+    );
+
+const orderAlertStack =
+    document.getElementById("orderAlertStack");
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        if (!orderId) {
+
+            showError(
+                "Order ID is missing."
+            );
+
+            return;
+
+        }
+
+
+        await loadParameters();
+
+        await loadOrder();
+
+    }
+);
+
+
+/* =====================================================
+   LOAD PARAMETERS
+===================================================== */
+
+/* =====================================================
+   LOAD PARAMETERS
+===================================================== */
+
+async function loadParameters() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabase
+                .from("parameter_values")
+                .select(`
+                    id,
+                    parameter_group,
+                    parameter_code,
+                    parameter_name,
+                    display_order,
+                    is_active
+                `)
+                .eq(
+                    "is_active",
+                    true
+                )
+                .in(
+                    "parameter_group",
+                    [
+                        "ORDER_STATUS",
+                        "PAYMENT_STATUS",
+                        "SHIPMENT_COURIER",
+                        "SHIPMENT_STATUS",
+                        "SHIPPING_METHOD"
+                    ]
+                )
+                .order(
+                    "display_order",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const parameters =
+            data || [];
+
+
+        orderStatuses =
+            parameters.filter(
+                item =>
+                    item.parameter_group ===
+                    "ORDER_STATUS"
+            );
+
+
+        paymentStatuses =
+            parameters.filter(
+                item =>
+                    item.parameter_group ===
+                    "PAYMENT_STATUS"
+            );
+
+
+        shipmentCouriers =
+            parameters.filter(
+                item =>
+                    item.parameter_group ===
+                    "SHIPMENT_COURIER"
+            );
+
+
+        shipmentStatuses =
+            parameters.filter(
+                item =>
+                    item.parameter_group ===
+                    "SHIPMENT_STATUS"
+            );
+
+
+        shippingMethods =
+            parameters.filter(
+                item =>
+                    item.parameter_group ===
+                    "SHIPPING_METHOD"
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Parameter loading error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD ORDER
+===================================================== */
+
+async function loadOrder() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabase
+                .from("orders")
+                .select(`
+                    id,
+                    user_id,
+                    order_number,
+                    status,
+                    payment_status,
+                    subtotal,
+                    discount_amount,
+                    shipping_amount,
+                    total_amount,
+                    shipping_address,
+                    created_at,
+                    updated_at
+                `)
+                .eq(
+                    "id",
+                    orderId
+                )
+                .maybeSingle();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!data) {
+
+            showError(
+                "Order not found."
+            );
+
+            return;
+
+        }
+
+
+        order = data;
+
+        await loadWorkflowOptions();
+
+        shipment = await loadShipment();
+
+
+        await loadOrderItems();
+
+        await loadCustomer();
+
+
+        renderPage();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Order loading error:",
+            error
+        );
+
+
+        showError(
+            error.message ||
+            "Unable to load order."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD ORDER ITEMS
+===================================================== */
+
+async function loadOrderItems() {
+
+    const {
+        data,
+        error
+    } =
+        await supabase
+            .from("order_items")
+            .select(`
+                id,
+                product_id,
+                product_name,
+                product_price,
+                quantity,
+                subtotal,
+                created_at
+            `)
+            .eq(
+                "order_id",
+                orderId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    orderItems =
+        data || [];
+
+
+    /*
+     * Fetch primary product images only when
+     * actual product_id values exist.
+     */
+
+    await loadProductImages();
+
+}
+
+async function loadShipment() {
+
+    const { data, error } = await supabase
+        .from("order_shipments")
+        .select(`
+            id,
+            order_id,
+            courier_name,
+            tracking_number,
+            tracking_url,
+            shipped_date,
+            expected_delivery_date,
+            delivered_date,
+            shipment_status,
+            shipping_method,
+            package_count,
+            notes
+        `)
+        .eq("order_id", orderId)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Shipment load error:", error);
+        return null;
+    }
+
+    return data;
+}
+
+
+/* =====================================================
+   LOAD PRODUCT IMAGES
+===================================================== */
+
+async function loadProductImages() {
+
+    const productIds = [
+        ...new Set(
+            orderItems
+                .map(
+                    item =>
+                        item.product_id
+                )
+                .filter(Boolean)
+        )
+    ];
+
+
+    if (!productIds.length) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabase
+            .from("product_images")
+            .select(`
+                product_id,
+                image_url,
+                is_primary,
+                display_order
+            `)
+            .in(
+                "product_id",
+                productIds
+            )
+            .order(
+                "is_primary",
+                {
+                    ascending: false
+                }
+            )
+            .order(
+                "display_order",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Product image loading error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    const imageMap =
+        new Map();
+
+
+    (data || []).forEach(
+        image => {
+
+            if (
+                !imageMap.has(
+                    image.product_id
+                )
+            ) {
+
+                imageMap.set(
+                    image.product_id,
+                    image.image_url
+                );
+
+            }
+
+        }
+    );
+
+
+    orderItems =
+        orderItems.map(
+            item => ({
+
+                ...item,
+
+                image_url:
+                    imageMap.get(
+                        item.product_id
+                    ) || null
+
+            })
+        );
+
+}
+
+
+/* =====================================================
+   LOAD CUSTOMER
+===================================================== */
+
+async function loadCustomer() {
+
+    if (!order.user_id) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabase
+            .from("profiles")
+            .select(`
+                id,
+                full_name,
+                email,
+                phone
+            `)
+            .eq(
+                "id",
+                order.user_id
+            )
+            .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "Customer loading error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    order.customer =
+        data || null;
+
+}
+
+
+/* =====================================================
+   RENDER PAGE
+===================================================== */
+
+function renderPage() {
+
+    orderTitle.textContent =
+        `Order #${order.order_number}`;
+
+
+    orderDate.innerHTML =
+        `Created on <strong>${formatDateTime(
+            order.created_at
+        )}</strong>`;
+
+
+    renderHeaderStatus();
+
+    renderContent();
+
+    renderShipment();
+
+}
+
+
+/* =====================================================
+   SHIPMENT EVENTS
+===================================================== */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target.closest(
+                "#editShipmentBtn"
+            )
+        ) {
+
+            openShipmentModal();
+
+        }
+
+
+        if (
+            event.target.closest(
+                "#closeShipmentModalBtn"
+            )
+        ) {
+
+            closeShipmentModal();
+
+        }
+
+
+        if (
+            event.target.closest(
+                "#cancelShipmentBtn"
+            )
+        ) {
+
+            closeShipmentModal();
+
+        }
+
+
+        if (
+            event.target.closest(
+                ".shipment-modal-overlay"
+            )
+        ) {
+
+            closeShipmentModal();
+
+        }
+
+
+        if (
+            event.target.closest(
+                "#saveShipmentBtn"
+            )
+        ) {
+
+            saveShipment();
+
+        }
+
+    }
+);
+
+
+/* ESC closes modal */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeShipmentModal();
+
+        }
+
+    }
+);
+
+/* =====================================================
+   RENDER SHIPMENT
+===================================================== */
+
+function renderShipment() {
+
+    const content =
+        document.getElementById(
+            "shipmentContent"
+        );
+
+    const badge =
+        document.getElementById(
+            "shipmentStatusBadge"
+        );
+
+
+    if (!content || !badge) {
+        return;
+    }
+
+
+    /* =================================================
+       NO SHIPMENT
+    ================================================= */
+
+    if (!shipment) {
+
+        badge.textContent =
+            "Not Shipped";
+
+
+        content.innerHTML = `
+
+            <div class="shipment-empty">
+
+                <div class="shipment-empty-icon">
+                    🚚
+                </div>
+
+                <h3>
+                    Shipment not created
+                </h3>
+
+                <p>
+                    Tracking information will appear here
+                    once the order has been shipped.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    /* =================================================
+       HELPERS
+    ================================================= */
+
+    const safe =
+        value =>
+            escapeHtml(
+                value ?? "—"
+            );
+
+
+    const formatDate =
+        value => {
+
+            if (!value) {
+                return "—";
+            }
+
+            return new Date(
+                value
+            ).toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+        };
+
+
+    const status =
+        (
+            shipment.shipment_status ||
+            ""
+        ).toLowerCase();
+
+
+    const isDelivered =
+        status.includes(
+            "deliver"
+        );
+
+
+    const isOutForDelivery =
+        status.includes(
+            "out"
+        );
+
+
+    const isInTransit =
+        status.includes(
+            "transit"
+        );
+
+
+    const hasShippedDate =
+        Boolean(
+            shipment.shipped_date
+        );
+
+
+    const hasExpectedDate =
+        Boolean(
+            shipment.expected_delivery_date
+        );
+
+
+    const hasDeliveredDate =
+        Boolean(
+            shipment.delivered_date
+        );
+
+
+    /* =================================================
+       STATUS BADGE
+    ================================================= */
+
+    badge.textContent =
+        shipment.shipment_status ||
+        "Shipped";
+
+
+    badge.className =
+        "status-badge shipment-status-badge";
+
+
+    if (isDelivered) {
+
+        badge.classList.add(
+            "shipment-status-delivered"
+        );
+
+    }
+    else if (
+        isOutForDelivery
+    ) {
+
+        badge.classList.add(
+            "shipment-status-out"
+        );
+
+    }
+    else if (
+        isInTransit
+    ) {
+
+        badge.classList.add(
+            "shipment-status-transit"
+        );
+
+    }
+    else {
+
+        badge.classList.add(
+            "shipment-status-pending"
+        );
+
+    }
+
+
+    /* =================================================
+       TRACK BUTTON
+    ================================================= */
+
+    const trackingButton =
+        shipment.tracking_url
+            ? `
+                <a
+                    href="${safe(
+                        shipment.tracking_url
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="shipment-track-btn"
+                >
+                    Track Shipment
+                    <span>↗</span>
+                </a>
+            `
+            : "";
+
+
+    /* =================================================
+       RENDER
+    ================================================= */
+
+    content.innerHTML = `
+
+        <!-- SUMMARY -->
+
+        <div class="shipment-summary">
+
+            <div class="shipment-summary-main">
+
+                <div class="shipment-courier-icon">
+                    🚚
+                </div>
+
+                <div>
+
+                    <div class="shipment-summary-label">
+                        SHIPMENT PARTNER
+                    </div>
+
+                    <div class="shipment-summary-courier">
+                        ${safe(
+                            shipment.courier_name
+                        )}
+                    </div>
+
+                    <div class="shipment-summary-method">
+                        ${safe(
+                            shipment.shipping_method
+                        )}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="shipment-package">
+
+                <span class="shipment-package-icon">
+                    📦
+                </span>
+
+                <div>
+
+                    <div class="shipment-package-label">
+                        PACKAGE
+                    </div>
+
+                    <strong>
+                        ${safe(
+                            shipment.package_count || 1
+                        )}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- JOURNEY -->
+
+        <div class="shipment-journey">
+
+            <div class="shipment-section-title">
+                Shipment Journey
+            </div>
+
+
+            <!-- SHIPPED -->
+
+            <div class="
+                shipment-step
+                ${hasShippedDate ? "completed" : ""}
+            ">
+
+                <div class="shipment-step-marker">
+                    ${hasShippedDate ? "✓" : "1"}
+                </div>
+
+                <div class="shipment-step-content">
+
+                    <div class="shipment-step-title">
+                        Shipment Shipped
+                    </div>
+
+                    <div class="shipment-step-date">
+                        ${
+                            hasShippedDate
+                                ? formatDate(
+                                    shipment.shipped_date
+                                )
+                                : "Not shipped yet"
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EXPECTED -->
+
+            <div class="
+                shipment-step
+                shipment-step-middle
+                ${
+                    hasExpectedDate
+                        ? "current"
+                        : ""
+                }
+            ">
+
+                <div class="shipment-step-marker">
+
+                    ${
+                        hasExpectedDate
+                            ? "•"
+                            : "2"
+                    }
+
+                </div>
+
+                <div class="shipment-step-content">
+
+                    <div class="shipment-step-title">
+                        Expected Delivery
+                    </div>
+
+                    <div class="shipment-step-date">
+
+                        ${
+                            hasExpectedDate
+                                ? formatDate(
+                                    shipment.expected_delivery_date
+                                )
+                                : "Date not available"
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERED -->
+
+            <div class="
+                shipment-step
+                shipment-step-last
+                ${
+                    hasDeliveredDate ||
+                    isDelivered
+                        ? "completed"
+                        : ""
+                }
+            ">
+
+                <div class="shipment-step-marker">
+
+                    ${
+                        hasDeliveredDate ||
+                        isDelivered
+                            ? "✓"
+                            : "3"
+                    }
+
+                </div>
+
+                <div class="shipment-step-content">
+
+                    <div class="shipment-step-title">
+                        Delivered
+                    </div>
+
+                    <div class="shipment-step-date">
+
+                        ${
+                            hasDeliveredDate
+                                ? formatDate(
+                                    shipment.delivered_date
+                                )
+                                : "Not delivered yet"
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TRACKING -->
+
+        <div class="shipment-tracking-box">
+
+            <div>
+
+                <div class="shipment-section-title">
+                    Tracking Number
+                </div>
+
+                <div class="shipment-tracking-number">
+
+                    ${
+                        shipment.tracking_number
+                            ? safe(
+                                shipment.tracking_number
+                            )
+                            : "Not available"
+                    }
+
+                </div>
+
+            </div>
+
+
+            ${trackingButton}
+
+        </div>
+
+
+        <!-- NOTES -->
+
+        ${
+            shipment.notes
+                ? `
+
+                    <div class="shipment-notes-box">
+
+                        <div class="shipment-section-title">
+                            Shipment Notes
+                        </div>
+
+                        <div class="shipment-notes-text">
+                            ${safe(
+                                shipment.notes
+                            )}
+                        </div>
+
+                    </div>
+
+                `
+                : ""
+        }
+
+    `;
+
+}
+
+/* =====================================================
+   SHIPMENT PARAMETER OPTIONS
+===================================================== */
+
+function renderShipmentOptions(
+    items,
+    selectedValue = "",
+    placeholder = "Select"
+) {
+
+    return `
+        <option value="">
+            ${placeholder}
+        </option>
+
+        ${(items || [])
+            .map(item => {
+
+                const selected =
+                    item.parameter_name === selectedValue
+                        ? "selected"
+                        : "";
+
+                return `
+                    <option
+                        value="${escapeHtml(item.parameter_name)}"
+                        ${selected}
+                    >
+                        ${escapeHtml(item.parameter_name)}
+                    </option>
+                `;
+
+            })
+            .join("")}
+    `;
+}
+
+
+/* =====================================================
+   OPEN SHIPMENT MODAL
+===================================================== */
+
+function openShipmentModal() {
+
+    const modal =
+        document.getElementById(
+            "shipmentModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+
+    document.getElementById(
+        "shipmentCourier"
+    ).innerHTML =
+        renderShipmentOptions(
+            shipmentCouriers,
+            shipment?.courier_name || "",
+            "Select courier"
+        );
+
+
+    document.getElementById(
+        "shipmentStatus"
+    ).innerHTML =
+        renderShipmentOptions(
+            shipmentStatuses,
+            shipment?.shipment_status || "",
+            "Select shipment status"
+        );
+
+
+    document.getElementById("shipmentStatus").onchange = applyShipmentFieldRules;
+
+
+    document.getElementById(
+        "shippingMethod"
+    ).innerHTML =
+        renderShipmentOptions(
+            shippingMethods,
+            shipment?.shipping_method || "",
+            "Select shipping method"
+        );
+
+
+    document.getElementById(
+        "trackingNumber"
+    ).value =
+        shipment?.tracking_number || "";
+
+
+    document.getElementById(
+        "trackingUrl"
+    ).value =
+        shipment?.tracking_url || "";
+
+
+    document.getElementById(
+        "shippedDate"
+    ).value =
+        shipment?.shipped_date
+            ? shipment.shipped_date.substring(0, 10)
+            : "";
+
+
+    document.getElementById(
+        "expectedDeliveryDate"
+    ).value =
+        shipment?.expected_delivery_date
+            ? shipment.expected_delivery_date.substring(0, 10)
+            : "";
+
+
+    document.getElementById(
+        "deliveredDate"
+    ).value =
+        shipment?.delivered_date
+            ? shipment.delivered_date.substring(0, 10)
+            : "";
+
+    applyShipmentFieldRules();
+
+
+    document.getElementById(
+        "packageCount"
+    ).value =
+        shipment?.package_count || 1;
+
+
+    document.getElementById(
+        "shipmentNotes"
+    ).value =
+        shipment?.notes || "";
+
+
+    modal.classList.add("active");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+}
+
+
+function applyShipmentFieldRules() {
+
+    const currentStatus = String(order?.status || "").toLowerCase();
+    const shipmentStatus = String(
+        document.getElementById("shipmentStatus")?.value || ""
+    ).toLowerCase();
+
+    const deliveredVisible =
+        currentStatus === "delivered";
+
+    const shipmentVisible = [
+        "shipped",
+        "out_for_delivery",
+        "delivered",
+        "delivery_failed"
+    ].includes(currentStatus);
+
+    const deliveredGroup =
+        document.getElementById("deliveredDate")?.closest(".shipment-form-group");
+    const shippedGroup =
+        document.getElementById("shippedDate")?.closest(".shipment-form-group");
+    const expectedGroup =
+        document.getElementById("expectedDeliveryDate")?.closest(".shipment-form-group");
+
+    if (deliveredGroup) deliveredGroup.style.display = deliveredVisible ? "" : "none";
+    if (shippedGroup) shippedGroup.style.display = shipmentVisible ? "" : "none";
+    if (expectedGroup) expectedGroup.style.display = shipmentVisible ? "" : "none";
+}
+
+
+/* =====================================================
+   CLOSE SHIPMENT MODAL
+===================================================== */
+
+function closeShipmentModal() {
+
+    const modal =
+        document.getElementById(
+            "shipmentModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+
+    modal.classList.remove(
+        "active"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+}
+
+
+/* =====================================================
+   SAVE SHIPMENT
+===================================================== */
+
+async function saveShipment() {
+
+    const saveButton =
+        document.getElementById(
+            "saveShipmentBtn"
+        );
+
+    const saveText =
+        document.getElementById(
+            "saveShipmentText"
+        );
+
+
+    try {
+
+        saveButton.disabled = true;
+
+        saveText.textContent =
+            "Saving...";
+
+
+        const courier =
+            document.getElementById(
+                "shipmentCourier"
+            ).value.trim();
+
+
+        const status =
+            document.getElementById(
+                "shipmentStatus"
+            ).value.trim();
+
+
+        const shippingMethod =
+            document.getElementById(
+                "shippingMethod"
+            ).value.trim();
+
+
+        const trackingNumber =
+            document.getElementById(
+                "trackingNumber"
+            ).value.trim();
+
+
+        const trackingUrl =
+            document.getElementById(
+                "trackingUrl"
+            ).value.trim();
+
+
+        const shippedDate =
+            document.getElementById(
+                "shippedDate"
+            ).value || null;
+
+
+        const expectedDeliveryDate =
+            document.getElementById(
+                "expectedDeliveryDate"
+            ).value || null;
+
+
+        const deliveredDate =
+            document.getElementById(
+                "deliveredDate"
+            ).value || null;
+
+
+        const packageCount =
+            Number(
+                document.getElementById(
+                    "packageCount"
+                ).value
+            ) || 1;
+
+
+        const notes =
+            document.getElementById(
+                "shipmentNotes"
+            ).value.trim();
+
+
+        if (!courier) {
+
+            showError(
+                "Please select a courier."
+            );
+
+            return;
+        }
+
+
+        if (!status) {
+
+            showError(
+                "Please select shipment status."
+            );
+
+            return;
+        }
+
+
+        if (!shippingMethod) {
+
+            showError(
+                "Please select shipping method."
+            );
+
+            return;
+        }
+
+
+        if (
+            trackingUrl &&
+            !/^https?:\/\//i.test(
+                trackingUrl
+            )
+        ) {
+
+            showError(
+                "Tracking URL must start with http:// or https://."
+            );
+
+            return;
+        }
+
+
+        if (packageCount < 1) {
+
+            showError(
+                "Package count must be at least 1."
+            );
+
+            return;
+        }
+
+
+        const shipmentData = {
+
+            order_id:
+                orderId,
+
+            courier_name:
+                courier,
+
+            tracking_number:
+                trackingNumber || null,
+
+            tracking_url:
+                trackingUrl || null,
+
+            shipped_date:
+                shippedDate,
+
+            expected_delivery_date:
+                expectedDeliveryDate,
+
+            delivered_date:
+                deliveredDate,
+
+            shipment_status:
+                status,
+
+            shipping_method:
+                shippingMethod,
+
+            package_count:
+                packageCount,
+
+            notes:
+                notes || null
+
+        };
+
+
+        let result;
+
+
+        /* =============================================
+           UPDATE EXISTING SHIPMENT
+        ============================================= */
+
+        if (shipment?.id) {
+
+            result =
+                await supabase
+                    .from(
+                        "order_shipments"
+                    )
+                    .update(
+                        shipmentData
+                    )
+                    .eq(
+                        "id",
+                        shipment.id
+                    );
+
+        }
+
+
+        /* =============================================
+           CREATE NEW SHIPMENT
+        ============================================= */
+
+        else {
+
+            result =
+                await supabase
+                    .from(
+                        "order_shipments"
+                    )
+                    .insert(
+                        shipmentData
+                    );
+
+        }
+
+
+        if (result.error) {
+            throw result.error;
+        }
+
+
+        /* Reload shipment */
+
+        shipment =
+            await loadShipment();
+
+
+        /* Refresh shipment UI */
+
+        renderShipment();
+
+
+        closeShipmentModal();
+
+
+        showSuccess(
+            "Shipment details saved successfully."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Shipment save error:",
+            error
+        );
+
+
+        showError(
+            error.message ||
+            "Unable to save shipment details."
+        );
+
+    }
+
+    finally {
+
+        saveButton.disabled = false;
+
+        saveText.textContent =
+            "Save Shipment";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   HEADER STATUS
+===================================================== */
+
+function renderHeaderStatus() {
+
+    headerOrderStatus.textContent =
+        getParameterName(
+            orderStatuses,
+            order.status
+        );
+
+
+    headerPaymentStatus.textContent =
+        getParameterName(
+            paymentStatuses,
+            order.payment_status
+        );
+
+}
+
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+function renderContent() {
+
+    pageContent.innerHTML = `
+
+        <div class="details-grid">
+
+
+            <!-- =============================================
+                 LEFT COLUMN
+            ============================================== -->
+
+            <div class="details-left">
+
+                <!-- ORDER ITEMS -->
+
+                <div class="details-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-wrap">
+
+                            <div class="card-icon">
+                                🛍
+                            </div>
+
+                            <h2>
+                                Order Items
+                            </h2>
+
+                        </div>
+
+
+                        <span
+                            class="card-header-count"
+                        >
+                            ${getTotalQuantity()}
+                            item(s)
+                        </span>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div
+                            class="items-table-wrapper"
+                        >
+
+                            <table
+                                class="items-table"
+                            >
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Product
+                                        </th>
+
+                                        <th>
+                                            Price
+                                        </th>
+
+                                        <th>
+                                            Qty
+                                        </th>
+
+                                        <th>
+                                            Subtotal
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    ${renderItems()}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                        ${renderTotals()}
+
+                    </div>
+
+                </div>
+
+                                            ${renderShipmentSection()}
+
+                <!-- SHIPPING ADDRESS -->
+
+                <div class="details-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-wrap">
+
+                            <div class="card-icon">
+                                📍
+                            </div>
+
+                            <h2>
+                                Shipping Address
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        ${renderAddress()}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <!-- =============================================
+                 RIGHT COLUMN
+            ============================================== -->
+
+            <div class="details-right">
+
+
+                <!-- CUSTOMER -->
+
+                <div class="details-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-wrap">
+
+                            <div class="card-icon">
+                                👤
+                            </div>
+
+                            <h2>
+                                Customer Information
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        ${renderCustomer()}
+
+                    </div>
+
+                </div>
+
+
+                <!-- UPDATE ORDER -->
+
+                <div class="details-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-wrap">
+
+                            <div class="card-icon">
+                                ↻
+                            </div>
+
+                            <h2>
+                                Update Order
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+
+                        <div
+                            class="form-group"
+                        >
+
+                            <label
+                                for="orderStatus"
+                            >
+                                Order Status
+                            </label>
+
+
+                            <select
+                                id="orderStatus"
+                            >
+
+                                ${renderStatusOptions()}
+
+                            </select>
+
+                        </div>
+
+
+                        <div
+                            class="form-group"
+                        >
+
+                            <label
+                                for="paymentStatus"
+                            >
+                                Payment Status
+                            </label>
+
+
+                            <select
+                                id="paymentStatus"
+                            >
+
+                                ${renderPaymentOptions()}
+
+                            </select>
+
+                        </div>
+
+
+                        <div id="statusSpecificFields" class="status-specific-fields">
+                            ${getStatusSpecificFieldsHtml(order.status)}
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="saveStatusBtn"
+                            class="save-btn"
+                        >
+                            Save Changes
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORDER INFORMATION -->
+
+                <div class="details-card">
+
+                    <div class="card-header">
+
+                        <div class="card-title-wrap">
+
+                            <div class="card-icon">
+                                ℹ
+                            </div>
+
+                            <h2>
+                                Order Information
+                            </h2>
+
+                        </div>
+                        <button type="button" id="viewOrderHistoryBtn" class="order-history-link" aria-label="View order status history"><span class="history-link-icon">↗</span><span>View status history</span></button>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Order Number
+                            </span>
+
+                            <span class="info-value">
+                                ${escapeHtml(
+                                    order.order_number
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Created On
+                            </span>
+
+                            <span class="info-value">
+                                ${formatDateTime(
+                                    order.created_at
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Last Updated
+                            </span>
+
+                            <span class="info-value">
+                                ${formatDateTime(
+                                    order.updated_at
+                                )}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+    document
+        .getElementById(
+            "saveStatusBtn"
+        )
+        .addEventListener(
+            "click",
+            saveStatus
+        );
+
+    const orderStatusSelect = document.getElementById("orderStatus");
+    if (orderStatusSelect) {
+        orderStatusSelect.addEventListener("change", renderStatusSpecificFields);
+    }
+    
+    const downloadInvoiceBtn =
+    document.getElementById(
+        "downloadInvoiceBtn"
+    );
+
+if (downloadInvoiceBtn) {
+
+   downloadInvoiceBtn.addEventListener(
+    "click",
+    () => {
+        openInvoicePreview(
+            order,
+            orderItems, supabase
+        );
+    }
+);
+
+}
+
+    const viewOrderHistoryBtn = document.getElementById("viewOrderHistoryBtn");
+    if (viewOrderHistoryBtn) viewOrderHistoryBtn.addEventListener("click", openOrderHistory);
+    
+}
+
+
+/* =====================================================
+   RENDER ITEMS
+===================================================== */
+
+function renderItems() {
+
+    if (!orderItems.length) {
+
+        return `
+
+            <tr>
+
+                <td
+                    colspan="4"
+                    style="
+                        text-align:center;
+                        padding:40px;
+                        color:#888;
+                    "
+                >
+                    No items found.
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    return orderItems
+        .map(
+            item => {
+
+                const imageHtml =
+                    item.image_url
+                        ? `
+                            <img
+                                src="${escapeHtml(
+                                    item.image_url
+                                )}"
+                                alt="${escapeHtml(
+                                    item.product_name
+                                )}"
+                                class="product-image"
+                                loading="lazy"
+                                onerror="
+                                    this.style.display='none';
+                                    this.nextElementSibling.style.display='flex';
+                                "
+                            >
+
+                            <div
+                                class="product-placeholder"
+                                style="display:none;"
+                            >
+                                ✦
+                            </div>
+                        `
+                        : `
+                            <div
+                                class="product-placeholder"
+                            >
+                                ✦
+                            </div>
+                        `;
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div
+                                class="product-cell"
+                            >
+
+                                ${imageHtml}
+
+
+                                <div>
+
+                                    <div
+                                        class="product-name"
+                                    >
+                                        ${escapeHtml(
+                                            item.product_name
+                                        )}
+                                    </div>
+
+
+                                    ${
+                                        item.product_id
+                                            ? `
+                                                <div
+                                                    class="product-id"
+                                                >
+                                                    Product
+                                                </div>
+                                            `
+                                            : `
+                                                <div
+                                                    class="product-id"
+                                                >
+                                                    Product reference unavailable
+                                                </div>
+                                            `
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="item-price"
+                            >
+                                ₹${formatMoney(
+                                    item.product_price
+                                )}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            ${Number(
+                                item.quantity || 0
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="item-subtotal"
+                            >
+                                ₹${formatMoney(
+                                    item.subtotal
+                                )}
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   TOTALS
+===================================================== */
+
+function renderTotals() {
+
+    return `
+
+        <div class="totals">
+
+
+            <div class="total-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong>
+                    ₹${formatMoney(
+                        order.subtotal
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div
+                class="
+                    total-row
+                    discount
+                "
+            >
+
+                <span>
+                    Discount
+                </span>
+
+                <strong>
+                    - ₹${formatMoney(
+                        order.discount_amount
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="total-row">
+
+                <span>
+                    Shipping
+                </span>
+
+                <strong>
+                    ₹${formatMoney(
+                        order.shipping_amount
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div
+                class="
+                    total-row
+                    grand-total
+                "
+            >
+
+                <span>
+                    Grand Total
+                </span>
+
+                <strong>
+                    ₹${formatMoney(
+                        order.total_amount
+                    )}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   CUSTOMER
+===================================================== */
+
+function renderCustomer() {
+
+    const customer =
+        order.customer;
+
+
+    if (!customer) {
+
+        return `
+
+            <div
+                style="
+                    color:#888;
+                    font-size:14px;
+                "
+            >
+                Customer information unavailable.
+            </div>
+
+        `;
+
+    }
+
+
+    return `
+
+        <div class="info-row">
+
+            <span class="info-label">
+                Full Name
+            </span>
+
+            <span class="info-value">
+                ${escapeHtml(
+                    customer.full_name ||
+                    "-"
+                )}
+            </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span class="info-label">
+                Email
+            </span>
+
+            <span class="info-value">
+                ${escapeHtml(
+                    customer.email ||
+                    "-"
+                )}
+            </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span class="info-label">
+                Phone
+            </span>
+
+            <span class="info-value">
+                ${escapeHtml(
+                    customer.phone ||
+                    "-"
+                )}
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   ADDRESS
+===================================================== */
+
+function renderAddress() {
+
+    const address =
+        order.shipping_address || {};
+
+
+    const lines = [
+
+        address.address_line1,
+
+        address.address_line2,
+
+        [
+            address.city,
+            address.state
+        ]
+            .filter(Boolean)
+            .join(", "),
+
+        address.pincode,
+
+        address.country
+
+    ].filter(Boolean);
+
+
+    return `
+
+        <div class="address-box">
+
+            <div class="address-name">
+
+                ${escapeHtml(
+                    address.full_name ||
+                    "-"
+                )}
+
+            </div>
+
+
+            <div>
+
+                ${
+                    lines.length
+                        ? lines
+                            .map(
+                                line =>
+                                    escapeHtml(
+                                        line
+                                    )
+                            )
+                            .join("<br>")
+                        : "Address unavailable"
+                }
+
+            </div>
+
+
+            ${
+                address.phone
+                    ? `
+                        <div
+                            style="
+                                margin-top:8px;
+                            "
+                        >
+                            Phone:
+                            ${escapeHtml(
+                                address.phone
+                            )}
+                        </div>
+                    `
+                    : ""
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   STATUS OPTIONS
+===================================================== */
+
+function renderStatusOptions() {
+
+    const current = order.status;
+
+    const currentParameter = orderStatuses.find(
+        status => status.parameter_code === current
+    );
+
+    const currentOption = currentParameter
+        ? `
+            <option value="${escapeHtml(currentParameter.parameter_code)}" selected>
+                ${escapeHtml(currentParameter.parameter_name)} (Current)
+            </option>
+        `
+        : `
+            <option value="${escapeHtml(current)}" selected>
+                ${escapeHtml(getParameterName(orderStatuses, current))} (Current)
+            </option>
+        `;
+
+    const transitionOptions = (workflowOptions || [])
+        .filter(option =>
+            String(option.to_status_code || "").toLowerCase() !==
+            String(current || "").toLowerCase()
+        )
+        .map(option => {
+            const target = orderStatuses.find(
+                status =>
+                    String(status.parameter_code).toLowerCase() ===
+                    String(option.to_status_code).toLowerCase()
+            );
+
+            if (!target) return "";
+
+            return `
+                <option value="${escapeHtml(target.parameter_code)}"
+                    data-transition-id="${escapeHtml(option.transition_id)}">
+                    ${escapeHtml(option.action_name || target.parameter_name)} → ${escapeHtml(target.parameter_name)}
+                </option>
+            `;
+        })
+        .join("");
+
+    return currentOption + transitionOptions;
+}
+
+
+/* =====================================================
+   WORKFLOW OPTIONS
+===================================================== */
+
+async function loadWorkflowOptions() {
+
+    workflowOptions = [];
+
+    const { data, error } = await supabase.rpc(
+        "admin_get_order_status_options",
+        { p_order_id: orderId }
+    );
+
+    if (error) {
+        throw error;
+    }
+
+    workflowOptions = Array.isArray(data?.options)
+        ? data.options
+        : [];
+}
+
+
+/* =====================================================
+   STATUS-SPECIFIC FIELDS
+===================================================== */
+
+function statusNeedsShipment(status) {
+    return [
+        "shipped",
+        "out_for_delivery",
+        "delivered",
+        "delivery_failed"
+    ].includes(String(status || "").toLowerCase());
+}
+
+function renderShipmentSection() {
+
+    if (!statusNeedsShipment(order.status)) {
+        return "";
+    }
+
+    return `
+        <!-- SHIPMENT & TRACKING -->
+        <div class="details-card shipment-card">
+            <div class="card-header">
+                <div>
+                    <h2>Shipment & Tracking</h2>
+                    <p>Track your order shipment details</p>
+                </div>
+                <span id="shipmentStatusBadge" class="status-badge">Not Shipped</span>
+            </div>
+
+            <div id="shipmentContent">
+                <div class="shipment-empty">
+                    <div class="shipment-empty-icon">🚚</div>
+                    <h3>Shipment not created</h3>
+                    <p>Tracking information will appear here once the order has been shipped.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="shipment-actions">
+            <button type="button" id="editShipmentBtn" class="edit-shipment-btn">
+                ✏️ Edit Shipment Details
+            </button>
+        </div>
+    `;
+}
+
+function getStatusSpecificFieldsHtml(status) {
+
+    const normalized = String(status || "").toLowerCase();
+    let html = "";
+
+    const remarksField = `
+        <div class="status-context-field">
+            <label for="statusDetailRemarks">Remarks</label>
+            <textarea id="statusDetailRemarks" maxlength="1000"
+                placeholder="Enter remarks for this status change..."></textarea>
+        </div>
+    `;
+
+    if (normalized === "cancelled") {
+        html = `
+            <div class="status-context-card status-context-danger">
+                <div class="status-context-title">Cancellation Details</div>
+                <div class="status-context-grid">
+                    ${remarksField}
+                    <div class="status-context-field">
+                        <label for="statusDetailReason">Cancellation Reason</label>
+                        <textarea id="statusDetailReason" maxlength="1000"
+                            placeholder="Enter the reason for cancelling this order..."></textarea>
+                    </div>
+                </div>
+                <div class="status-context-hint">Cancellation Reason is required when changing the order to Cancelled. Remarks are optional.</div>
+            </div>
+        `;
+    } else if (normalized === "delivered") {
+        html = `
+            <div class="status-context-card status-context-success">
+                <div class="status-context-title">Delivery Details</div>
+                <div class="status-context-grid">
+                    ${remarksField}
+                    <div class="status-context-field">
+                        <label for="statusDetailDeliveredDate">Delivered Date</label>
+                        <input id="statusDetailDeliveredDate" type="date"
+                            value="${escapeHtml(shipment?.delivered_date ? shipment.delivered_date.substring(0,10) : "")}">
+                    </div>
+                </div>
+                <div class="status-context-hint">Delivered Date is required when changing the order to Delivered.</div>
+            </div>
+        `;
+    } else if (normalized === "delivery_failed") {
+        html = `
+            <div class="status-context-card status-context-warning">
+                <div class="status-context-title">Delivery Failure Details</div>
+                <div class="status-context-grid">
+                    ${remarksField}
+                    <div class="status-context-field">
+                        <label for="statusDetailReason">Failure Reason</label>
+                        <textarea id="statusDetailReason" maxlength="1000"
+                            placeholder="Why did delivery fail?"></textarea>
+                    </div>
+                </div>
+                <div class="status-context-hint">Failure Reason is stored separately from Remarks.</div>
+            </div>
+        `;
+    } else if (normalized === "return_requested") {
+        html = `
+            <div class="status-context-card status-context-warning">
+                <div class="status-context-title">Return Request Details</div>
+                <div class="status-context-grid">
+                    ${remarksField}
+                    <div class="status-context-field">
+                        <label for="statusDetailReason">Return Reason</label>
+                        <textarea id="statusDetailReason" maxlength="1000"
+                            placeholder="Enter the customer's return reason..."></textarea>
+                    </div>
+                </div>
+                <div class="status-context-hint">Return Reason is stored separately from Remarks.</div>
+            </div>
+        `;
+    } else if (normalized === "return_rejected") {
+        html = `
+            <div class="status-context-card status-context-danger">
+                <div class="status-context-title">Return Rejection Details</div>
+                <div class="status-context-grid">
+                    ${remarksField}
+                    <div class="status-context-field">
+                        <label for="statusDetailReason">Rejection Reason</label>
+                        <textarea id="statusDetailReason" maxlength="1000"
+                            placeholder="Enter the reason for rejecting the return..."></textarea>
+                    </div>
+                </div>
+                <div class="status-context-hint">Rejection Reason is stored separately from Remarks.</div>
+            </div>
+        `;
+    } else if (normalized === "refund_initiated") {
+        html = `
+            <div class="status-context-card status-context-info">
+                <div class="status-context-title">Refund Details</div>
+                <div class="status-context-grid">
+                    ${remarksField}
+                    <div class="status-context-field">
+                        <label for="statusDetailReason">Refund Reference / Note</label>
+                        <textarea id="statusDetailReason" maxlength="1000"
+                            placeholder="Enter refund reference or processing note..."></textarea>
+                    </div>
+                </div>
+                <div class="status-context-hint">Refund Reference / Note is stored separately from Remarks.</div>
+            </div>
+        `;
+    } else if (statusNeedsShipment(normalized)) {
+        html = `
+            <div class="status-context-card status-context-info">
+                <div class="status-context-title">Shipment Details</div>
+                ${remarksField}
+                <div class="status-context-hint">Shipment &amp; tracking details are available for this status. Use <strong>Edit Shipment Details</strong> to maintain courier, tracking and delivery information.</div>
+            </div>
+        `;
+    }
+
+    return html;
+}
+
+function renderStatusSpecificFields(eventOrStatus) {
+
+    const select = document.getElementById("orderStatus");
+    const container = document.getElementById("statusSpecificFields");
+
+    if (!container) return;
+
+    const status =
+        typeof eventOrStatus === "string"
+            ? eventOrStatus
+            : (select?.value || order.status);
+
+    container.innerHTML = getStatusSpecificFieldsHtml(status);
+}
+
+function getStatusDetailValue() {
+    const field = document.getElementById("statusDetailReason");
+    return field ? field.value.trim() : "";
+}
+
+function getStatusRemarksValue() {
+    const field = document.getElementById("statusDetailRemarks");
+    return field ? field.value.trim() : "";
+}
+
+/* =====================================================
+   PAYMENT OPTIONS
+===================================================== */
+
+function renderPaymentOptions() {
+
+    return paymentStatuses
+        .map(
+            status => `
+
+                <option
+                    value="${escapeHtml(
+                        status.parameter_code
+                    )}"
+                    ${
+                        status.parameter_code ===
+                        order.payment_status
+                            ? "selected"
+                            : ""
+                    }
+                >
+                    ${escapeHtml(
+                        status.parameter_name
+                    )}
+                </option>
+
+            `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   SAVE STATUS
+===================================================== */
+
+async function saveStatus() {
+
+    const saveButton = document.getElementById("saveStatusBtn");
+    const newStatus = document.getElementById("orderStatus")?.value || "";
+    const newPaymentStatus = document.getElementById("paymentStatus")?.value || "";
+
+    if (!newStatus) {
+        showToast("error", "Update failed", "Please select an order status.");
+        return;
+    }
+
+    if (!newPaymentStatus) {
+        showToast("error", "Update failed", "Please select a payment status.");
+        return;
+    }
+
+    const statusChanged = newStatus !== order.status;
+    const paymentChanged = newPaymentStatus !== order.payment_status;
+
+    if (!statusChanged && !paymentChanged) {
+        showToast("success", "No changes", "The order already has these statuses.");
+        return;
+    }
+
+    let transition = null;
+    const detailValue = getStatusDetailValue();
+    const remarksValue = getStatusRemarksValue();
+
+    if (statusChanged) {
+
+        transition = (workflowOptions || []).find(option =>
+            String(option.to_status_code).toLowerCase() ===
+            String(newStatus).toLowerCase()
+        );
+
+        if (!transition) {
+            showToast(
+                "error",
+                "Invalid workflow transition",
+                "That status is not a configured next step for this order."
+            );
+            return;
+        }
+
+        if (String(newStatus).toLowerCase() === "cancelled" && !detailValue) {
+            showToast(
+                "error",
+                "Cancellation reason required",
+                "Please enter a cancellation reason before cancelling the order."
+            );
+            return;
+        }
+
+        if (
+            String(newStatus).toLowerCase() === "delivered" &&
+            !document.getElementById("statusDetailDeliveredDate")?.value
+        ) {
+            showToast(
+                "error",
+                "Delivered date required",
+                "Please select the delivered date before marking the order as delivered."
+            );
+            return;
+        }
+    }
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    try {
+
+        let workflowResult = null;
+
+        if (statusChanged) {
+
+            const targetStatus = String(newStatus).toLowerCase();
+            const metadata = {
+                source: "order-details",
+                status_details: {}
+            };
+
+            if (detailValue) {
+                const key =
+                    targetStatus === "cancelled"
+                        ? "cancellation_reason"
+                        : targetStatus === "delivery_failed"
+                            ? "failure_reason"
+                            : targetStatus === "return_requested"
+                                ? "return_reason"
+                                : targetStatus === "return_rejected"
+                                    ? "rejection_reason"
+                                    : targetStatus === "refund_initiated"
+                                        ? "refund_reference_or_note"
+                                        : "status_note";
+
+                metadata.status_details[key] = detailValue;
+            }
+
+            if (targetStatus === "delivered") {
+                metadata.status_details.delivered_date =
+                    document.getElementById("statusDetailDeliveredDate").value;
+            }
+
+            const { data, error } = await supabase.rpc(
+                "admin_change_order_status",
+                {
+                    p_order_id: orderId,
+                    p_transition_id: transition.transition_id,
+                    p_remarks: remarksValue || null,
+                    p_metadata: metadata
+                }
+            );
+
+            if (error) throw error;
+            workflowResult = data;
+        }
+
+        if (paymentChanged) {
+
+            const { data, error } = await supabase
+                .from("orders")
+                .update({
+                    payment_status: newPaymentStatus,
+                    updated_at: new Date().toISOString()
+                })
+                .eq("id", orderId)
+                .select("id,payment_status,updated_at")
+                .single();
+
+            if (error) throw error;
+
+            order.payment_status = data.payment_status;
+            order.updated_at = data.updated_at;
+        }
+
+        if (workflowResult) {
+
+            order.status = workflowResult.to_status || newStatus;
+            order.updated_at = new Date().toISOString();
+
+            if (String(newStatus).toLowerCase() === "delivered") {
+
+                const deliveredDate =
+                    document.getElementById("statusDetailDeliveredDate").value;
+
+                if (shipment?.id) {
+                    const { error: shipmentError } =
+                        await supabase
+                            .from("order_shipments")
+                            .update({ delivered_date: deliveredDate })
+                            .eq("id", shipment.id);
+
+                    if (shipmentError) throw shipmentError;
+                    shipment = await loadShipment();
+                }
+            }
+        }
+
+        await loadWorkflowOptions();
+        renderPage();
+
+        showToast(
+            "success",
+            "Order updated successfully!",
+            statusChanged && paymentChanged
+                ? "Order workflow and payment status have been updated."
+                : statusChanged
+                    ? "Order status moved through the configured workflow."
+                    : "Payment status has been updated."
+        );
+
+    }
+    catch (error) {
+
+        console.error("Order update error:", error);
+
+        showToast(
+            "error",
+            "Unable to update order",
+            error.message || "Something went wrong while saving the order."
+        );
+
+    }
+    finally {
+
+        const button = document.getElementById("saveStatusBtn");
+
+        if (button) {
+            button.disabled = false;
+            button.textContent = "Save Changes";
+        }
+
+    }
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(
+    type,
+    title,
+    message
+) {
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+
+    toast.className =
+        `toast ${type}`;
+
+
+    const icon =
+        type === "success"
+            ? "✓"
+            : "!";
+
+
+    toast.innerHTML = `
+
+        <div class="toast-icon">
+            ${icon}
+        </div>
+
+
+        <div class="toast-content">
+
+            <div class="toast-title">
+                ${escapeHtml(title)}
+            </div>
+
+            <div class="toast-message">
+                ${escapeHtml(message)}
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="toast-close"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+    `;
+
+
+    orderAlertStack.appendChild(toast);
+
+
+    const closeButton =
+        toast.querySelector(
+            ".toast-close"
+        );
+
+
+    closeButton.addEventListener(
+        "click",
+        () => {
+
+            toast.remove();
+
+        }
+    );
+
+
+    setTimeout(
+        () => {
+
+            if (
+                toast.isConnected
+            ) {
+
+                toast.remove();
+
+            }
+
+        },
+        4500
+    );
+
+}
+
+
+/* =====================================================
+   ORDER STATUS HISTORY
+===================================================== */
+const orderHistoryModal = document.getElementById("orderHistoryModal");
+const orderHistoryOverlay = document.getElementById("orderHistoryOverlay");
+const closeOrderHistoryBtn = document.getElementById("closeOrderHistoryBtn");
+const closeOrderHistoryAction = document.getElementById("closeOrderHistoryAction");
+
+async function openOrderHistory() {
+    if (!orderHistoryModal || !orderId) return;
+    orderHistoryModal.classList.add("active");
+    orderHistoryModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    const body = document.getElementById("orderHistoryBody");
+    const current = document.getElementById("orderHistoryCurrentStatus");
+    const count = document.getElementById("orderHistoryCount");
+    const subtitle = document.getElementById("orderHistoryModalSubtitle");
+    if (current) current.textContent = getParameterName(orderStatuses, order?.status) || "—";
+    if (subtitle) subtitle.textContent = `${order?.order_number ? "Order " + order.order_number + " · " : ""}Complete status transition timeline`;
+    if (count) count.textContent = "";
+    if (body) body.innerHTML = `<div class="order-history-loading">Loading status history...</div>`;
+    try {
+        const { data, error } = await supabase.from("order_status_history").select(`id,order_id,from_status,to_status,action_code,action_name,changed_by,remarks,metadata,changed_at`).eq("order_id", orderId).order("changed_at", { ascending: true });
+        if (error) throw error;
+        const history = data || [];
+        if (count) count.textContent = `${history.length} ${history.length === 1 ? "event" : "events"}`;
+        if (!history.length) {
+            if (body) body.innerHTML = `<div class="order-history-empty"><div><div class="order-history-empty-icon">◷</div><strong style="display:block;color:#51404a;margin-bottom:5px;">No status history yet</strong><span>No workflow transitions have been recorded for this order.</span></div></div>`;
+            return;
+        }
+        if (body) body.innerHTML = `<div class="order-history-timeline">${history.map((event,index)=>renderOrderHistoryEvent(event,index===history.length-1)).join("")}</div>`;
+    } catch (error) {
+        console.error("Order status history load error:", error);
+        if (body) body.innerHTML = `<div class="order-history-error"><div><div class="order-history-empty-icon">!</div><strong style="display:block;color:#8b3d4e;margin-bottom:5px;">Unable to load history</strong><span>${escapeHtml(error.message || "Something went wrong while loading status history.")}</span></div></div>`;
+    }
+}
+
+function renderOrderHistoryEvent(event, latest) {
+    const fromStatus = event.from_status ? getParameterName(orderStatuses,event.from_status) : "Order created";
+    const toStatus = getParameterName(orderStatuses,event.to_status);
+    const actionName = event.action_name || event.action_code || "Status updated";
+    const details = getOrderHistoryDetails(event.metadata);
+    return `<div class="order-history-event ${latest ? "latest" : ""}"><div class="order-history-dot">${latest ? "✓" : "•"}</div><div class="order-history-event-card"><div class="order-history-event-top"><div class="order-history-transition">${event.from_status ? `<span class="order-history-status from">${escapeHtml(fromStatus)}</span><span class="order-history-arrow">→</span>` : ""}<span class="order-history-status to">${escapeHtml(toStatus)}</span></div><div class="order-history-time">${escapeHtml(formatDateTime(event.changed_at))}</div></div><div class="order-history-action">${escapeHtml(actionName)}</div>${event.remarks ? `<div class="order-history-remarks">${escapeHtml(event.remarks)}</div>` : ""}${details ? `<div class="order-history-details">${details}</div>` : ""}${event.changed_by ? `<div style="margin-top:8px;color:#a08994;font-size:9px;">Changed by · ${escapeHtml(event.changed_by)}</div>` : ""}</div></div>`;
+}
+
+function getOrderHistoryDetails(metadata) {
+    if (!metadata || typeof metadata !== "object") return "";
+    const statusDetails = metadata.status_details && typeof metadata.status_details === "object" ? metadata.status_details : {};
+    const labels = {cancellation_reason:"Cancellation reason",failure_reason:"Failure reason",return_reason:"Return reason",rejection_reason:"Rejection reason",refund_reference_or_note:"Refund reference / note",delivered_date:"Delivered date",status_note:"Status note"};
+    return Object.entries(statusDetails).filter(([,value])=>value!==null&&value!==undefined&&String(value).trim()!=="").map(([key,value])=>`<div class="order-history-detail"><div class="order-history-detail-label">${escapeHtml(labels[key] || formatHistoryKey(key))}</div><div class="order-history-detail-value">${escapeHtml(typeof value === "object" ? JSON.stringify(value) : value)}</div></div>`).join("");
+}
+function formatHistoryKey(key){return String(key||"").replace(/[_-]+/g," ").replace(/\b\w/g,letter=>letter.toUpperCase());}
+function closeOrderHistory(){
+    if(!orderHistoryModal)return;
+
+    // Move focus out of the modal BEFORE hiding it from assistive technology.
+    // This prevents the browser accessibility warning when the Close button is focused.
+    const trigger = document.getElementById("viewOrderHistoryBtn");
+    const activeElement = document.activeElement;
+    if (activeElement && orderHistoryModal.contains(activeElement)) {
+        if (trigger && typeof trigger.focus === "function") {
+            trigger.focus({ preventScroll: true });
+        } else {
+            activeElement.blur();
+        }
+    }
+
+    orderHistoryModal.classList.remove("active");
+    orderHistoryModal.setAttribute("aria-hidden","true");
+    document.body.style.overflow="";
+}
+closeOrderHistoryBtn?.addEventListener("click",closeOrderHistoryBtn ? closeOrderHistory : null);
+closeOrderHistoryAction?.addEventListener("click",closeOrderHistory);
+orderHistoryOverlay?.addEventListener("click",closeOrderHistory);
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&orderHistoryModal?.classList.contains("active"))closeOrderHistory();});
+
+/* =====================================================
+   TOTAL QUANTITY
+===================================================== */
+
+function getTotalQuantity() {
+
+    return orderItems.reduce(
+        (
+            total,
+            item
+        ) =>
+            total +
+            Number(
+                item.quantity || 0
+            ),
+        0
+    );
+
+}
+
+
+/* =====================================================
+   PARAMETER NAME
+===================================================== */
+
+function getParameterName(
+    list,
+    code
+) {
+
+    const parameter =
+        list.find(
+            item =>
+                item.parameter_code ===
+                code
+        );
+
+
+    return parameter
+        ? parameter.parameter_name
+        : code || "-";
+
+}
+
+
+/* =====================================================
+   DATE TIME
+===================================================== */
+
+function formatDateTime(
+    value
+) {
+
+    if (!value) {
+        return "-";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "-";
+
+    }
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+function formatMoney(
+    value
+) {
+
+    return Number(
+        value || 0
+    ).toLocaleString(
+        "en-IN",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SAFE CLASS
+===================================================== */
+
+function safeClass(
+    value
+) {
+
+    return String(
+        value || ""
+    )
+        .toLowerCase()
+        .replace(
+            /[^a-z0-9_-]/g,
+            ""
+        );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+/* =====================================================
+   SUCCESS
+===================================================== */
+
+function showSuccess(message) {
+    showOrderAlert(message, "success", "Done");
+}
+
+function showOrderAlert(message, type = "success", title = "") {
+    if (!orderAlertStack) return;
+
+    const alertEl = document.createElement("div");
+    alertEl.className = `order-alert ${type}`;
+    const icon = type === "error" ? "!" : "✓";
+
+    alertEl.innerHTML = `
+        <div class="order-alert-icon">${icon}</div>
+        <div class="order-alert-content">
+            <div class="order-alert-title">${escapeHtml(title || (type === "error" ? "Something went wrong" : "Done"))}</div>
+            <div class="order-alert-message">${escapeHtml(message)}</div>
+        </div>
+    `;
+
+    orderAlertStack.appendChild(alertEl);
+    setTimeout(() => {
+        alertEl.style.opacity = "0";
+        alertEl.style.transform = "translateY(10px)";
+        alertEl.style.transition = "opacity .18s ease, transform .18s ease";
+        setTimeout(() => alertEl.remove(), 200);
+    }, 2800);
+}
+
+function showError(
+    message
+) {
+
+    pageContent.innerHTML = `
+
+        <div class="page-message">
+
+            <strong>
+                Unable to load order
+            </strong>
+
+            ${escapeHtml(
+                message
+            )}
+
+            <div
+                style="
+                    margin-top:18px;
+                "
+            >
+
+                <button
+                    type="button"
+                    class="back-btn"
+                    id="errorBackBtn"
+                >
+                    ← Back to Orders
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document
+        .getElementById(
+            "errorBackBtn"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    "orders.html";
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+document
+    .getElementById(
+        "backBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "orders.html";
+
+        }
+    );
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener(
+        "click",
+        async () => {
+
+            await supabase.auth.signOut();
+
+            window.location.href =
+                "index.html";
+
+        }
+    );
+
+}
+
+</script>
+
+<script src="js/invoice.js"></script>
+</body>
+
+</html>

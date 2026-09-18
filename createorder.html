@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Complete Order | SS Spark Collections</title>
+<link rel="stylesheet" href="style.css">
+<style>
+:root{--pink:#d6336c;--pink2:#b92357;--rose:#8f294f;--ink:#542238;--muted:#987080;--border:#edd9e2;--green:#218a57}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{font-family:Arial,sans-serif;color:var(--ink);background:#fff}
+button{font:inherit}.page{min-height:100vh;background:linear-gradient(180deg,#fff8fb 0,#fff 55%);display:flex;align-items:center;justify-content:center;padding:18px}
+.card{width:min(520px,100%);background:#fff;border:1px solid var(--border);border-radius:25px;box-shadow:0 20px 60px rgba(83,35,52,.10);padding:27px 24px;text-align:center}
+.logo{width:88px;height:auto;display:block;margin:0 auto 15px}.eyebrow{margin:0 0 7px;color:var(--pink);font:700 8px Arial;letter-spacing:3px}
+.title{margin:0;font:500 30px/1.1 Georgia,serif}.sub{margin:9px auto 0;max-width:380px;color:var(--muted);font:10px/1.55 Arial}
+.status{margin:18px 0 0;font:700 9px Arial;color:var(--muted)}
+.quote{margin:18px 0 0;padding:15px;border:1px solid #ead7df;border-radius:16px;background:#fff8fb;text-align:left}
+.quote-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.quote-head strong{font:700 10px Arial}.quote-head b{font:800 18px Arial;color:var(--pink)}
+.quote-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #f1e3e8;font:9px Arial;color:var(--muted)}
+.quote-row:last-child{border-bottom:0}.quote-row b{color:var(--ink)}
+.pay-box{margin-top:16px;padding:16px;border:1px solid #ead7df;border-radius:16px;background:#fff}
+.pay-title{font:700 11px Georgia,serif}.pay-note{margin:6px 0 0;color:var(--muted);font:9px/1.45 Arial}
+.primary{width:100%;height:48px;margin-top:15px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font:700 10px Arial;box-shadow:0 11px 25px rgba(214,51,108,.2)}
+.primary:disabled{opacity:.55;cursor:not-allowed}
+.back-review{display:inline-flex;align-items:center;justify-content:center;margin:15px auto 0;color:var(--rose);font:700 9px Arial;text-decoration:none;padding:7px 10px;border:1px solid #ead7df;border-radius:999px;background:#fff}
+.back-review:hover{background:#fff7fa;color:var(--pink)}
+.coupon-line{color:var(--green)!important}
+.coupon-line b{color:var(--green)!important}
+.quote-row.discount-row{color:var(--pink)}
+.quote-row.discount-row b{color:var(--pink)}
+.secondary{display:inline-block;margin-top:11px;color:var(--rose);font:700 9px Arial;text-decoration:none}
+.loader{width:40px;height:40px;margin:22px auto 0;border:3px solid #f3dce5;border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite}
+.loader.hidden{display:none}@keyframes spin{to{transform:rotate(360deg)}}
+.alert-stack{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;width:min(92vw,450px);display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.alert{pointer-events:auto;background:#fff;border:1px solid #ead5e1;border-radius:17px;padding:14px;box-shadow:0 16px 40px rgba(63,30,48,.18);display:flex;align-items:center;gap:11px;text-align:left}
+.alert-icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#fff0f2;color:#b4234f;font-weight:900;flex:none}
+.alert.success .alert-icon{background:#eaf8f0;color:#25834a}.alert-content{min-width:0;flex:1}
+.alert-title{font:800 12px Arial;color:#4c3042}.alert-message{margin-top:3px;font:10px/1.45 Arial;color:#816b76;overflow-wrap:anywhere}
+.alert-action{margin-top:12px;text-align:center}.home-btn{border:0;border-radius:10px;background:var(--pink);color:#fff;padding:9px 15px;font:700 9px Arial}
+.secure{margin-top:17px;padding:9px;border:1px solid #e1f0e6;border-radius:11px;background:#f7fcf9;color:#347252;font:700 8px Arial}
+@media(max-width:380px){.page{padding:10px}.card{padding:22px 14px;border-radius:20px}.logo{width:76px}.title{font-size:27px}.sub{font-size:9px}.alert-stack{width:calc(100vw - 18px);bottom:10px}.alert{padding:12px}.alert-icon{width:32px;height:32px}}
+@media(prefers-reduced-motion:reduce){.loader{animation:none}}
+</style>
+</head>
+<body>
+<main class="page">
+<section class="card" aria-live="polite">
+  <img class="logo" src="assets/logo.png" alt="SS Spark Collections">
+  <p class="eyebrow">SS SPARK COLLECTIONS</p>
+  <h1 class="title" id="pageTitle">Final order check</h1>
+  <p class="sub" id="pageSub">We will validate your reviewed order against the latest cart, price, stock, coupon and charges.</p>
+  <div class="loader" id="loader"></div>
+  <div class="status" id="status">Preparing secure validation…</div>
+  <a class="back-review" href="review.html">← Back to Review Order</a>
+  <div id="quoteBox" class="quote" hidden></div>
+  <div id="actionBox" class="pay-box" hidden></div>
+  <div class="secure">🔒 Final validation and order creation are handled by SS Spark Collection Admin.</div>
+</section>
+</main>
+<div class="alert-stack" id="alertStack" aria-live="assertive"></div>
+
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+const $=id=>document.getElementById(id);
+let processing=false;
+let state=null;
+let validated=null;
+
+const money=v=>`₹${Number(v||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+
+function showAlert(message,type="error",title="Please check"){
+  const stack=$("alertStack");
+  const el=document.createElement("div");
+  el.className=`alert ${type}`;
+  el.innerHTML=`<div class="alert-icon">${type==="success"?"✓":"!"}</div><div class="alert-content"><div class="alert-title">${esc(title)}</div><div class="alert-message">${esc(message)}</div>${type==="success"?`<div class="alert-action"><button class="home-btn" type="button" id="homeBtn">Continue Shopping</button></div>`:""}</div>`;
+  stack.appendChild(el);
+  if(type==="success")$("homeBtn")?.addEventListener("click",()=>location.href="index.html");
+}
+
+function friendlyError(e){
+  const m=String(e?.message||"").trim();
+  return m||"We could not complete your order. Please return to checkout and review it again.";
+}
+
+function renderQuote(){
+  const q=validated.quote||{};
+  const couponCode=String(state.couponCode||q.coupon_code||"").trim();
+  const discount=Number(q.discount||0);
+  const shipping=Number(q.shipping||0);
+  const cod=Number(q.cod_charge||0);
+  const total=Number(q.total||0);
+  $("quoteBox").hidden=false;
+  $("quoteBox").innerHTML=`
+    <div class="quote-head"><strong>${state.paymentMethod==="upi"?"Amount to Pay":"Order Total"}</strong><b>${money(total)}</b></div>
+    ${couponCode?`<div class="quote-row coupon-line"><span>Coupon</span><b>${esc(couponCode)} applied</b></div>`:""}
+    <div class="quote-row"><span>Subtotal</span><b>${money(q.subtotal)}</b></div>
+    ${(discount>0||couponCode)?`<div class="quote-row discount-row"><span>Discount</span><b>− ${money(discount)}</b></div>`:""}
+    <div class="quote-row"><span>Shipping</span><b>${shipping>0?money(shipping):"Free"}</b></div>
+    ${cod>0?`<div class="quote-row"><span>COD Charge</span><b>${money(cod)}</b></div>`:""}
+  `;
+}
+
+function showCODAction(){
+  $("actionBox").hidden=false;
+  $("actionBox").innerHTML=`
+    <div class="pay-title">Cash on Delivery</div>
+    <div class="pay-note">All final checks have passed. Your order will be created now.</div>
+    <button class="primary" id="placeBtn" type="button">Place Order · ${money(validated.quote.total)} →</button>
+  `;
+  $("placeBtn").onclick=()=>insertOrder({provider:"cod",providerPaymentId:null});
+}
+
+function showUPIAction(){
+  $("actionBox").hidden=false;
+  $("actionBox").innerHTML=`
+    <div class="pay-title">UPI Payment</div>
+    <div class="pay-note">The amount below is locked by the validation RPC. Complete payment with your configured gateway, then the order is inserted only after payment verification.</div>
+    <button class="primary" id="payBtn" type="button">Pay ${money(validated.quote.total)} →</button>
+  `;
+  $("payBtn").onclick=startUPIPayment;
+}
+
+/*
+  IMPORTANT:
+  The existing project payment.html is only a UI placeholder; it does not
+  currently contain a real payment gateway. Therefore this function deliberately
+  does NOT fake a successful payment.
+
+  When you connect Razorpay / Cashfree / PhonePe / another gateway, put its
+  official checkout call here. After the gateway succeeds, send the gateway's
+  server-verified payment id to insertOrder().
+
+  Do not call insertOrder() merely because a client-side callback says "success"
+  unless the gateway payment/signature has also been verified server-side.
+*/
+async function startUPIPayment(){
+  const btn=$("payBtn");
+  if(!btn||processing)return;
+  showAlert("A real UPI gateway is not connected yet. No order was created and no payment was marked as successful.","error","Payment gateway not configured");
+  btn.disabled=false;
+}
+
+async function insertOrder(payment){
+  if(processing)return;
+  processing=true;
+  const btn=$("placeBtn")||$("payBtn");
+  if(btn){btn.disabled=true;btn.textContent="Creating secure order…";}
+  $("status").textContent="Final hard-stop check + order creation…";
+
+  try{
+    /*
+      create_secure_order re-locks and recalculates everything itself.
+      The server-stored quote is compared to the live DB state before ANY
+      order/payment/item/shipment/coupon/cart mutation happens.
+    */
+    const {data,error}=await supabase.rpc("create_secure_order",{
+      p_quote_id:validated.quote_id,
+      p_client_request_id:state.clientRequestId||null,
+      p_provider:payment.provider||null,
+      p_provider_payment_id:payment.providerPaymentId||null
+    });
+
+    if(error)throw error;
+    if(!data?.success)throw new Error(data?.message||"Unable to create your order.");
+
+    sessionStorage.removeItem("ssSparkOrderPending");
+    sessionStorage.removeItem("ssSparkCheckout");
+    sessionStorage.removeItem("ssSparkPaymentPending");
+
+    $("loader").classList.add("hidden");
+    $("actionBox").hidden=true;
+    $("pageTitle").textContent="Order confirmed ✨";
+    $("pageSub").textContent="Your order has been created successfully. Thank you for shopping with SS Spark Collections!";
+    $("status").textContent=`Order ${data.order_number||""}`;
+    $("status").style.color="var(--green)";
+    showAlert(`Order ID: ${data.order_number||"Order created"} · ${money(data.total)}`,"success","Your order is confirmed ✨");
+
+    // Email is a post-order notification. It must never roll back or block
+    // the successfully-created order if the email service is temporarily unavailable.
+    try{
+  const { error: emailError } =
+    await supabase.functions.invoke("send-order-confirmation",{
+      body:{ order_id:data.order_id }
+    });
+
+  if(emailError){
+    console.warn("Order confirmation email could not be sent:",emailError);
+  }
+}catch(emailError){
+  console.warn("Order confirmation email trigger failed:",emailError);
+}
+
+    setTimeout(()=>location.href="index.html",5000);
+  }catch(e){
+    console.error("Secure order creation failed",e);
+    processing=false;
+    if(btn)btn.disabled=false;
+    $("loader").classList.add("hidden");
+    $("pageTitle").textContent="Order not created";
+    $("pageSub").textContent="No order was created from this failed attempt. Please return to checkout and review your order.";
+    $("status").textContent="Please review your order again";
+    showAlert(friendlyError(e),"error","Order not created");
+  }
+}
+
+async function validate(){
+  if(processing)return;
+  processing=true;
+  try{
+    const {data:{user}}=await supabase.auth.getUser();
+    if(!user)throw new Error("Please sign in to continue.");
+
+    const raw=sessionStorage.getItem("ssSparkOrderPending")||sessionStorage.getItem("ssSparkCheckout");
+    if(!raw)throw new Error("Your order session has expired. Please return to checkout.");
+
+    try{state=JSON.parse(raw)}catch{throw new Error("Your checkout session is invalid. Please return to checkout.");}
+
+    if(!state||!["cod","upi"].includes(state.paymentMethod))
+      throw new Error("Invalid payment method. Please return to checkout.");
+
+    if(!state.quoteId)
+      throw new Error("Your final review quote is missing. Please return to checkout and review your order again.");
+
+    /*
+      IMPORTANT: createorder.html must NOT calculate/recalculate the order.
+      The financial snapshot was already created on the Review step.
+      This page only reads that snapshot for display.
+
+      The real final hard-stop happens inside create_secure_order() when the
+      customer clicks Place Order / after verified UPI payment. That RPC
+      re-locks and recalculates the live DB state and compares it with the
+      stored Review snapshot before any order mutation.
+    */
+    const reviewQuote=state.reviewQuote||null;
+    if(!reviewQuote)throw new Error("Your reviewed order snapshot is missing. Please return to Review Order.");
+
+    validated={
+      success:true,
+      quote_id:state.quoteId,
+      quote:reviewQuote,
+      payment_method:state.paymentMethod
+    };
+
+    $("loader").classList.add("hidden");
+    $("status").textContent="Review snapshot loaded ✓";
+
+    // Validation/loading is complete. Allow the final action button to run.
+    processing=false;
+
+    renderQuote();
+
+    if(state.paymentMethod==="cod"){
+      showCODAction();
+    }else{
+      showUPIAction();
+    }
+  }catch(e){
+    console.error("Order validation failed",e);
+    processing=false;
+    $("loader").classList.add("hidden");
+    $("pageTitle").textContent="Order cannot continue";
+    $("pageSub").textContent="Nothing was charged or created. Please return to Review Order and check your order again.";
+    $("status").textContent="Unable to load your reviewed order";
+    showAlert(friendlyError(e),"error","Review required");
+    const box=$("actionBox");
+    box.hidden=false;
+    box.innerHTML=`<a class="secondary" href="review.html">← Back to Review Order</a>`;
+  }
+}
+
+validate();
+</script>
+</body>
+</html>

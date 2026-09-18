@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | SS Spark Collections</title>
+<link rel="stylesheet" href="style.css">
+<style>
+:root{
+  --pink:#d6336c;--pink2:#b92357;--rose:#8f294f;--ink:#542238;
+  --muted:#987080;--border:#edd9e2;--soft:#fff7fa;--gold:#b78635;
+  --green:#218a57;--shadow:0 18px 50px rgba(83,35,52,.08)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--ink);font-family:Arial,sans-serif}
+a{text-decoration:none;color:inherit}
+button{font:inherit}
+.top-bar{text-align:center}
+.contact-page{min-height:100vh;background:
+  radial-gradient(circle at 10% 10%,rgba(214,51,108,.06),transparent 28%),
+  radial-gradient(circle at 90% 18%,rgba(183,134,53,.06),transparent 25%),
+  linear-gradient(180deg,#fff9fb 0,#fff 43%)}
+.contact-wrap{width:min(1120px,92%);margin:auto;padding:34px 0 70px}
+
+/* Premium hero */
+.hero{position:relative;overflow:hidden;text-align:center;padding:58px 22px 48px;margin-bottom:26px;
+  border:1px solid var(--border);border-radius:30px;background:linear-gradient(145deg,#fff,#fff7fa);
+  box-shadow:var(--shadow)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero:before{width:180px;height:180px;right:-70px;top:-75px;border:1px solid rgba(214,51,108,.12)}
+.hero:after{width:120px;height:120px;left:-55px;bottom:-55px;border:1px solid rgba(183,134,53,.16)}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid #efd6df;border-radius:999px;background:#fff;color:var(--pink);font:700 8px Arial;letter-spacing:1.8px;text-transform:uppercase}
+.hero h1{margin:15px 0 10px;font:500 clamp(36px,6vw,56px)/1.05 Georgia,serif;color:var(--ink)}
+.hero h1 span{color:var(--pink)}
+.hero p{max-width:650px;margin:0 auto;color:var(--muted);font:11px/1.75 Arial}
+.hero-note{margin-top:16px!important;color:#765466!important;font-size:9px!important}
+
+/* Section headings */
+.section-heading{text-align:left;margin:36px 0 18px}
+.eyebrow{margin:0 0 7px;color:var(--pink);font:700 8px Arial;letter-spacing:2.4px}
+.section-heading h2{margin:0;font:500 28px Georgia,serif;color:var(--ink)}
+.section-heading p{max-width:620px;margin:7px auto 0;color:var(--muted);font:10px/1.55 Arial}
+
+/* Contact cards */
+.contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.contact-card{min-width:0;padding:22px 17px;border:1px solid var(--border);border-radius:20px;background:#fff;
+  box-shadow:0 10px 30px rgba(83,35,52,.045);display:flex;flex-direction:column}
+.contact-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  background:var(--soft);border:1px solid #f0dce4;font-size:18px;margin-bottom:15px}
+.contact-card h3{margin:0;font:600 17px Georgia,serif}
+.contact-card p{margin:7px 0 12px;color:var(--muted);font:9px/1.55 Arial;min-height:43px}
+.contact-value{font:700 10px Arial;color:var(--rose);word-break:break-word;margin-bottom:15px}
+.contact-btn{margin-top:auto;display:flex;align-items:center;justify-content:center;min-height:38px;padding:0 10px;
+  border:1px solid #e9cbd6;border-radius:10px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font:700 9px Arial;transition:.18s}
+.contact-btn:hover{background:var(--soft);color:#970542;border-color:#dfaebe}
+
+/* Trust strip */
+.trust-section{margin-top:28px;padding:28px;border:1px solid var(--border);border-radius:24px;background:#fff;
+  box-shadow:var(--shadow)}
+.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.trust-card{text-align:center;padding:15px 12px;border-radius:16px;background:#fffafd;border:1px solid #f0dce4}
+.trust-icon{font-size:18px}
+.trust-card h3{margin:8px 0 5px;font:600 15px Georgia,serif}
+.trust-card p{margin:0;color:var(--muted);font:9px/1.55 Arial}
+
+/* Reassurance */
+.reassurance{display:grid;grid-template-columns:1.15fr .85fr;gap:15px;margin-top:16px}
+.info-card{padding:27px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(145deg,#fff,#fff8fb);box-shadow:var(--shadow)}
+.info-card h2{margin:0 0 9px;font:500 25px Georgia,serif}
+.info-card p{margin:0;color:var(--muted);font:10px/1.75 Arial}
+.info-list{display:grid;gap:9px}
+.info-item{display:flex;gap:10px;align-items:flex-start;padding:12px 13px;border:1px solid #ead7df;border-radius:14px;background:#fff}
+.info-item .mark{flex:0 0 24px;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:#fff0f5;color:var(--pink);font-size:11px}
+.info-item strong{display:block;font:700 10px Arial}
+.info-item span{display:block;margin-top:3px;color:var(--muted);font:9px/1.45 Arial}
+
+/* Social */
+.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.social-card{display:flex;align-items:center;gap:14px;padding:18px;border:1px solid var(--border);border-radius:18px;background:#fff;box-shadow:0 10px 28px rgba(83,35,52,.04)}
+.social-icon{width:44px;height:44px;flex:0 0 44px;border-radius:13px;display:grid;place-items:center;background:var(--soft);border:1px solid #f0dce4;font-weight:700;font-size:17px}
+.social-copy{min-width:0;flex:1}
+.social-copy strong{display:block;font:600 16px Georgia,serif}
+.social-copy span{display:block;margin-top:4px;color:var(--muted);font:9px/1.45 Arial}
+.social-btn{display:inline-flex;align-items:center;justify-content:center;min-height:35px;padding:0 12px;border-radius:10px;background:var(--pink);color:#fff;font:700 8px Arial;white-space:nowrap}
+
+/* Final CTA */
+.final-cta{position:relative;overflow:hidden;margin-top:28px;padding:38px 24px;text-align:center;border-radius:25px;
+  background:linear-gradient(135deg,#fff4f8,#fff,#fff9ef);border:1px solid var(--border)}
+.final-cta .spark{color:var(--gold);font-size:18px}
+.final-cta h2{margin:8px 0 7px;font:500 28px Georgia,serif}
+.final-cta p{max-width:600px;margin:0 auto;color:var(--muted);font:10px/1.65 Arial}
+.final-cta .email-cta{display:inline-flex;margin-top:16px;align-items:center;justify-content:center;min-height:42px;padding:0 18px;border-radius:11px;
+  background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 10px 24px rgba(214,51,108,.18);font:700 9px Arial}
+
+/* Footer note */
+.contact-footer-note{text-align:center;margin-top:18px;color:#ad8f9d;font:8px/1.6 Arial}
+
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .contact-wrap{width:calc(100% - 24px);padding:18px 0 48px}
+  .hero{padding:40px 17px 35px;border-radius:22px}
+  .hero h1{font-size:39px}
+  .hero p{font-size:10px;line-height:1.65}
+  .section-heading{text-align:center;margin:29px 0 14px}
+  .section-heading h2{font-size:25px}
+  .contact-grid{grid-template-columns:1fr 1fr;gap:9px}
+  .contact-card{padding:17px 12px;border-radius:16px}
+  .contact-icon{width:36px;height:36px;border-radius:11px;font-size:15px;margin-bottom:11px}
+  .contact-card h3{font-size:15px}
+  .contact-card p{font-size:8px;min-height:auto;margin-bottom:9px}
+  .contact-value{font-size:9px;margin-bottom:11px}
+  .contact-btn{min-height:34px;font-size:8px}
+  .trust-section{padding:19px 13px;border-radius:19px}
+  .trust-grid{grid-template-columns:1fr;gap:8px}
+  .trust-card{padding:13px 10px}
+  .reassurance{grid-template-columns:1fr;gap:10px}
+  .info-card{padding:21px;border-radius:19px}
+  .info-card h2{font-size:23px}
+  .social-grid{grid-template-columns:1fr}
+  .social-card{padding:14px;border-radius:16px}
+  .social-icon{width:39px;height:39px;flex-basis:39px}
+  .social-btn{padding:0 10px}
+  .final-cta{padding:30px 16px;border-radius:21px}
+  .final-cta h2{font-size:25px}
+}
+@media(max-width:360px){
+  .hero h1{font-size:34px}
+  .contact-card{padding:15px 10px}
+  .contact-card h3{font-size:14px}
+  .contact-card p{font-size:7.5px}
+  .contact-value{font-size:8px}
+  .social-copy strong{font-size:14px}
+  .social-btn{font-size:7px}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">✨ Free Shipping Across India <span>|</span> 💝 Carefully Packed With Love</div>
+
+<header class="main-header">
+  <a href="index.html" class="brand-logo"><img src="assets/logo.png" alt="SS Spark Collections"></a>
+  <nav class="main-nav">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="product-list.html">Products</a>
+    <a href="new-arrivals.html">New Arrivals</a>
+    <a href="contact.html" aria-current="page" class="active">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <button class="icon-btn" id="headerSearchBtn" type="button" aria-label="Search">🔍</button>
+    <a href="cart.html" class="cart-btn" aria-label="Shopping Cart">🛒<span id="cartCount">0</span></a>
+    <div id="authArea" class="auth-area">
+      <a href="login.html" class="login-btn">Login</a>
+      <a href="create-account.html" class="signup-btn">Create Account</a>
+    </div>
+  </div>
+</header>
+
+<main class="contact-page">
+<div class="contact-wrap">
+
+  <section class="hero">
+    <div class="hero-badge">✦ Customer Care · SS Spark Collections</div>
+    <h1>We’re Here to <span>Help</span> 💗</h1>
+    <p>
+      Have a question about a product, order, delivery, return, or anything else?
+      We’re always happy to hear from you. Choose the contact option that is most convenient for you.
+    </p>
+    <p class="hero-note">Your questions matter to us — we’ll always do our best to make your shopping experience simple, comfortable and stress-free.</p>
+  </section>
+
+  <section>
+    <div class="section-heading">
+      <p class="eyebrow">REACH OUT ANYTIME</p>
+      <h2>How Can We Help?</h2>
+      <p>For faster assistance, please choose the channel that best matches your enquiry.</p>
+    </div>
+
+    <div class="contact-grid">
+      <article class="contact-card">
+        <div class="contact-icon">✉</div>
+        <h3>Email Us</h3>
+        <p>For detailed enquiries, order support, returns, product questions and general assistance.</p>
+        <div class="contact-value">sssparkcollection@gmail.com</div>
+        <a class="contact-btn" href="mailto:sssparkcollection@gmail.com">Email Us →</a>
+      </article>
+
+      <article class="contact-card">
+        <div class="contact-icon">☎</div>
+        <h3>Call Us</h3>
+        <p>Prefer speaking with us? Reach out directly for customer support and order assistance.</p>
+        <div class="contact-value">+91 XXXXXXXXXX</div>
+        <a class="contact-btn" href="tel:+91XXXXXXXXXX">Call Us →</a>
+      </article>
+
+      <article class="contact-card">
+        <div class="contact-icon">💬</div>
+        <h3>WhatsApp</h3>
+        <p>For quick questions, order assistance and convenient customer support through WhatsApp.</p>
+        <div class="contact-value">+91 XXXXXXXXXX</div>
+        <a class="contact-btn" href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener">Chat on WhatsApp →</a>
+      </article>
+
+      <article class="contact-card">
+        <div class="contact-icon">✦</div>
+        <h3>Customer Care</h3>
+        <p>We value every customer and aim to provide a friendly, clear and helpful experience.</p>
+        <div class="contact-value">We’re happy to help</div>
+        <a class="contact-btn" href="mailto:sssparkcollection@gmail.com">Get Support →</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="trust-section">
+    <div class="section-heading" style="margin-top:0">
+      <p class="eyebrow">A SHOPPING EXPERIENCE YOU CAN TRUST</p>
+      <h2>We Put Customers First</h2>
+      <p>From your first visit to after-sales support, we want every interaction with SS Spark Collections to feel thoughtful and dependable.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">💗</div>
+        <h3>Carefully Chosen</h3>
+        <p>We aim to bring you products selected with quality, style and everyday value in mind.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">📦</div>
+        <h3>Handled With Care</h3>
+        <p>We believe your order deserves attention from preparation to the moment it reaches you.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🤝</div>
+        <h3>Here After Checkout</h3>
+        <p>Need help after placing an order? Our support channels are always available for your questions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="reassurance">
+    <article class="info-card">
+      <p class="eyebrow">WHY REACH OUT TO US?</p>
+      <h2>Real Help, When You Need It</h2>
+      <p>
+        Shopping online should feel easy and reassuring. Whether you’re choosing a product,
+        checking an order, or simply need clarification before making a purchase, you can contact us directly.
+        We believe clear communication is an important part of a great customer experience.
+      </p>
+      <p style="margin-top:12px">
+        When contacting us about an order, keeping your <strong>order number</strong> ready can help us understand
+        your request and assist you more efficiently.
+      </p>
+    </article>
+
+    <div class="info-list">
+      <div class="info-item">
+        <div class="mark">✓</div>
+        <div><strong>Product Questions</strong><span>Ask us about product details, availability or anything you would like to know.</span></div>
+      </div>
+      <div class="info-item">
+        <div class="mark">✓</div>
+        <div><strong>Order Assistance</strong><span>We can help with questions related to an order you have already placed.</span></div>
+      </div>
+      <div class="info-item">
+        <div class="mark">✓</div>
+        <div><strong>Delivery Support</strong><span>Contact us if you need assistance understanding your delivery or shipment.</span></div>
+      </div>
+      <div class="info-item">
+        <div class="mark">✓</div>
+        <div><strong>Returns & Exchanges</strong><span>Reach out to understand the applicable process for your purchase.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-heading">
+      <p class="eyebrow">FOLLOW OUR JOURNEY</p>
+      <h2>Stay Connected ✨</h2>
+      <p>Follow SS Spark Collections for new arrivals, collection updates, inspiration and announcements.</p>
+    </div>
+
+    <div class="social-grid">
+      <div class="social-card">
+        <div class="social-icon">◎</div>
+        <div class="social-copy">
+          <strong>Instagram</strong>
+          <span>Discover our latest collections, new arrivals and updates.</span>
+        </div>
+        <a class="social-btn" href="https://instagram.com/REPLACE_WITH_YOUR_INSTAGRAM" target="_blank" rel="noopener">Visit →</a>
+      </div>
+      <div class="social-card">
+        <div class="social-icon">f</div>
+        <div class="social-copy">
+          <strong>Facebook</strong>
+          <span>Stay updated with announcements, offers and brand news.</span>
+        </div>
+        <a class="social-btn" href="https://facebook.com/REPLACE_WITH_YOUR_FACEBOOK" target="_blank" rel="noopener">Visit →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="spark">✦</div>
+    <h2>We’re Always Happy to Hear From You</h2>
+    <p>
+      Your feedback, questions and suggestions help us improve. Thank you for choosing
+      SS Spark Collections and being a part of our journey.
+    </p>
+    <a class="email-cta" href="mailto:sssparkcollection@gmail.com">Contact Us by Email →</a>
+  </section>
+
+  <p class="contact-footer-note">
+    SS Spark Collections · Thoughtful shopping, carefully packed and customer-focused.
+    <br>For order-related enquiries, please keep your order number handy.
+  </p>
+
+</div>
+</main>
+
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+const authArea = document.getElementById("authArea");
+const cartCount = document.getElementById("cartCount");
+
+async function updateCartCount(userId){
+  if(!userId){ cartCount.textContent="0"; return; }
+  const {data:c} = await supabase.from("carts").select("id").eq("user_id",userId).maybeSingle();
+  if(!c){ cartCount.textContent="0"; return; }
+  const {data:items} = await supabase.from("cart_items").select("quantity").eq("cart_id",c.id);
+  cartCount.textContent=String((items||[]).reduce((sum,x)=>sum+Number(x.quantity||0),0));
+}
+
+async function authUI(){
+  const {data} = await supabase.auth.getUser();
+  const user = data?.user || null;
+
+  if(!user){
+    authArea.innerHTML='<a href="login.html" class="login-btn">Login</a><a href="create-account.html" class="signup-btn">Create Account</a>';
+    cartCount.textContent="0";
+    return;
+  }
+
+  const {data:p} = await supabase.from("profiles").select("full_name").eq("id",user.id).maybeSingle();
+  const name = p?.full_name || user.user_metadata?.full_name || user.email || "Account";
+
+  authArea.innerHTML=`
+    <div class="profile-dropdown">
+      <button class="profile-trigger" id="profileTrigger" type="button">
+        <span class="profile-avatar">✦</span><span>Hi, ${escapeHtml(name)}</span><span class="profile-arrow">⌄</span>
+      </button>
+      <div class="profile-menu" id="profileMenu">
+        <div class="profile-menu-header">
+          <div class="profile-menu-avatar">✦</div>
+          <div><strong>${escapeHtml(name)}</strong><small>${escapeHtml(user.email||"")}</small></div>
+        </div>
+        <div class="profile-menu-divider"></div>
+        <a href="wishlist.html" class="profile-menu-item"><span>♡</span><span>Wishlist</span></a>
+        <a href="Order-lists.html" class="profile-menu-item"><span>♧</span><span>My Orders</span></a>
+        <div class="profile-menu-divider"></div>
+        <button id="logoutBtn" class="profile-menu-logout" type="button"><span>↪</span><span>Logout</span></button>
+      </div>
+    </div>`;
+
+  const trigger=document.getElementById("profileTrigger");
+  const menu=document.getElementById("profileMenu");
+  trigger?.addEventListener("click",e=>{e.stopPropagation();menu?.classList.toggle("show")});
+  document.addEventListener("click",e=>{
+    if(menu && !menu.contains(e.target) && !trigger?.contains(e.target)) menu.classList.remove("show");
+  });
+  document.getElementById("logoutBtn")?.addEventListener("click",async()=>{
+    await supabase.auth.signOut();
+    location.href="login.html";
+  });
+  await updateCartCount(user.id);
+}
+
+function escapeHtml(v){
+  return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+document.getElementById("headerSearchBtn")?.addEventListener("click",()=>location.href="search.html");
+authUI().catch(()=>{});
+</script>
+</body>
+</html>

@@ -1,0 +1,2575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Parameters | SS Spark Collections</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+    <style>
+        /* =========================
+           PARAMETERS PAGE
+        ========================= */
+
+        .parameters-page {
+            margin-top: 10px;
+        }
+
+        .parameters-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .parameter-filters {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .parameter-search,
+        .parameter-group-filter {
+            padding: 13px 15px;
+            border: 1px solid #ead5e1;
+            border-radius: 12px;
+            background: white;
+            outline: none;
+            font-family: inherit;
+            color: #4c3042;
+        }
+
+        .parameter-search {
+            width: 100%;
+            max-width: 360px;
+            box-sizing: border-box;
+        }
+
+        .parameter-group-filter {
+            min-width: 180px;
+        }
+
+        .parameter-search:focus,
+        .parameter-group-filter:focus {
+            border-color: #c83288;
+        }
+
+        .primary-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 20px;
+            background: linear-gradient(90deg, #d63391, #c84c94);
+            color: white;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 18px rgba(196, 67, 139, 0.22);
+        }
+
+        /* =========================
+           PARAMETER FORM
+        ========================= */
+
+        .parameter-form-card {
+            background: white;
+            border: 1px solid #ecdbe4;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(120, 70, 100, 0.06);
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .form-header span {
+            color: #c83288;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .form-header h2 {
+            margin: 6px 0;
+            color: #4c3042;
+        }
+
+        .form-header p {
+            margin: 0;
+            color: #9b8490;
+            font-size: 12px;
+        }
+
+        .close-form-btn {
+            border: none;
+            background: #fff1f7;
+            color: #b72c78;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #68485a;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #ead5e1;
+            border-radius: 11px;
+            outline: none;
+            font-family: inherit;
+            color: #4c3042;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #c83288;
+        }
+
+        .form-group input[readonly],
+        .form-group select:disabled {
+            background: #f9f3f6;
+            color: #8e7480;
+            cursor: not-allowed;
+        }
+
+        .form-hint {
+            font-size: 10px;
+            color: #a58d99;
+            margin-top: -2px;
+        }
+
+        .parameter-options {
+            margin: 5px 0;
+        }
+
+        .parameter-options label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 13px;
+            border: 1px solid #ecdbe4;
+            border-radius: 10px;
+            background: #fff8fb;
+            font-size: 11px;
+            color: #68485a;
+        }
+
+        .parameter-options input {
+            accent-color: #c83288;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .secondary-btn {
+            border: 1px solid #e3cbd8;
+            background: white;
+            color: #68485a;
+            padding: 12px 20px;
+            border-radius: 11px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .secondary-btn:hover {
+            background: #fff5fa;
+        }
+
+        .form-message {
+            margin-top: 12px;
+            font-size: 12px;
+            min-height: 18px;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .parameters-card {
+            background: white;
+            border: 1px solid #ecdbe4;
+            border-radius: 17px;
+            overflow: hidden;
+        }
+
+        .parameters-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .parameters-table th {
+            text-align: left;
+            padding: 15px 18px;
+            background: #fff5fa;
+            color: #936379;
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .parameters-table td {
+            padding: 15px 18px;
+            border-top: 1px solid #f1e6ec;
+            font-size: 12px;
+            color: #5f4552;
+        }
+
+        .parameter-code {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 7px;
+            background: #fff3f8;
+            color: #a33876;
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        .parameter-group {
+            font-size: 10px;
+            font-weight: 700;
+            color: #936379;
+            letter-spacing: 0.5px;
+        }
+
+        .parameter-name {
+            font-weight: 600;
+            color: #4c3042;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #e7f7ed;
+            color: #25834a;
+        }
+
+        .status-inactive {
+            background: #f8e7ec;
+            color: #a14b68;
+        }
+
+        .action-btn {
+            border: 1px solid #ead5e1;
+            background: white;
+            color: #9b3d74;
+            padding: 7px 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-right: 5px;
+        }
+
+        .action-btn:hover {
+            background: #fff1f7;
+        }
+
+        .delete-btn {
+            color: #b14b68;
+        }
+
+        .empty-parameters {
+            text-align: center;
+            padding: 50px 20px;
+            color: #aa8b9c;
+        }
+
+        .empty-parameters-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           PREMIUM BOTTOM ALERT
+        ========================= */
+        .parameter-alert-stack{
+            position:fixed;
+            left:50%;
+            bottom:24px;
+            transform:translateX(-50%);
+            z-index:9999;
+            width:min(92vw,430px);
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+            pointer-events:none;
+        }
+        .parameter-alert{
+            pointer-events:auto;
+            background:#fff;
+            border:1px solid #ead5e1;
+            border-radius:16px;
+            padding:13px 14px;
+            box-shadow:0 14px 35px rgba(63,30,48,.18);
+            display:flex;
+            align-items:center;
+            gap:11px;
+            animation:parameterAlertIn .22s ease-out;
+        }
+        .parameter-alert-icon{
+            width:32px;height:32px;border-radius:50%;
+            display:grid;place-items:center;
+            background:#fff0f6;color:#b4235a;font-weight:900;flex:none;
+        }
+        .parameter-alert-content{flex:1;min-width:0}
+        .parameter-alert-title{font-size:12px;font-weight:800;color:#4c3042}
+        .parameter-alert-message{margin-top:2px;font-size:11px;line-height:1.4;color:#816b76}
+        .parameter-alert-actions{display:flex;gap:7px;flex:none}
+        .parameter-alert-actions button{
+            border:1px solid #ead5e1;border-radius:9px;padding:8px 11px;
+            background:#fff;color:#68485a;font-size:11px;font-weight:800;cursor:pointer;
+        }
+        .parameter-alert-actions .danger{
+            border-color:#c83288;background:linear-gradient(90deg,#d63391,#c84c94);
+            color:#fff;
+        }
+        .parameter-alert.success .parameter-alert-icon{background:#eaf8f0;color:#25834a}
+        .parameter-alert.error .parameter-alert-icon{background:#fff0f2;color:#b4234f}
+        @keyframes parameterAlertIn{
+            from{opacity:0;transform:translateY(16px) scale(.98)}
+            to{opacity:1;transform:translateY(0) scale(1)}
+        }
+        @media(max-width:700px){
+            .parameter-alert-stack{bottom:14px;width:calc(100vw - 24px)}
+            .parameter-alert{padding:12px}
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .parameters-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .parameter-filters {
+                flex-direction: column;
+            }
+
+            .parameter-search {
+                max-width: none;
+            }
+
+            .parameter-group-filter {
+                width: 100%;
+            }
+
+            .primary-btn {
+                width: 100%;
+            }
+
+            .parameters-card {
+                overflow-x: auto;
+            }
+
+            .parameters-table {
+                min-width: 850px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .parameter-form-card {
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions button {
+                width: 100%;
+            }
+        }
+
+        /* =========================
+           PARAMETER PAGINATION
+        ========================= */
+        .parameter-pagination { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:14px; padding:12px 14px; background:rgba(255,255,255,.92); border:1px solid #ead5e1; border-radius:14px; box-shadow:0 6px 18px rgba(82,37,64,.04); }
+        .parameter-pagination-left { display:flex; align-items:center; gap:10px; color:#987e8d; font-size:12px; font-weight:700; }
+        .parameter-page-size { height:34px; padding:0 10px; border:1px solid #ead5e1; border-radius:9px; background:#fff; color:#4d263d; font-weight:700; outline:none; }
+        .parameter-pagination-controls { display:flex; align-items:center; gap:5px; }
+        .parameter-page-btn { min-width:34px; height:34px; padding:0 9px; border:1px solid #ead5e1; border-radius:9px; background:#fff; color:#4d263d; font-size:12px; font-weight:800; cursor:pointer; transition:.18s ease; }
+        .parameter-page-btn:hover:not(:disabled) { transform:translateY(-1px); border-color:#c9a9bc; box-shadow:0 5px 12px rgba(82,37,64,.08); }
+
+        .mobile-parameter-list { display:none; }
+        @media (max-width:700px) {
+            .parameters-card { display:none; }
+            .mobile-parameter-list { display:grid; gap:12px; margin-top:16px; }
+            .mobile-parameter-card { background:#fff; border:1px solid #ead7df; border-radius:16px; padding:14px; box-shadow:0 8px 24px rgba(83,35,52,.07); }
+            .mobile-parameter-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+            .mobile-parameter-group { font-size:10px; font-weight:800; letter-spacing:.6px; color:#a02b5d; background:#fff0f5; padding:5px 8px; border-radius:999px; }
+            .mobile-parameter-status { font-size:10px; font-weight:800; padding:5px 8px; border-radius:999px; }
+            .mobile-parameter-status.active { color:#176b3a; background:#eaf8f0; }
+            .mobile-parameter-status.inactive { color:#8a5265; background:#f5edf1; }
+            .mobile-parameter-code { margin-top:10px; font-size:12px; font-weight:800; color:#4d263d; word-break:break-word; }
+            .mobile-parameter-name { margin-top:3px; font-size:15px; font-weight:800; color:#2f1c27; }
+            .mobile-parameter-description { margin-top:7px; font-size:12px; line-height:1.5; color:#806a75; word-break:break-word; }
+            .mobile-parameter-meta { display:flex; justify-content:space-between; gap:10px; margin-top:11px; padding-top:10px; border-top:1px solid #f0e3e8; font-size:11px; color:#806a75; }
+            .mobile-parameter-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+            .mobile-parameter-actions button { width:100%; min-height:40px; border-radius:10px; font-weight:800; border:1px solid #ead1dc; background:#fff; color:#8f2852; cursor:pointer; }
+            .mobile-parameter-actions .delete-parameter-btn { background:#fff6f7; color:#b4234f; border-color:#f0cbd6; }
+        }
+
+        .parameter-page-btn.active { background:#4d263d; border-color:#4d263d; color:#fff; }
+        .parameter-page-btn:disabled { opacity:.45; cursor:not-allowed; }
+        .parameter-page-ellipsis { min-width:24px; text-align:center; color:#987e8d; font-weight:800; }
+        @media (max-width:700px) { .parameter-pagination { flex-direction:column; align-items:stretch; gap:10px; } .parameter-pagination-left { justify-content:space-between; } .parameter-pagination-controls { justify-content:center; flex-wrap:wrap; } }
+
+    </style>
+</head>
+
+
+<body data-admin-page="parameters">
+
+<div id="parameterAlertStack" class="parameter-alert-stack" aria-live="polite"></div>
+
+<div class="admin-layout">
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <div id="admin-navigation"></div>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div
+    class="admin-profile"
+    id="adminProfile"
+    style="margin-left: auto;"
+>
+
+    <button
+        type="button"
+        class="admin-profile-trigger"
+        id="adminProfileTrigger"
+        aria-expanded="false"
+        aria-haspopup="true"
+    >
+
+        <div class="profile-icon">
+            👤
+        </div>
+
+        <div class="profile-details">
+
+            <strong>
+                Admin
+            </strong>
+
+            <span>
+                Administrator
+            </span>
+
+        </div>
+
+        <span class="profile-chevron">
+            ⌄
+        </span>
+
+    </button>
+
+
+    <div
+        class="admin-profile-menu"
+        id="adminProfileMenu"
+    >
+
+        <button
+            type="button"
+            id="logoutBtn"
+            class="profile-menu-item logout-item"
+        >
+
+            <span>
+                ↪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+        </header>
+
+
+        <section class="parameters-page">
+
+            <!-- PAGE HEADING -->
+
+            <div class="section-heading section-heading-row">
+
+                <div>
+
+                    <span>
+                        SYSTEM
+                    </span>
+
+                    <h2>
+                        Store Parameters
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOOLBAR -->
+
+            <div class="parameters-toolbar">
+
+                <div class="parameter-filters">
+
+                    <input
+                        type="search"
+                        id="parameterSearch"
+                        class="parameter-search"
+                        placeholder="Search parameters..."
+                    >
+
+                    <select
+                        id="parameterGroupFilter"
+                        class="parameter-group-filter"
+                    >
+                        <option value="">
+                            All Groups
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    id="addParameterBtn"
+                >
+                    ＋ Add Parameter
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 ADD / EDIT FORM
+            ========================= -->
+
+            <div
+                id="parameterFormCard"
+                class="parameter-form-card"
+                style="display: none;"
+            >
+
+                <div class="form-header">
+
+                    <div>
+
+                        <span>
+                            PARAMETER MANAGEMENT
+                        </span>
+
+                        <h2 id="parameterFormTitle">
+                            Add New Parameter
+                        </h2>
+
+                        <p>
+                            Manage reusable store configuration values.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="close-form-btn"
+                        id="closeParameterForm"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+
+                <form id="parameterForm">
+
+                    <div class="form-grid">
+
+                        <!-- GROUP -->
+
+                        <div class="form-group">
+
+                            <label for="parameterGroup">
+                                Parameter Group *
+                            </label>
+
+                            <select
+                                id="parameterGroup"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Group
+                                </option>
+
+                            </select>
+
+                            <small
+                                id="parameterGroupHint"
+                                class="form-hint"
+                            >
+                                Select the configuration group.
+                            </small>
+
+                        </div>
+
+
+                        <!-- CODE -->
+
+                        <div class="form-group">
+
+                            <label for="parameterCode">
+                                Parameter Code *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="parameterCode"
+                                placeholder="example_code"
+                                required
+                            >
+
+                            <small
+                                id="parameterCodeHint"
+                                class="form-hint"
+                            >
+                                Lowercase letters, numbers and underscore only.
+                            </small>
+
+                        </div>
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label for="parameterName">
+                                Parameter Name *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="parameterName"
+                                placeholder="Example Name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- DISPLAY ORDER -->
+
+                        <div class="form-group">
+
+                            <label for="parameterDisplayOrder">
+                                Display Order
+                            </label>
+
+                            <input
+                                type="number"
+                                id="parameterDisplayOrder"
+                                min="0"
+                                value="1"
+                            >
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="form-group full-width">
+
+                            <label for="parameterDescription">
+                                Description
+                            </label>
+
+                            <textarea
+                                id="parameterDescription"
+                                rows="3"
+                                placeholder="Describe this parameter..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIVE -->
+
+                    <div class="parameter-options">
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                id="parameterActive"
+                                checked
+                            >
+
+                            Active
+
+                        </label>
+
+                    </div>
+
+
+                    <div
+                        id="parameterFormMessage"
+                        class="form-message"
+                    ></div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            id="cancelParameterForm"
+                        >
+                            Cancel
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                            id="parameterSubmitBtn"
+                        >
+                            ✦ Save Parameter
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- =========================
+                 PARAMETER TABLE
+            ========================= -->
+
+            <div class="parameters-card">
+
+                <table class="parameters-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Group
+                            </th>
+
+                            <th>
+                                Code
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Order
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="parametersTableBody">
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                <div class="empty-parameters">
+
+                                    <div class="empty-parameters-icon">
+                                        ⚙
+                                    </div>
+
+                                    Loading parameters...
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div id="mobileParameterList" class="mobile-parameter-list"></div>
+
+            <div id="parameterPagination" class="parameter-pagination" hidden>
+                <div class="parameter-pagination-left">
+                    <span>Rows per page</span>
+                    <select id="parameterPageSize" class="parameter-page-size">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                    </select>
+                    <span id="parameterPaginationInfo"></span>
+                </div>
+                <div id="parameterPaginationControls" class="parameter-pagination-controls"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script type="module">
+
+    import { supabase } from "./supabase-client.js";
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+
+            /* =========================
+               ELEMENTS
+            ========================= */
+
+            const addParameterBtn =
+                document.getElementById(
+                    "addParameterBtn"
+                );
+
+            const parameterFormCard =
+                document.getElementById(
+                    "parameterFormCard"
+                );
+
+            const closeParameterForm =
+                document.getElementById(
+                    "closeParameterForm"
+                );
+
+            const cancelParameterForm =
+                document.getElementById(
+                    "cancelParameterForm"
+                );
+
+            const parameterForm =
+                document.getElementById(
+                    "parameterForm"
+                );
+
+            const parameterGroup =
+                document.getElementById(
+                    "parameterGroup"
+                );
+
+            const parameterCode =
+                document.getElementById(
+                    "parameterCode"
+                );
+
+            const parameterName =
+                document.getElementById(
+                    "parameterName"
+                );
+
+            const parameterDescription =
+                document.getElementById(
+                    "parameterDescription"
+                );
+
+            const parameterDisplayOrder =
+                document.getElementById(
+                    "parameterDisplayOrder"
+                );
+
+            const parameterActive =
+                document.getElementById(
+                    "parameterActive"
+                );
+
+            const parameterFormMessage =
+                document.getElementById(
+                    "parameterFormMessage"
+                );
+
+            const parameterFormTitle =
+                document.getElementById(
+                    "parameterFormTitle"
+                );
+
+            const parameterSubmitBtn =
+                document.getElementById(
+                    "parameterSubmitBtn"
+                );
+
+            const parameterSearch =
+                document.getElementById(
+                    "parameterSearch"
+                );
+
+            const parameterGroupFilter =
+                document.getElementById(
+                    "parameterGroupFilter"
+                );
+
+            const parametersTableBody =
+                document.getElementById(
+                    "parametersTableBody"
+                );
+
+            const parameterPagination =
+                document.getElementById("parameterPagination");
+
+            const parameterPageSize =
+                document.getElementById("parameterPageSize");
+
+            const parameterPaginationInfo =
+                document.getElementById("parameterPaginationInfo");
+
+            const parameterPaginationControls =
+                document.getElementById("parameterPaginationControls");
+
+            const mobileParameterList =
+                document.getElementById("mobileParameterList");
+
+
+            /* =========================
+               STATE
+            ========================= */
+
+            let allParameters = [];
+
+            let editingParameterId = null;
+
+            let currentPage = 1;
+            let pageSize = 20;
+
+
+            /* =========================
+               LOAD PARAMETERS
+            ========================= */
+
+            async function loadParameters(resetView = true) {
+
+                parametersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-parameters">
+                                Loading parameters...
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+
+                try {
+
+                    /*
+                     * We fetch all parameters here.
+                     * This is required for:
+                     * - search
+                     * - group filter
+                     * - edit
+                     */
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabase
+                            .from(
+                                "parameter_values"
+                            )
+                            .select(`
+                                id,
+                                parameter_group,
+                                parameter_code,
+                                parameter_name,
+                                description,
+                                display_order,
+                                is_active,
+                                created_at,
+                                updated_at
+                            `)
+                            .order(
+                                "parameter_group",
+                                {
+                                    ascending: true
+                                }
+                            )
+                            .order(
+                                "display_order",
+                                {
+                                    ascending: true
+                                }
+                            )
+                            .order(
+                                "parameter_name",
+                                {
+                                    ascending: true
+                                }
+                            );
+
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    allParameters =
+                        data || [];
+
+                    if (resetView) {
+                        currentPage = 1;
+                    }
+
+                    populateGroupFilters(
+                        allParameters
+                    );
+                    populateFormGroups();
+
+                    if (resetView) {
+                        renderParameters(allParameters);
+                    } else {
+                        applyFilters(false);
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Load parameters error:",
+                        error
+                    );
+
+
+                    parametersTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-parameters">
+                                    Unable to load parameters.
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+
+                }
+
+            }
+
+
+            /* =========================
+               GROUP FILTERS
+            ========================= */
+
+            function getGroups() {
+
+                return [
+                    ...new Set(
+                        allParameters
+                            .map(
+                                parameter =>
+                                    parameter.parameter_group
+                            )
+                            .filter(Boolean)
+                    )
+                ].sort();
+
+            }
+
+
+            function populateGroupFilters(
+                parameters
+            ) {
+
+                const groups = [
+                    ...new Set(
+                        parameters
+                            .map(
+                                parameter =>
+                                    parameter.parameter_group
+                            )
+                            .filter(Boolean)
+                    )
+                ].sort();
+
+
+                const currentFilter =
+                    parameterGroupFilter.value;
+
+
+                parameterGroupFilter.innerHTML = `
+                    <option value="">
+                        All Groups
+                    </option>
+                `;
+
+
+                groups.forEach(
+                    group => {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value = group;
+                        option.textContent = group;
+
+                        parameterGroupFilter
+                            .appendChild(option);
+
+                    }
+                );
+
+
+                if (
+                    groups.includes(
+                        currentFilter
+                    )
+                ) {
+
+                    parameterGroupFilter.value =
+                        currentFilter;
+
+                }
+
+            }
+
+
+            /*
+             * Populate the Add/Edit group dropdown
+             * using groups already available.
+             *
+             * We don't allow arbitrary duplicate
+             * group names through the UI.
+             */
+
+            function populateFormGroups() {
+
+                const groups =
+                    getGroups();
+
+
+                const currentValue =
+                    parameterGroup.value;
+
+
+                parameterGroup.innerHTML = `
+                    <option value="">
+                        Select Group
+                    </option>
+                `;
+
+
+                groups.forEach(
+                    group => {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value = group;
+                        option.textContent = group;
+
+                        parameterGroup
+                            .appendChild(option);
+
+                    }
+                );
+
+
+                if (
+                    currentValue &&
+                    groups.includes(
+                        currentValue
+                    )
+                ) {
+
+                    parameterGroup.value =
+                        currentValue;
+
+                }
+
+            }
+
+
+            /* =========================
+               OPEN ADD FORM
+            ========================= */
+
+            addParameterBtn.addEventListener(
+                "click",
+                () => {
+
+                    resetForm();
+
+                    populateFormGroups();
+
+                    parameterFormCard.style.display =
+                        "block";
+
+                    parameterFormCard.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+            );
+
+
+            /* =========================
+               CLOSE FORM
+            ========================= */
+
+            function closeForm() {
+
+                parameterFormCard.style.display =
+                    "none";
+
+                resetForm();
+
+            }
+
+
+            function resetForm() {
+
+                parameterForm.reset();
+
+                parameterGroup.disabled =
+                    false;
+
+                parameterCode.readOnly =
+                    false;
+
+                parameterActive.checked =
+                    true;
+
+                parameterDisplayOrder.value =
+                    1;
+
+                parameterFormMessage.textContent =
+                    "";
+
+                editingParameterId =
+                    null;
+
+                parameterFormTitle.textContent =
+                    "Add New Parameter";
+
+                parameterSubmitBtn.textContent =
+                    "✦ Save Parameter";
+
+                populateFormGroups();
+
+            }
+
+
+            closeParameterForm.addEventListener(
+                "click",
+                closeForm
+            );
+
+
+            cancelParameterForm.addEventListener(
+                "click",
+                closeForm
+            );
+
+
+            /* =========================
+               EDIT PARAMETER
+            ========================= */
+
+            /* =========================
+               BOTTOM ALERT HELPERS
+            ========================= */
+            const parameterAlertStack =
+                document.getElementById("parameterAlertStack");
+
+            window.showParameterAlert = function showParameterAlert(message, type = "success", title = "") {
+                const alertEl = document.createElement("div");
+                alertEl.className = `parameter-alert ${type}`;
+                const icon = type === "error" ? "!" : type === "success" ? "✓" : "i";
+                alertEl.innerHTML = `
+                    <div class="parameter-alert-icon">${icon}</div>
+                    <div class="parameter-alert-content">
+                        <div class="parameter-alert-title">${escapeHtml(title || (type === "error" ? "Something went wrong" : "Done"))}</div>
+                        <div class="parameter-alert-message">${escapeHtml(message)}</div>
+                    </div>
+                `;
+                parameterAlertStack.appendChild(alertEl);
+                setTimeout(() => {
+                    alertEl.style.opacity = "0";
+                    alertEl.style.transform = "translateY(10px)";
+                    alertEl.style.transition = "opacity .18s ease, transform .18s ease";
+                    setTimeout(() => alertEl.remove(), 200);
+                }, 2800);
+            }
+
+            window.showParameterConfirm = function showParameterConfirm(title, message) {
+                return new Promise(resolve => {
+                    const alertEl = document.createElement("div");
+                    alertEl.className = "parameter-alert";
+                    alertEl.innerHTML = `
+                        <div class="parameter-alert-icon">!</div>
+                        <div class="parameter-alert-content">
+                            <div class="parameter-alert-title">${escapeHtml(title)}</div>
+                            <div class="parameter-alert-message">${escapeHtml(message)}</div>
+                        </div>
+                        <div class="parameter-alert-actions">
+                            <button type="button" data-alert-cancel>Cancel</button>
+                            <button type="button" class="danger" data-alert-confirm>Delete</button>
+                        </div>
+                    `;
+                    parameterAlertStack.appendChild(alertEl);
+
+                    const finish = value => {
+                        alertEl.remove();
+                        resolve(value);
+                    };
+                    alertEl.querySelector("[data-alert-cancel]").addEventListener("click", () => finish(false));
+                    alertEl.querySelector("[data-alert-confirm]").addEventListener("click", () => finish(true));
+                });
+            }
+
+            parametersTableBody.addEventListener(
+                "click",
+                async event => {
+
+                    const editButton =
+                        event.target.closest(
+                            ".edit-parameter-btn"
+                        );
+
+
+                    if (editButton) {
+
+                        const parameterId =
+                            editButton.dataset.id;
+
+
+                        const parameter =
+                            allParameters.find(
+                                item =>
+                                    item.id ===
+                                    parameterId
+                            );
+
+
+                        if (!parameter) {
+
+                            parameterFormMessage.textContent =
+                                "Parameter not found.";
+
+                            return;
+
+                        }
+
+
+                        editingParameterId =
+                            parameter.id;
+
+
+                        populateFormGroups();
+
+
+                        parameterGroup.value =
+                            parameter.parameter_group;
+
+                        parameterCode.value =
+                            parameter.parameter_code;
+
+                        parameterName.value =
+                            parameter.parameter_name || "";
+
+                        parameterDescription.value =
+                            parameter.description || "";
+
+                        parameterDisplayOrder.value =
+                            parameter.display_order ?? 0;
+
+                        parameterActive.checked =
+                            parameter.is_active;
+
+
+                        /*
+                         * Group and code are identity
+                         * fields, so they cannot be
+                         * changed during edit.
+                         */
+
+                        parameterGroup.disabled =
+                            true;
+
+                        parameterCode.readOnly =
+                            true;
+
+
+                        parameterFormTitle.textContent =
+                            "Edit Parameter";
+
+                        parameterSubmitBtn.textContent =
+                            "✦ Update Parameter";
+
+                        parameterFormMessage.textContent =
+                            "";
+
+
+                        parameterFormCard.style.display =
+                            "block";
+
+
+                        parameterFormCard.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+
+                        return;
+
+                    }
+
+
+        
+            /* =====================
+                       DELETE
+                    ===================== */
+
+                    const deleteButton =
+                        event.target.closest(
+                            ".delete-parameter-btn"
+                        );
+
+
+                    if (!deleteButton) {
+                        return;
+                    }
+
+
+                    const parameterId =
+                        deleteButton.dataset.id;
+
+
+                    const parameter =
+                        allParameters.find(
+                            item =>
+                                item.id ===
+                                parameterId
+                        );
+
+
+                    if (!parameter) {
+                        return;
+                    }
+
+
+                    const confirmed =
+                        await showParameterConfirm(
+                            `Delete "${parameter.parameter_name}"?`,
+                            "This parameter will be removed from the store configuration."
+                        );
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+
+                    try {
+
+                        parameterFormMessage.textContent =
+                            "Deleting parameter...";
+
+
+                        const {
+                            error
+                        } =
+                            await supabase.rpc(
+                                "delete_parameter",
+                                {
+                                    p_id:
+                                        parameterId
+                                }
+                            );
+
+
+                        if (error) {
+                            throw error;
+                        }
+
+
+                        parameterFormMessage.textContent =
+                            "Parameter deleted successfully ✨";
+
+                        showParameterAlert(
+                            "Parameter deleted successfully.",
+                            "success",
+                            "Deleted"
+                        );
+
+                        await loadParameters(false);
+
+
+                        setTimeout(
+                            () => {
+
+                                parameterFormMessage.textContent =
+                                    "";
+
+                            },
+                            1500
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Delete parameter error:",
+                            error
+                        );
+
+
+                        parameterFormMessage.textContent =
+                            error.message ||
+                            "Unable to delete parameter.";
+
+                    }
+
+                }
+            );
+
+
+            /* =========================
+               MOBILE ACTIONS
+            ========================= */
+
+            mobileParameterList.addEventListener("click", event => {
+                const button = event.target.closest(".edit-parameter-btn, .delete-parameter-btn");
+                if (!button) return;
+                const id = button.dataset.id;
+                const desktopButton = parametersTableBody.querySelector(`.${button.classList.contains("edit-parameter-btn") ? "edit-parameter-btn" : "delete-parameter-btn"}[data-id="${CSS.escape(id)}"]`);
+                if (desktopButton) desktopButton.click();
+            });
+
+
+            /* =========================
+               SAVE / UPDATE
+            ========================= */
+
+            parameterForm.addEventListener(
+                "submit",
+                async event => {
+
+                    event.preventDefault();
+
+
+                    const group =
+                        parameterGroup.value.trim();
+
+
+                    const code =
+                        parameterCode.value
+                            .trim()
+                            .toLowerCase();
+
+
+                    const name =
+                        parameterName.value.trim();
+
+
+                    const description =
+                        parameterDescription.value.trim();
+
+
+                    const displayOrder =
+                        Number(
+                            parameterDisplayOrder.value ||
+                            0
+                        );
+
+
+                    const isActive =
+                        parameterActive.checked;
+
+
+                    if (!group) {
+
+                        parameterFormMessage.textContent =
+                            "Please select a parameter group.";
+
+                        return;
+
+                    }
+
+
+                    if (!code) {
+
+                        parameterFormMessage.textContent =
+                            "Parameter code is required.";
+
+                        return;
+
+                    }
+
+
+                    if (!/^[a-z0-9_]+$/.test(code)) {
+
+                        parameterFormMessage.textContent =
+                            "Code can contain only lowercase letters, numbers and underscore.";
+
+                        return;
+
+                    }
+
+
+                    if (!name) {
+
+                        parameterFormMessage.textContent =
+                            "Parameter name is required.";
+
+                        return;
+
+                    }
+
+
+                    if (displayOrder < 0) {
+
+                        parameterFormMessage.textContent =
+                            "Display order cannot be negative.";
+
+                        return;
+
+                    }
+
+
+                    parameterFormMessage.textContent =
+                        editingParameterId
+                            ? "Updating parameter..."
+                            : "Saving parameter...";
+
+
+                    try {
+
+                        let data;
+                        let error;
+
+
+                        if (editingParameterId) {
+
+                            ({
+                                data,
+                                error
+                            } =
+                                await supabase.rpc(
+                                    "update_parameter",
+                                    {
+                                        p_id: editingParameterId,
+                                        p_name: name,
+                                        p_description: description || null,
+                                        p_display_order: displayOrder,
+                                        p_is_active: isActive
+                                    }
+                                ));
+
+                            if (error && /update_parameter|function .* does not exist|PGRST202/i.test(error.message || "")) {
+                                const fallback = await supabase
+                                    .from("parameter_values")
+                                    .update({
+                                        parameter_name: name,
+                                        description: description || null,
+                                        display_order: displayOrder,
+                                        is_active: isActive,
+                                        updated_at: new Date().toISOString()
+                                    })
+                                    .eq("id", editingParameterId)
+                                    .select()
+                                    .single();
+                                data = fallback.data;
+                                error = fallback.error;
+                            }
+
+                        } else {
+
+                            // Insert directly into parameter_values.
+                            // This avoids a noisy 400 when create_parameter RPC is not deployed.
+                            ({
+                                data,
+                                error
+                            } = await supabase
+                                .from("parameter_values")
+                                .insert({
+                                    parameter_group: group,
+                                    parameter_code: code,
+                                    parameter_name: name,
+                                    description: description || null,
+                                    display_order: displayOrder,
+                                    is_active: isActive
+                                })
+                                .select()
+                                .single());
+
+                        }
+
+
+                        if (error) {
+                            throw error;
+                        }
+
+
+                        parameterFormMessage.textContent =
+                            editingParameterId
+                                ? "Parameter updated successfully ✨"
+                                : "Parameter created successfully ✨";
+
+                        showParameterAlert(
+                            editingParameterId
+                                ? "Parameter updated successfully."
+                                : "Parameter created successfully.",
+                            "success",
+                            "Saved"
+                        );
+
+                        await loadParameters(false);
+
+
+                        setTimeout(
+                            () => {
+
+                                closeForm();
+
+                            },
+                            800
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Parameter save error:",
+                            error
+                        );
+
+
+                        parameterFormMessage.textContent =
+                            error.message ||
+                            "Unable to save parameter.";
+
+                    }
+
+                }
+            );
+
+
+            /* =========================
+               SEARCH
+            ========================= */
+
+            function applyFilters(resetPage = true) {
+
+                const searchTerm =
+                    parameterSearch.value
+                        .trim()
+                        .toLowerCase();
+
+
+                const selectedGroup =
+                    parameterGroupFilter.value;
+
+
+                const filtered =
+                    allParameters.filter(
+                        parameter => {
+
+                            const group =
+                                (
+                                    parameter.parameter_group ||
+                                    ""
+                                ).toLowerCase();
+
+                            const code =
+                                (
+                                    parameter.parameter_code ||
+                                    ""
+                                ).toLowerCase();
+
+                            const name =
+                                (
+                                    parameter.parameter_name ||
+                                    ""
+                                ).toLowerCase();
+
+                            const description =
+                                (
+                                    parameter.description ||
+                                    ""
+                                ).toLowerCase();
+
+
+                            const matchesSearch =
+                                !searchTerm ||
+                                group.includes(
+                                    searchTerm
+                                ) ||
+                                code.includes(
+                                    searchTerm
+                                ) ||
+                                name.includes(
+                                    searchTerm
+                                ) ||
+                                description.includes(
+                                    searchTerm
+                                );
+
+
+                            const matchesGroup =
+                                !selectedGroup ||
+                                parameter.parameter_group ===
+                                    selectedGroup;
+
+
+                            return (
+                                matchesSearch &&
+                                matchesGroup
+                            );
+
+                        }
+                    );
+
+
+                if (resetPage) {
+                    currentPage = 1;
+                }
+                renderParameters(filtered);
+
+            }
+
+
+            parameterSearch.addEventListener(
+                "input",
+                applyFilters
+            );
+
+
+            parameterGroupFilter.addEventListener(
+                "change",
+                applyFilters
+            );
+
+
+            parameterPageSize.addEventListener(
+                "change",
+                () => {
+                    pageSize = Number(parameterPageSize.value);
+                    currentPage = 1;
+                    applyFilters();
+                }
+            );
+
+
+            /* =========================
+               RENDER PARAMETERS
+            ========================= */
+
+            function renderParameters(
+                parameters
+            ) {
+
+                if (!parameters || parameters.length === 0) {
+                    parametersTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-parameters">
+
+                                    <div class="empty-parameters-icon">
+                                        ⚙
+                                    </div>
+
+                                    No matching parameters found
+
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+
+                    parameterPagination.hidden = true;
+                    parameterPaginationControls.innerHTML = "";
+                    mobileParameterList.innerHTML = `<div class="empty-parameters"><div class="empty-parameters-icon">⚙</div>No matching parameters found</div>`;
+                    parameterPaginationInfo.textContent = "";
+                    return;
+                }
+
+                const totalItems = parameters.length;
+                const totalPages = Math.ceil(totalItems / pageSize);
+
+                currentPage = Math.min(
+                    currentPage,
+                    totalPages
+                );
+
+                const startIndex =
+                    (currentPage - 1) * pageSize;
+
+                const pageParameters =
+                    parameters.slice(
+                        startIndex,
+                        startIndex + pageSize
+                    );
+
+                parametersTableBody.innerHTML =
+                    pageParameters
+                        .map(
+                            parameter => `
+
+                                <tr>
+
+                                    <td>
+                                        <span class="parameter-group">
+                                            ${escapeHtml(
+                                                parameter.parameter_group
+                                            )}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="parameter-code">
+                                            ${escapeHtml(
+                                                parameter.parameter_code
+                                            )}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="parameter-name">
+                                            ${escapeHtml(
+                                                parameter.parameter_name
+                                            )}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        ${escapeHtml(
+                                            parameter.description ||
+                                            "—"
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${parameter.display_order}
+                                    </td>
+
+                                    <td>
+                                        <span class="status-badge ${
+                                            parameter.is_active
+                                                ? "status-active"
+                                                : "status-inactive"
+                                        }">
+
+                                            ${
+                                                parameter.is_active
+                                                    ? "Active"
+                                                    : "Inactive"
+                                            }
+
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        <button
+                                            type="button"
+                                            class="action-btn edit-parameter-btn"
+                                            data-id="${parameter.id}"
+                                        >
+                                            Edit
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="action-btn delete-btn delete-parameter-btn"
+                                            data-id="${parameter.id}"
+                                        >
+                                            Delete
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            `
+                        )
+                        .join("");
+
+                mobileParameterList.innerHTML = pageParameters.map(parameter => `
+                    <article class="mobile-parameter-card">
+                        <div class="mobile-parameter-top">
+                            <span class="mobile-parameter-group">${escapeHtml(parameter.parameter_group)}</span>
+                            <span class="mobile-parameter-status ${parameter.is_active ? "active" : "inactive"}">${parameter.is_active ? "Active" : "Inactive"}</span>
+                        </div>
+                        <div class="mobile-parameter-code">${escapeHtml(parameter.parameter_code)}</div>
+                        <div class="mobile-parameter-name">${escapeHtml(parameter.parameter_name)}</div>
+                        <div class="mobile-parameter-description">${escapeHtml(parameter.description || "No description")}</div>
+                        <div class="mobile-parameter-meta"><span>Display Order</span><strong>${Number(parameter.display_order ?? 0)}</strong></div>
+                        <div class="mobile-parameter-actions">
+                            <button type="button" class="edit-parameter-btn" data-id="${escapeHtml(parameter.id)}">Edit</button>
+                            <button type="button" class="delete-parameter-btn" data-id="${escapeHtml(parameter.id)}">Delete</button>
+                        </div>
+                    </article>
+                `).join("");
+
+                const firstItem = startIndex + 1;
+                const lastItem = Math.min(
+                    startIndex + pageSize,
+                    totalItems
+                );
+
+                parameterPagination.hidden = false;
+                parameterPaginationInfo.textContent =
+                    `${firstItem}-${lastItem} of ${totalItems}`;
+
+                renderPagination(totalPages);
+            }
+
+
+            function renderPagination(totalPages) {
+
+                parameterPaginationControls.innerHTML = "";
+
+                const addButton = (
+                    label,
+                    page,
+                    disabled = false,
+                    active = false
+                ) => {
+
+                    const button =
+                        document.createElement("button");
+
+                    button.type = "button";
+                    button.className =
+                        "parameter-page-btn";
+                    button.textContent = label;
+                    button.disabled = disabled;
+
+                    if (active) {
+                        button.classList.add("active");
+                    }
+
+                    if (!disabled && !active) {
+                        button.addEventListener(
+                            "click",
+                            () => {
+                                currentPage = page;
+                                applyFilters(false);
+                            }
+                        );
+                    }
+
+                    parameterPaginationControls
+                        .appendChild(button);
+                };
+
+                addButton(
+                    "‹",
+                    currentPage - 1,
+                    currentPage === 1
+                );
+
+                const pages = [];
+
+                if (totalPages <= 7) {
+                    for (
+                        let i = 1;
+                        i <= totalPages;
+                        i++
+                    ) {
+                        pages.push(i);
+                    }
+                } else {
+                    pages.push(1);
+
+                    if (currentPage > 4) {
+                        pages.push("...");
+                    }
+
+                    const start = Math.max(
+                        2,
+                        currentPage - 1
+                    );
+
+                    const end = Math.min(
+                        totalPages - 1,
+                        currentPage + 1
+                    );
+
+                    for (
+                        let i = start;
+                        i <= end;
+                        i++
+                    ) {
+                        pages.push(i);
+                    }
+
+                    if (currentPage < totalPages - 3) {
+                        pages.push("...");
+                    }
+
+                    pages.push(totalPages);
+                }
+
+                pages.forEach(page => {
+
+                    if (page === "...") {
+                        const span =
+                            document.createElement("span");
+
+                        span.className =
+                            "parameter-page-ellipsis";
+                        span.textContent = "…";
+
+                        parameterPaginationControls
+                            .appendChild(span);
+
+                    } else {
+                        addButton(
+                            String(page),
+                            page,
+                            false,
+                            page === currentPage
+                        );
+                    }
+                });
+
+                addButton(
+                    "›",
+                    currentPage + 1,
+                    currentPage === totalPages
+                );
+            }
+
+
+            /* =========================
+               HTML ESCAPE
+            ========================= */
+
+            function escapeHtml(value) {
+
+                return String(value)
+                    .replace(
+                        /&/g,
+                        "&amp;"
+                    )
+                    .replace(
+                        /</g,
+                        "&lt;"
+                    )
+                    .replace(
+                        />/g,
+                        "&gt;"
+                    )
+                    .replace(
+                        /"/g,
+                        "&quot;"
+                    )
+                    .replace(
+                        /'/g,
+                        "&#039;"
+                    );
+
+            }
+
+
+            /* =========================
+               LOGOUT
+            ========================= */
+
+            const adminLogout =
+                document.getElementById(
+                    "adminLogout"
+                );
+
+
+            if (adminLogout) {
+
+                adminLogout.addEventListener(
+                    "click",
+                    () => {
+
+                        showParameterConfirm(
+                            "Logout?",
+                            "Are you sure you want to logout?"
+                        ).then(confirmed => {
+                            if (confirmed) {
+                                window.location.href = "index.html";
+                            }
+                        });
+
+                    }
+                );
+
+            }
+
+
+            /* =========================
+               INITIAL LOAD
+            ========================= */
+
+            loadParameters();
+
+        }
+    );
+
+</script>
+
+<script type="module">
+
+    import { supabase }
+        from "./supabase-client.js";
+
+
+    /* =====================================================
+       LOAD NAVIGATION
+       ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+            const navigationContainer =
+                document.getElementById(
+                    "admin-navigation"
+                );
+
+            if (!navigationContainer) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "admin-navigation.html"
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Navigation could not be loaded."
+                    );
+                }
+
+
+                const navigationHTML =
+                    await response.text();
+
+
+                navigationContainer.innerHTML =
+                    navigationHTML;
+
+
+                /* =================================================
+                   ACTIVE NAVIGATION
+                   ================================================= */
+
+                const currentPage =
+                    document.body.dataset.adminPage;
+
+
+                if (currentPage) {
+
+                    const activeItem =
+                        navigationContainer.querySelector(
+                            `.nav-item[data-page="${currentPage}"]`
+                        );
+
+
+                    if (activeItem) {
+
+                        activeItem.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   ADMIN DROPDOWN
+                   ================================================= */
+
+                const adminProfile =
+                    document.getElementById(
+                        "adminProfile"
+                    );
+
+                const adminProfileTrigger =
+                    document.getElementById(
+                        "adminProfileTrigger"
+                    );
+
+                const adminProfileMenu =
+                    document.getElementById(
+                        "adminProfileMenu"
+                    );
+
+
+                if (
+                    adminProfile &&
+                    adminProfileTrigger &&
+                    adminProfileMenu
+                ) {
+
+                    adminProfileTrigger.addEventListener(
+                        "click",
+                        (event) => {
+
+                            event.stopPropagation();
+
+
+                            const isOpen =
+                                adminProfile.classList.toggle(
+                                    "open"
+                                );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                isOpen
+                                    ? "true"
+                                    : "false"
+                            );
+
+                        }
+                    );
+
+
+                    adminProfileMenu.addEventListener(
+                        "click",
+                        (event) => {
+                            event.stopPropagation();
+                        }
+                    );
+
+
+                    document.addEventListener(
+                        "click",
+                        () => {
+
+                            adminProfile.classList.remove(
+                                "open"
+                            );
+
+
+                            adminProfileTrigger.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   LOGOUT
+                   ================================================= */
+
+                const logoutBtn =
+                    document.getElementById(
+                        "logoutBtn"
+                    );
+
+
+                if (logoutBtn) {
+
+                    logoutBtn.addEventListener(
+                        "click",
+                        async () => {
+
+                            logoutBtn.disabled =
+                                true;
+
+
+                            logoutBtn.innerHTML = `
+                                <span>↪</span>
+                                <span>Logging out...</span>
+                            `;
+
+
+                            try {
+
+                                const {
+                                    error
+                                } =
+                                    await supabase
+                                        .auth
+                                        .signOut();
+
+
+                                if (error) {
+                                    throw error;
+                                }
+
+
+                                window.location.href =
+                                    "index.html";
+
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Logout failed:",
+                                    error
+                                );
+
+
+                                logoutBtn.disabled =
+                                    false;
+
+
+                                logoutBtn.innerHTML = `
+                                    <span>↪</span>
+                                    <span>Logout</span>
+                                `;
+
+
+                                showParameterAlert(
+                                    "Unable to logout. Please try again.",
+                                    "error",
+                                    "Logout failed"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to load admin navigation:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
