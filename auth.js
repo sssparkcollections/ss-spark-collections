@@ -74,7 +74,7 @@ if (signupForm) {
                 options: {
                     // Always return to the live SS Spark Collections homepage
                     // after the user confirms their email.
-                    emailRedirectTo: "https://puvaneshn.github.io/ss-spark-collections/index.html",
+                    emailRedirectTo: "https://sssparkcollections.github.io/ss-spark-collections/index.html",
                     data: {
                         full_name: fullName,
                         phone: phone
@@ -235,7 +235,7 @@ forgotSubmitBtn?.addEventListener("click", async () => {
 
     try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: new URL("reset-password.html", window.location.origin).href
+            redirectTo: "https://sssparkcollections.github.io/ss-spark-collections/reset-password.html"
         });
 
         if (error) {
@@ -329,7 +329,9 @@ if (recoveryPasswordForm) {
             }
             recoveryStatus.textContent = "Password updated successfully. You can now log in.";
             window.showRecoveryAlert?.("Your password has been updated. Redirecting you to login...", "success", "Password updated");
-            setTimeout(() => { window.location.href = "login.html"; }, 1200);
+            setTimeout(() => {
+                window.location.href = "https://sssparkcollections.github.io/ss-spark-collections/index.html";
+            }, 1200);
         } catch (error) {
             console.error("Unexpected password update error:", error);
             recoveryStatus.textContent = "Unable to update your password. Please try again.";
@@ -441,9 +443,7 @@ if (loginForm) {
 
             // Go back to homepage
             setTimeout(() => {
-
-                window.location.href = "index.html";
-
+                window.location.href = "https://sssparkcollections.github.io/ss-spark-collections/index.html";
             }, 1000);
 
         } catch (error) {
