@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Complete Order | SS Spark Collections</title>
+<title>Complete Order | DS Handmade Hub </title>
 <link rel="stylesheet" href="style.css">
 <style>
 :root{--pink:#d6336c;--pink2:#b92357;--rose:#8f294f;--ink:#542238;--muted:#987080;--border:#edd9e2;--green:#218a57}
@@ -46,8 +46,8 @@ button{font:inherit}.page{min-height:100vh;background:linear-gradient(180deg,#ff
 <body>
 <main class="page">
 <section class="card" aria-live="polite">
-  <img class="logo" src="assets/logo.png" alt="SS Spark Collections">
-  <p class="eyebrow">SS SPARK COLLECTIONS</p>
+  <img class="logo" src="assets/logo.png" alt="DS Handmade Hub">
+  <p class="eyebrow">DS HANDMADE HUB</p>
   <h1 class="title" id="pageTitle">Final order check</h1>
   <p class="sub" id="pageSub">We will validate your reviewed order against the latest cart, price, stock, coupon and charges.</p>
   <div class="loader" id="loader"></div>
@@ -55,7 +55,7 @@ button{font:inherit}.page{min-height:100vh;background:linear-gradient(180deg,#ff
   <a class="back-review" href="review.html">← Back to Review Order</a>
   <div id="quoteBox" class="quote" hidden></div>
   <div id="actionBox" class="pay-box" hidden></div>
-  <div class="secure">🔒 Final validation and order creation are handled by SS Spark Collection Admin.</div>
+  <div class="secure">🔒 Final validation and order creation are handled by DS Handmade Hub Admin.</div>
 </section>
 </main>
 <div class="alert-stack" id="alertStack" aria-live="assertive"></div>
@@ -173,7 +173,7 @@ async function insertOrder(payment){
     $("loader").classList.add("hidden");
     $("actionBox").hidden=true;
     $("pageTitle").textContent="Order confirmed ✨";
-    $("pageSub").textContent="Your order has been created successfully. Thank you for shopping with SS Spark Collections!";
+    $("pageSub").textContent="Your order has been created successfully. Thank you for shopping with DS Handmade Hub!";
     $("status").textContent=`Order ${data.order_number||""}`;
     $("status").style.color="var(--green)";
     showAlert(`Order ID: ${data.order_number||"Order created"} · ${money(data.total)}`,"success","Your order is confirmed ✨");

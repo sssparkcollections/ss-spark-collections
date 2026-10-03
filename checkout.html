@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout | SS Spark Collections</title>
+<title>Checkout | DS Handmade Hub</title>
 <link rel="stylesheet" href="style.css">
 <style>
 :root{
@@ -281,7 +281,7 @@ a{text-decoration:none}
 <body>
 <div class="top-bar">✨ Free Shipping Across India <span>|</span> 💝 Carefully Packed With Love</div>
 <header class="main-header">
-  <a href="index.html" class="brand-logo"><img src="assets/logo.png" alt="SS Spark Collections"></a>
+  <a href="index.html" class="brand-logo"><img src="assets/logo.png" alt="DS Handmade Hub"></a>
   <nav class="main-nav">
     <a href="index.html">Home</a><a href="shop.html">Shop</a><a href="product-list.html">Products</a><a href="new-arrivals.html">New Arrivals</a><a href="contact.html">Contact</a>
   </nav>
@@ -298,12 +298,12 @@ a{text-decoration:none}
   <div class="checkout-wrap">
     <div class="checkout-top">
       <a class="back" href="cart.html">← <span>Back to Cart</span></a>
-      <div class="checkout-brand"><img src="assets/logo.png" alt="SS Spark Collections"></div>
+      <div class="checkout-brand"><img src="assets/logo.png" alt="DS Handmade Hub"></div>
       <div class="secure">🔒 Secure Checkout</div>
     </div>
 
     <div class="checkout-title">
-      <p class="eyebrow">SS SPARK COLLECTIONS</p>
+      <p class="eyebrow">DS HANDMADE HUB</p>
       <h1>Checkout</h1>
     </div>
 
@@ -334,11 +334,12 @@ let cart=null;
 let items=[];
 let addresses=[];
 let selectedAddressId=null;
-let selectedPayment="upi";
+let selectedPayment="";
 let shippingMinimumAmount=1000;
 let shippingCharge=99;
 let codCharge=0;
 let codAvailable=true;
+let upiAvailable=true;
 let coupon=null;
 let toastTimer=null;
 const PINCODE_API="https://api.postalpincode.in";
@@ -471,7 +472,7 @@ async function loadParameters(){
     .in("parameter_group",["SHIPPING","PAYMENT"]);
   if(error) throw error;
   for(const p of data||[]){
-    const n=Number(p.parameter_value);
+    const n=Number(p.description);
     if(p.parameter_group==="SHIPPING" && p.parameter_code==="MINIMUM_ORDER_AMOUNT" && Number.isFinite(n)) shippingMinimumAmount=Math.max(0,n);
     if(p.parameter_group==="SHIPPING" && p.parameter_code==="SHIPPING_CHARGE" && Number.isFinite(n)) shippingCharge=Math.max(0,n);
     if(p.parameter_group==="PAYMENT" && p.parameter_code==="COD_CHARGE" && Number.isFinite(n)) codCharge=Math.max(0,n);
@@ -482,7 +483,13 @@ async function loadParameters(){
   codAvailable =
     String(p.description || "").trim().toUpperCase() === "YES";
 }
-  }
+if(
+  p.parameter_group==="PAYMENT" &&
+  String(p.parameter_code || "").trim().toUpperCase()==="UPI_AVAILABLE"
+){
+  upiAvailable =
+    String(p.description || "").trim().toUpperCase() === "YES";
+}}
 }
 async function loadCart(){
   const {data:c,error:ce}=await supabase.from("carts").select("id").eq("user_id",user.id).maybeSingle();
@@ -737,7 +744,7 @@ function render(){
 
         <div class="coupon">
           <div class="coupon-head">
-            <span class="coupon-icon">%</span>
+            <span class="coupon-icon"> 💰 </span>
             <div><strong>Have a coupon?</strong><span>Apply a valid offer before payment.</span></div>
           </div>
           <div class="coupon-row">
@@ -753,25 +760,41 @@ function render(){
 
         <div class="payment-panel summary-payment" id="paymentPanel" style="display:block">
           <div class="panel-head summary-payment-head">
-            <div><h3 style="margin:0;font:600 15px Georgia,serif">Payment Method</h3><p>Select UPI or Cash on Delivery.</p></div>
+            <div>
+  <h3 style="margin:0;font:600 15px Georgia,serif">Payment Method</h3>
+  <p>
+    ${
+      upiAvailable && codAvailable
+        ? "Select your preferred payment method."
+        : upiAvailable
+          ? "Pay securely using UPI."
+          : codAvailable
+            ? "Cash on Delivery is currently available."
+            : "No payment method is currently available."
+    }
+  </p>
+</div>
           </div>
           <div class="payment-list">
-            <label class="payment-option selected" data-payment="upi">
-              <input type="radio" name="payment" value="upi" checked>
+            ${upiAvailable ? `
+            <label class="payment-option ${selectedPayment==="upi" ? "selected" : ""}" data-payment="upi">
+              <input type="radio" name="payment" value="upi" ${selectedPayment==="upi" ? "checked" : ""}>
               <div class="payment-copy"><strong>UPI</strong><span>Pay securely using your preferred UPI app.</span></div>
               <span class="payment-badge">Online</span>
             </label>
-            <label
-  class="payment-option ${codAvailable ? "" : "disabled"}"
+            ` : ""}
+<label
+  class="payment-option ${selectedPayment==="cod" ? "selected" : ""} ${codAvailable ? "" : "disabled"}"
   data-payment="cod"
   aria-disabled="${!codAvailable}"
 >
-  <input
-    type="radio"
-    name="payment"
-    value="cod"
-    ${codAvailable ? "" : "disabled"}
-  >
+<input
+  type="radio"
+  name="payment"
+  value="cod"
+  ${selectedPayment==="cod" ? "checked" : ""}
+  ${codAvailable ? "" : "disabled"}
+>
 
   <div class="payment-copy">
     <strong>Cash on Delivery</strong>
@@ -822,7 +845,7 @@ function render(){
       <button class="primary place-order" id="placeOrder" type="button">Place Order <span>→</span></button>
     </div>`;
   bind();
-  if(addresses.length) fillAddress(addresses[0]);
+  updatePaymentUI();
 }
 function renderSavedAddress(a){
   const line2=a.address_line2?`, ${esc(a.address_line2)}`:"";
@@ -1017,7 +1040,7 @@ async function fillAddress(a){
   document.getElementById("addressLine1").value=a.address_line1||"";
   document.getElementById("addressLine2").value=a.address_line2||"";
   const pin=document.getElementById("pincode");
-  if(pin)pin.value=String(a.pincode||"").replace(/\\D/g,"").slice(0,6);
+  if(pin)pin.value=String(a.pincode||"").replace(/\D/g,"").slice(0,6);
 
   if(pin?.value.length===6){
     await restoreLocationForAddress(a);
@@ -1104,8 +1127,20 @@ function setStep(n){
   if(n===3){a.classList.add("done");r.classList.add("done");p.classList.add("active")}
 }
 function updatePaymentUI(){
-   if(!codAvailable && selectedPayment==="cod"){
-    selectedPayment="upi";
+   if(selectedPayment==="upi" && !upiAvailable){
+    selectedPayment=codAvailable ? "cod" : "";
+  }
+
+  if(selectedPayment==="cod" && !codAvailable){
+    selectedPayment=upiAvailable ? "upi" : "";
+  }
+
+  if(!selectedPayment){
+    if(upiAvailable){
+      selectedPayment="upi";
+    }else if(codAvailable){
+      selectedPayment="cod";
+    }
   }
   document.querySelectorAll(".payment-option").forEach(el=>{
     const selected=selectedPayment===el.dataset.payment;
@@ -1124,9 +1159,14 @@ function updatePaymentUI(){
   if(total)total.textContent=money(currentTotal());
 
   const reviewPayment=document.getElementById("reviewPayment");
-  if(reviewPayment){
-    reviewPayment.textContent=selectedPayment==="cod"?"Cash on Delivery":"UPI";
-  }
+ if(reviewPayment){
+  reviewPayment.textContent=
+    selectedPayment==="cod"
+      ? "Cash on Delivery"
+      : selectedPayment==="upi"
+        ? "UPI"
+        : "No payment method selected";
+}
 }
 
 function refreshSummary(){
@@ -1226,18 +1266,18 @@ function bind(){
     panel.classList.add("show");
   });
   bindSavedAddressControls();
-  document.querySelectorAll("[data-cart-action]").forEach(button=>{
-    button.addEventListener("click",async()=>{
-      const row=button.closest("[data-cart-item]");
-      const id=row?.dataset.cartItem;
-      const action=button.dataset.cartAction;
-      const item=items.find(x=>x.id===id);
-      if(!item)return;
-      if(action==="remove"){await changeCheckoutItem(id,0);return}
-      const qty=Number(item.quantity||0);
-      if(action==="minus")await changeCheckoutItem(id,qty-1);
-      if(action==="plus")await changeCheckoutItem(id,Math.min(qty+1,getStock(item)));
-    });
+  document.getElementById("summaryItems")?.addEventListener("click",async e=>{
+    const button=e.target.closest("[data-cart-action]");
+    if(!button)return;
+    const row=button.closest("[data-cart-item]");
+    const id=row?.dataset.cartItem;
+    const action=button.dataset.cartAction;
+    const item=items.find(x=>x.id===id);
+    if(!item)return;
+    if(action==="remove"){await changeCheckoutItem(id,0);return}
+    const qty=Number(item.quantity||0);
+    if(action==="minus")await changeCheckoutItem(id,qty-1);
+    if(action==="plus")await changeCheckoutItem(id,Math.min(qty+1,getStock(item)));
   });
 
   document.getElementById("applyCoupon")?.addEventListener("click",applyCoupon);
@@ -1260,6 +1300,24 @@ function bind(){
 
     const payload=addressPayload();
     if(!validateAddress(payload))return;
+
+    if(!selectedPayment){
+  showToast("Please select a payment method","error","Please check");
+  return;
+}
+
+if(selectedPayment==="upi" && !upiAvailable){
+  selectedPayment=codAvailable ? "cod" : "";
+}
+
+if(selectedPayment==="cod" && !codAvailable){
+  selectedPayment=upiAvailable ? "upi" : "";
+}
+
+if(!selectedPayment){
+  showToast("No payment method is currently available","error","Payment unavailable");
+  return;
+}
 
     const btn=document.getElementById("continuePayment");
     if(btn)btn.disabled=true;
@@ -1297,14 +1355,24 @@ function bind(){
       if(btn)btn.disabled=false;
     }
   });
+
   document.querySelectorAll(".payment-option").forEach(option=>{
-    option.addEventListener("click",()=>{
-      selectedPayment=option.dataset.payment;
-      const radio=option.querySelector("input");
-      if(radio)radio.checked=true;
-      updatePaymentUI();
-    });
+  option.addEventListener("click",()=>{
+    if(option.classList.contains("disabled")) return;
+
+    const payment=option.dataset.payment;
+
+    if(payment==="upi" && !upiAvailable) return;
+    if(payment==="cod" && !codAvailable) return;
+
+    selectedPayment=payment;
+
+    const radio=option.querySelector("input");
+    if(radio)radio.checked=true;
+
+    updatePaymentUI();
   });
+});
 
   document.getElementById("placeOrder")?.addEventListener("click",async()=>{
     showToast("Order placement will be connected to payment processing next","info","Coming next");
@@ -1328,14 +1396,25 @@ async function clearPendingCheckoutQuotes(){
 
 async function restoreCheckoutState(){
   let saved=null;
+
   try{
     const raw=sessionStorage.getItem("ssSparkCheckout");
     saved=raw?JSON.parse(raw):null;
   }catch{}
+
   if(!saved)return;
 
-  if(["upi","cod"].includes(saved.paymentMethod)) selectedPayment=saved.paymentMethod;
-  if(saved.addressId) selectedAddressId=saved.addressId;
+  if(saved.addressId){
+    selectedAddressId=saved.addressId;
+  }
+
+  if(saved.paymentMethod==="upi" && upiAvailable){
+    selectedPayment="upi";
+  }else if(saved.paymentMethod==="cod" && codAvailable){
+    selectedPayment="cod";
+  }else{
+    selectedPayment="";
+  }
 }
 
 async function restoreCheckoutCoupon(){
@@ -1355,12 +1434,24 @@ async function init(){
   try{
     const ok=await authUI();
     if(!ok){location.href="login.html";return}
-    await restoreCheckoutState();
-    await clearPendingCheckoutQuotes();
-    await loadParameters();
-    await loadCart();
-    await loadAddresses();
-    render();
+    
+await clearPendingCheckoutQuotes();
+await loadParameters();
+await restoreCheckoutState();
+
+if(!selectedPayment){
+  if(upiAvailable){
+    selectedPayment = "upi";
+  }else if(codAvailable){
+    selectedPayment = "cod";
+  }else{
+    selectedPayment = "";
+  }
+}
+
+await loadCart();
+await loadAddresses();
+render();
 
     // Restore the exact address the customer had selected before Review.
     const savedRaw=sessionStorage.getItem("ssSparkCheckout");

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product | SS Spark Collections</title>
+<title>Product | DS Handmade Hub</title>
 <link rel="stylesheet" href="style.css">
 <style>
 :root{
@@ -376,7 +376,7 @@ button{cursor:pointer}
   ✨ Free Shipping Across India <span>|</span> 💝 Carefully Packed With Love
 </div>
 <header class="main-header">
-  <a href="index.html" class="brand-logo"><img src="assets/logo.png" alt="SS Spark Collections"></a>
+  <a href="index.html" class="brand-logo"><img src="assets/logo.png" alt="DS Handmade Hub"></a>
   <nav class="main-nav">
     <a href="index.html">Home</a>
     <a href="shop.html" class="active">Shop</a>
@@ -740,7 +740,7 @@ function renderProduct(){
       <div class="main-image-shell${images.length?" has-zoom":""}">
         ${product.is_new_arrival||product.is_best_seller||product.is_featured?`<span class="gallery-badge">${product.is_new_arrival?"New Arrival":product.is_best_seller?"Best Seller":"Featured"}</span>`:""}
         <button id="wishlistMain" class="wishlist-main${isWishlisted(product.id)?" active":""}" type="button" aria-label="Wishlist" aria-pressed="${isWishlisted(product.id)}">${isWishlisted(product.id)?"♥":"♡"}</button>
-        ${images.length?`<img id="mainProductImage" src="${escapeHtml(images[0].image_url)}" alt="${escapeHtml(product.name)}">`:`<div class="premium-placeholder"><div class="placeholder-card"><span class="placeholder-sparkle s1">✦</span><span class="placeholder-sparkle s2">✧</span><span class="placeholder-sparkle s3">✦</span><img src="assets/logo.png" alt=""><span class="placeholder-caption">SS Spark Collections</span></div></div>`}
+        ${images.length?`<img id="mainProductImage" src="${escapeHtml(images[0].image_url)}" alt="${escapeHtml(product.name)}">`:`<div class="premium-placeholder"><div class="placeholder-card"><span class="placeholder-sparkle s1">✦</span><span class="placeholder-sparkle s2">✧</span><span class="placeholder-sparkle s3">✦</span><img src="assets/logo.png" alt=""><span class="placeholder-caption">DS Handmade Hub</span></div></div>`}
         <button class="gallery-arrow gallery-prev" id="prevImage" type="button" aria-label="Previous image">‹</button>
         <button class="gallery-arrow gallery-next" id="nextImage" type="button" aria-label="Next image">›</button>
       </div>

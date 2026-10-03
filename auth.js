@@ -47,7 +47,7 @@ if (signupForm) {
         }
 
         message.textContent = "Creating your account...";
-        window.showSignupAlert?.("Creating your SS Spark account...", "info", "Creating account");
+        window.showSignupAlert?.("Creating your DS Handmade Hub account...", "info", "Creating account");
 
         if (submitButton) {
             submitButton.disabled = true;
@@ -439,7 +439,7 @@ if (loginForm) {
 
             message.textContent =
                 "Login successful!";
-            window.showLoginAlert?.("Welcome back! Redirecting you to SS Spark Collections...", "success", "Login successful");
+            window.showLoginAlert?.("Welcome back! Redirecting you to DS Handmade Hub...", "success", "Login successful");
 
             // Go back to homepage
             setTimeout(() => {

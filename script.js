@@ -131,7 +131,7 @@ function renderBanners() {
         image.src = banner.image_url;
         image.alt =
             banner.title ||
-            "SS Spark Collections";
+            "DS Handmade Hub";
 
 
         /* -----------------------------
@@ -1574,7 +1574,7 @@ async function loadCollectionPage() {
         return;
     }
 
-    document.title = `${config.title} | SS Spark Collections`;
+    document.title = `${config.title} | DS Handmade Hub`;
     if (title) title.textContent = config.title;
     if (subtitle) subtitle.textContent = config.subtitle;
 

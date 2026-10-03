@@ -472,8 +472,8 @@ async function openInvoicePreview() {
     console.warn("Invoice store address warning:", error);
   }
 
-  const fromName = "SS SPARK COLLECTIONS";
-  const fromPhone = "6383270648";
+  const fromName = "DS HANDMADE HUB";
+  const fromPhone = "+91 - 9080588925";
   const fromEmail = "";
   const itemRows = state.items.length
     ? state.items.map((item, index) => `
@@ -504,8 +504,36 @@ body{margin:0;padding:30px;background:#f7f3f5;color:#2b2026;font:12px Arial,Helv
 .invoice-container{max-width:850px;margin:0 auto}
 .invoice{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 12px 40px rgba(50,25,40,.09);border:1px solid #eadfe5}
 .header{padding:30px 35px;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #eee5e9}
-.brand{font:700 18px Georgia,serif;color:#542238;letter-spacing:.2px}
-.brand-sub{margin-top:6px;font-size:10px;color:#8b747f}
+/* Container alignment */
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Logo sizing */
+.invoice-logo {
+  width: 85px;
+  height: 85px;
+  object-fit: contain;
+  border-radius: 9px;
+}
+
+/* Brand name styling with your color */
+.brand {
+  color: #d6296f;
+  font:700 18px Georgia,serif;
+  font-size: 1 rem;
+  line-height: 1.15;
+  letter-spacing:.2px;
+}
+
+/* Subtitle styling */
+.brand-sub {
+  font-size: 0.75rem;
+  color: #440505;
+  margin-top: 2px;
+}
 .invoice-title{text-align:right}.invoice-title h1{margin:0;font:600 25px Georgia,serif;letter-spacing:1px}.invoice-title span{display:block;margin-top:5px;font-size:10px;color:#8b747f}
 .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:20px 35px;background:#fff8fb}
 .meta-item{padding:10px}.meta-label{display:block;margin-bottom:5px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#967f89}.meta-value{font-size:12px;font-weight:700}
@@ -525,8 +553,18 @@ table{width:100%;border-collapse:collapse}thead th{padding:11px 9px;text-align:l
 <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
 <div class="invoice">
 <div class="header">
-  <div><div class="brand">${safe(fromName)}</div><div class="brand-sub">Carefully packed with love</div></div>
-  <div class="invoice-title"><h1>INVOICE</h1><span>${safe(order.order_number || order.id)}</span></div>
+<div class="brand-wrap">
+  <img
+    src="assets/logo.png"
+    class="invoice-logo"
+    alt="${safe(fromName)}"
+  />
+  <div>
+    <div class="brand">${safe(fromName)}</div>
+    <div class="brand-sub">Carefully packed with love</div>
+  </div>
+</div>
+<div class="invoice-title"><h1>INVOICE</h1><span>${safe(order.order_number || order.id)}</span></div>
 </div>
 <div class="meta">
   <div class="meta-item"><span class="meta-label">Order Date</span><div class="meta-value">${safe(formatDate(order.created_at))}</div></div>
@@ -560,7 +598,7 @@ table{width:100%;border-collapse:collapse}thead th{padding:11px 9px;text-align:l
     <div class="summary-row total"><span>Grand Total</span><span>₹${money(order.total_amount)}</span></div>
   </div>
 </div>
-<div class="footer"><div class="quote">Thank you for shopping with SS Spark Collections</div><div class="thanks">Inclusive of all taxes · Carefully packed with love</div></div>
+<div class="footer"><div class="quote">Thank you for shopping with DS Handmade Hub</div><div class="thanks">Inclusive of all taxes · Carefully packed with love</div></div>
 </div>
 </div>
 </body></html>`);
@@ -575,7 +613,7 @@ function renderPage() {
   root.innerHTML = `
     <div class="order-view-head">
       <div>
-        <p class="order-view-eyebrow">SS SPARK COLLECTIONS</p>
+        <p class="order-view-eyebrow">DS HANDMADE HUB</p>
         <h1>Order #${escapeHtml(state.order.order_number || state.order.id)}</h1>
         <div class="order-view-date">Placed on ${escapeHtml(formatDateTime(state.order.created_at))}</div>
       </div>
@@ -651,7 +689,7 @@ function renderPage() {
         <section class="ov-card help-box">
           <div class="help-icon">♡</div>
           <strong>Need Help?</strong>
-          <p>Contact SS Spark Collections support if you have any questions about this order.</p>
+          <p>Contact DS Handmade Hub support if you have any questions about this order.</p>
         </section>
       </div>
     </div>

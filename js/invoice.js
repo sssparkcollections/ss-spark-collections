@@ -137,10 +137,10 @@ try {
     // FROM
     // -------------------------------------------------
 
-    const fromName = "SS SPARK COLLECTIONS";
+    const fromName = "DS Handmade Hub";
 
 
-    const fromPhone = "6383270648"
+    const fromPhone = "+91 - 9080588925"
 
 
     const fromEmail = "";
@@ -969,13 +969,13 @@ body{background:#f8f3f5!important;color:#30242a}
     <img
         src="assets/logo.png"
         class="invoice-logo"
-        alt="SS Spark Collections"
+        alt="DS Handmade Hub"
     >
 
     <div>
 
         <div class="brand">
-            SS SPARK COLLECTIONS
+            DS Handmade Hub
         </div>
 
         <div class="brand-sub">
@@ -1278,13 +1278,13 @@ body{background:#f8f3f5!important;color:#30242a}
 
             <div class="instagram">
                 Follow us on Instagram
-                · @sssparkcollection
+                · @ds_handmade_hub
             </div>
 
 
             <div class="thanks">
                 Thank you for choosing
-                SS SPARK COLLECTIONS ❤️
+                DS Handmade Hub ❤️
             </div>
 
         </div>
