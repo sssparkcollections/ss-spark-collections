@@ -9,6 +9,27 @@ async function openInvoicePreview(order, orderItems, supabase) {
         return;
     }
 
+    // Always fetch the current COD charge directly from the orders table.
+    try {
+        const {
+            data: codData,
+            error: codError
+        } = await supabase
+            .from("orders")
+            .select("cod_charge")
+            .eq("id", order.id)
+            .maybeSingle();
+
+        if (!codError && codData) {
+            order = {
+                ...order,
+                cod_charge: codData.cod_charge
+            };
+        }
+    } catch (error) {
+        console.warn("COD charge loading warning:", error);
+    }
+
     // Open immediately so popup blocker does not interfere
     const invoiceWindow = window.open(
         "",
@@ -1239,6 +1260,21 @@ body{background:#f8f3f5!important;color:#30242a}
                     <span>
                         ₹${money(
                             order.shipping_amount
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        COD Charge
+                    </span>
+
+                    <span>
+                        ₹${money(
+                            order.cod_charge
                         )}
                     </span>
 

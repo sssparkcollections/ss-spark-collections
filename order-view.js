@@ -595,6 +595,7 @@ table{width:100%;border-collapse:collapse}thead th{padding:11px 9px;text-align:l
     <div class="summary-row"><span>Subtotal</span><span>₹${money(order.subtotal)}</span></div>
     <div class="summary-row"><span>Discount</span><span>− ₹${money(order.discount_amount)}</span></div>
     <div class="summary-row"><span>Shipping</span><span>${Number(order.shipping_amount || 0) === 0 ? "Free" : "₹" + money(order.shipping_amount)}</span></div>
+    <div class="summary-row"><span>COD Charge</span><span>₹${money(order.cod_charge)}</span></div>
     <div class="summary-row total"><span>Grand Total</span><span>₹${money(order.total_amount)}</span></div>
   </div>
 </div>
@@ -647,6 +648,7 @@ function renderPage() {
               <div class="ov-total-row"><span>Subtotal</span><strong>₹${money(state.order.subtotal)}</strong></div>
               ${Number(state.order.discount_amount || 0) > 0 ? `<div class="ov-total-row discount"><span>Discount</span><strong>− ₹${money(state.order.discount_amount)}</strong></div>` : ""}
               <div class="ov-total-row"><span>Shipping</span><strong>${Number(state.order.shipping_amount || 0) === 0 ? "Free" : "₹"+money(state.order.shipping_amount)}</strong></div>
+              <div class="ov-total-row"><span>COD Charge</span><strong>₹${money(state.order.cod_charge)}</strong></div>
               <div class="ov-grand-total"><span>Total</span><span>₹${money(state.order.total_amount)}</span></div>
             </div>
           </div>
@@ -868,6 +870,7 @@ async function loadOrder() {
       subtotal,
       discount_amount,
       shipping_amount,
+      cod_charge,
       total_amount,
       shipping_address,
       created_at,

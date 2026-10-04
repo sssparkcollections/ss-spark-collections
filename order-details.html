@@ -2675,6 +2675,7 @@ async function loadOrder() {
                     subtotal,
                     discount_amount,
                     shipping_amount,
+                    cod_charge,
                     total_amount,
                     shipping_address,
                     created_at,
@@ -2704,6 +2705,24 @@ async function loadOrder() {
 
 
         order = data;
+
+        // Always fetch the current COD charge directly from the orders table.
+        try {
+            const {
+                data: codData,
+                error: codError
+            } = await supabase
+                .from("orders")
+                .select("cod_charge")
+                .eq("id", orderId)
+                .maybeSingle();
+
+            if (!codError && codData) {
+                order.cod_charge = codData.cod_charge;
+            }
+        } catch (error) {
+            console.warn("COD charge loading warning:", error);
+        }
 
         await loadWorkflowOptions();
 
@@ -4632,6 +4651,21 @@ function renderTotals() {
                 <strong>
                     ₹${formatMoney(
                         order.shipping_amount
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="total-row">
+
+                <span>
+                    COD Charge
+                </span>
+
+                <strong>
+                    ₹${formatMoney(
+                        order.cod_charge
                     )}
                 </strong>
 
