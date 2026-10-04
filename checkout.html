@@ -383,10 +383,14 @@ function showCheckoutConfirm(title,message){
     alertEl.querySelector("[data-alert-confirm]").addEventListener("click",()=>finish(true));
   });
 }
-function getPrice(item){
-  const variant=item.product_variants;
-  if(variant && Number(variant.price)>=0) return Number(variant.price);
-  return Number(item.products?.price||0);
+function getPrice(item) {
+  const variantPrice = Number(item.product_variants?.price);
+
+  if (variantPrice > 0) {
+    return variantPrice;
+  }
+
+  return Number(item.products?.price || 0);
 }
 function getComparePrice(item){
   const variant=item.product_variants;

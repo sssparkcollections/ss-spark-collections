@@ -941,8 +941,23 @@ async function loadProduct(){
   currentIndex=images.findIndex(x=>x.is_primary);
   if(currentIndex<0)currentIndex=0;
   quantity=1;
-  selectedSize=null;
-  selectedColor=null;
+  selectedSize = null;
+selectedColor = null;
+
+/* =========================================================
+   AUTO-SELECT WHEN ONLY ONE ACTIVE VARIANT EXISTS
+   ========================================================= */
+
+if (variants.length === 1) {
+
+    const singleVariant = variants[0];
+
+    selectedSize =
+        String(singleVariant.size || "").trim() || null;
+
+    selectedColor =
+        String(singleVariant.color || "").trim() || null;
+}
 
   const {data:param,error:paramError}=await supabase
     .from("parameter_values")
